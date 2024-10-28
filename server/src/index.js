@@ -4,11 +4,12 @@ import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
 import session from "express-session"
 import passport from 'passport';
+import MongoStore from 'connect-mongo';
 
-import { connectToMongoDB } from './db/ConnectMongoDB'
+import connectToMongoDB from './db/ConnectMongoDB.js'
 
-import { AuthRouter } from './routes/auth.routes';
-import { HomeRouter } from './routes/home.routes';
+import AuthRouter from './routes/auth.routes.js';
+import HomeRouter from './routes/home.routes.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -23,6 +24,13 @@ app.use(
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
+        cookie: {
+            maxAge: 60000*60,
+        },
+        store: MongoStore.create({
+            mongoUrl: process.env.MONGO_DB_URI, // Optional but recommended for stability
+            collectionName: 'sessions', // Optional, defaults to 'sessions'
+        }),
     })
 )
 
@@ -37,3 +45,4 @@ app.listen(PORT, ()=>{
     console.log(`server is running on ${PORT}`);
     console.log(`Url: 127.0.0.1:${PORT}`);
 })
+
