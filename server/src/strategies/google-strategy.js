@@ -1,10 +1,13 @@
 import passport from "passport";
-import { Strategy as GoogleStrategy } from "passport-google-oauth2";
-import User from "../models/user.models";
+import GoogleStrategy from "passport-google-oauth2";
+import models from '../models/user.models.js'; // Adjust the path
+const { User, Profile, Image } = models;
+import dotenv from 'dotenv';
 
+dotenv.config();
 // Configure serialization
 passport.serializeUser((user, done) => {
-    done(null, user.id);
+    return done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
@@ -12,17 +15,18 @@ passport.deserializeUser(async (id, done) => {
         const findUser = await User.findById(id);
         return findUser ? done(null, findUser) : done(null, null);
     } catch (err) {
-        done(err, null);
+        return done(err, null);
     }
 });
 
 // Set up Google OAuth strategy
 passport.use(
+    "google",
     new GoogleStrategy(
         {
             clientID: process.env.GOOGLE_CLIENT_ID,
             clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-            callbackURL: "http://localhost:3000/api/auth/google/redirect",
+            callbackURL: process.env.GOOGLE_CALLBACK,    
             scope: ["profile", "email"],
         },
         async (accessToken, refreshToken, profile, done) => {
