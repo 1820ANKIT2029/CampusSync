@@ -33,7 +33,7 @@ passport.use(
                 
                 if (!findUser) {
                     const newUser = new User({
-                        username: profile.displayName,
+                        username: profile.id,
                         email: email,
                         password: "Google",
                     });
