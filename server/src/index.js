@@ -2,6 +2,8 @@ import express from 'express';
 import dotenv from 'dotenv';
 import cookieParser from 'cookie-parser';
 import bodyParser from 'body-parser';
+import session from "express-session"
+import passport from 'passport';
 
 import { connectToMongoDB } from './db/ConnectMongoDB'
 
@@ -9,13 +11,23 @@ import { AuthRouter } from './routes/auth.routes';
 import { HomeRouter } from './routes/home.routes';
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
-const PORT = process.env.PORT || 3000;
+app.use(
+    session({
+        secret: process.env.SESSION_SECRET,
+        resave: false,
+        saveUninitialized: false,
+    })
+)
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use('/', HomeRouter);  // home api routes for testing
 app.use('/auth', AuthRouter);  // auth api router
