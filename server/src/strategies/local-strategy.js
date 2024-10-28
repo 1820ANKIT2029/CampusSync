@@ -1,6 +1,8 @@
 import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { User } from "../models/user.models";
+import {hashPassword,comparePassword} from "../util/hash_function";
+import { error } from "console";
 
 // Configure passport serialization
 passport.serializeUser((user, done) => {
@@ -29,15 +31,20 @@ passport.use(
                 if (!findUser) {
                     const newUser = new User({
                         username,
-                        email: username,  // assuming `username` is an email
-                        password: password  // ideally, hash this before saving
+                        password: hashPassword(password),
                     });
                     const newSavedUser = await newUser.save();
                     return done(null, newSavedUser);
                 }
                 
                 // User found
-                return done(null, findUser);
+                if(comparePassword(password,findUser.password)){
+                    return done(null, findUser);
+                }
+                else{
+                    return done({error: "Password Don't matched"},null)
+                }
+                
             } catch (err) {
                 done(err, null);
             }
