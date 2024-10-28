@@ -2,6 +2,10 @@ import { Schema, model } from 'mongoose';
 
 // Image schema use in profile schema
 const imageSchema = new Schema({
+    userid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Profile'
+    },
     name: String,
     data: Buffer,
     contentType: String
@@ -19,6 +23,9 @@ const userSchema = new Schema({
         required: true,
         minlength: 6,
     },
+    email: {
+        type: String,
+    }
 }, { timestamps: true });
 
 // Profile schema
@@ -44,7 +51,7 @@ const profileScheme = new Schema({
         enum: ["male", "female"],
     },
     profilePic: {
-        type: imageSchema
+        type: String,
     },
 
 }, { timestamps: true });
@@ -52,8 +59,10 @@ const profileScheme = new Schema({
 // model of User, Profile
 const User = model("User", userSchema);
 const Profile = model("Profile", profileScheme);
+const Image = model("Image", imageSchema);
 
 export default {
     User,
-    Profile
+    Profile,
+    Image
 };
