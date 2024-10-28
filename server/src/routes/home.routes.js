@@ -6,6 +6,4 @@ HomeRouter.get('/', (req, res, next)=>{
     res.send("AuraTracker CodeSangam 2024");
 })
 
-export default {
-    HomeRouter
-};
+export default HomeRouter;
