@@ -2,7 +2,6 @@ import passport from "passport";
 import { Strategy as LocalStrategy } from "passport-local";
 import { User } from "../models/user.models";
 import {hashPassword,comparePassword} from "../util/hash_function";
-import { error } from "console";
 
 // Configure passport serialization
 passport.serializeUser((user, done) => {
@@ -39,6 +38,7 @@ passport.use(
                 
                 // User found
                 if(comparePassword(password,findUser.password)){
+                    req.session.user = findUser;
                     return done(null, findUser);
                 }
                 else{
