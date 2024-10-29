@@ -30,17 +30,19 @@ const userSchema = new Schema({
 
 // Profile schema
 const profileScheme = new Schema({
+    userid: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+    },
     name: {
         type: String,
-        required: true,
     },
     year: {
         type: Number,
-        required: true,
     },
     branch: {
         type: String,
-        required: true,
     },
     email: {
         type: String,
@@ -57,12 +59,6 @@ const profileScheme = new Schema({
 }, { timestamps: true });
 
 // model of User, Profile
-const User = model("User", userSchema);
-const Profile = model("Profile", profileScheme);
-const Image = model("Image", imageSchema);
-
-export default {
-    User,
-    Profile,
-    Image
-};
+export const User = model("User", userSchema);
+export const Profile = model("Profile", profileScheme);
+export const Image = model("Image", imageSchema);
