@@ -10,6 +10,7 @@ import { connectToMongoDB } from './db/ConnectMongoDB.js'
 
 import AuthRouter from './routes/auth.routes.js';
 import HomeRouter from './routes/home.routes.js';
+import AdminRouter from './routes/admin.routes.js';
 
 import { googlestrategy, localstrategy} from './strategies/index.js'
 import { User } from './models/user.models.js';
@@ -56,10 +57,11 @@ passport.deserializeUser(async (id, done) => {
 });
 
 passport.use("google", googlestrategy);
-passport.use("local", localstrategy)
+passport.use("local", localstrategy);
 
 app.use('/', HomeRouter);  // home api routes for testing
 app.use('/auth', AuthRouter);  // auth api router
+app.use('/admin',AdminRouter);
 
 app.listen(PORT, ()=>{
     connectToMongoDB();
