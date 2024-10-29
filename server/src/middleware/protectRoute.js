@@ -4,7 +4,7 @@ export const ensureLoggedIn = function(req,res,next) {
         return next();
     }
     else{
-        res.redirect("/");
+        return res.status(401).json({error: "not logged in"});
     }
 }
 
@@ -14,6 +14,6 @@ export const ensureLoggedOut = function(req,res,next){
         return next();
     }
     else{
-        res.redirect("/");
+        return res.status(401).json({error: "already logged in"});
     }
 }
