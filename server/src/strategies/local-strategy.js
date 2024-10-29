@@ -6,11 +6,10 @@ import { hashPassword, comparePassword } from "../util/hash_function.js";
 // Implement the local strategy
 const localstrategy = new LocalStrategy(
     { 
-        username: "username", 
-        password: "password", 
-        passReqToCallback: true // Allows access to req in the callback
+        usernameField: "username", 
+        passwordField: "password", 
     },
-    async (req, username, password, done) => {
+    async (username, password, done) => {
         try {
             let findUser = await User.findOne({ username });
             
