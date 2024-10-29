@@ -1,7 +1,7 @@
 import { Schema } from 'mongoose';
 
 const taskSchema = new Schema({
-    event: { 
+    eventId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Event', 
         required: true 

@@ -25,6 +25,10 @@ const userSchema = new Schema({
     },
     email: {
         type: String,
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false,
     }
 }, { timestamps: true });
 
@@ -58,7 +62,7 @@ const profileScheme = new Schema({
     aura: {
         type: Number,
         default: 0,
-    }
+    },
 
 }, { timestamps: true });
 
