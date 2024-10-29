@@ -36,16 +36,16 @@ export const createEvent = async (req,res,next) => {
 }
 
 export const removeEvent = async (req,res,next) => {
-    const { id } = req.params;
+    const { id } = req.query;
 
     try{
-        const exist = Event.findById(id);
+        const exist = Event.findById({_id:id});
 
         if(!exist){
             return res.status(404).json({error: "task doesn't exist"});
         }
 
-        await Event.findByIdAndDelete(id);
+        await Event.findByIdAndDelete({_id:id});
         await Task.deleteMany({eventId: id});
         
         return res.status(200).json({message: "event deleted successively."});
