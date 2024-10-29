@@ -6,10 +6,13 @@ import session from "express-session"
 import passport from 'passport';
 import MongoStore from 'connect-mongo';
 
-import connectToMongoDB from './db/ConnectMongoDB.js'
+import { connectToMongoDB } from './db/ConnectMongoDB.js'
 
 import AuthRouter from './routes/auth.routes.js';
 import HomeRouter from './routes/home.routes.js';
+
+import { googlestrategy, localstrategy} from './strategies/index.js'
+import { User } from './models/user.models.js';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -27,15 +30,33 @@ app.use(
         cookie: {
             maxAge: 60000*60,
         },
+        // define place to store sessions
         store: MongoStore.create({
-            mongoUrl: process.env.MONGO_DB_URI, // Optional but recommended for stability
-            collectionName: 'sessions', // Optional, defaults to 'sessions'
+            mongoUrl: process.env.MONGO_DB_URI,
+            collectionName: 'sessions',
         }),
     })
 )
 
 app.use(passport.initialize());
 app.use(passport.session());
+
+passport.serializeUser((user, done) => {
+    done(null, user.id);
+});
+
+passport.deserializeUser(async (id, done) => {
+    try {
+        const findUser = await User.findById(id);
+        if (!findUser) throw new Error("User Not Found");
+        done(null, findUser);
+    } catch (err) {
+        done(err, null);
+    }
+});
+
+passport.use("google", googlestrategy);
+passport.use("local", localstrategy)
 
 app.use('/', HomeRouter);  // home api routes for testing
 app.use('/auth', AuthRouter);  // auth api router
