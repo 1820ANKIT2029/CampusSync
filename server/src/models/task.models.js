@@ -1,6 +1,6 @@
 import { Schema } from 'mongoose';
 
-export const taskSchema = new Schema({
+const taskSchema = new Schema({
     event: { 
         type: Schema.Types.ObjectId, 
         ref: 'Event', 
@@ -18,7 +18,7 @@ export const taskSchema = new Schema({
     }
 });
 
-export const taskParticipantSchema = new Schema({
+const taskParticipantSchema = new Schema({
     task: { 
         type: Schema.Types.ObjectId, 
         ref: 'Task', 
@@ -34,3 +34,6 @@ export const taskParticipantSchema = new Schema({
         default: false 
     }
 });
+
+export const Task = model("Task", taskSchema);
+export const TaskParticipant = model("TaskParticipant", taskParticipantSchema);
