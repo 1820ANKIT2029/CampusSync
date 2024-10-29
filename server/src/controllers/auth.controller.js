@@ -11,40 +11,51 @@ export const loginV1 =  passport.authenticate("local", {
 export const signupV1 = async (req, res, next) => {
     const {username,password,confirmPassword,email} = req.body;
 
-    const user = await User.findOne({username});
+    try{
+        const user = await User.findOne({username});
 
-    if(user){
-        return res.status(400).json({error: "User already exists"});
-    }
+        if(user){
+            return res.status(400).json({error: "User already exists"});
+        }
 
-    if(password != confirmPassword){
-        return res.status(400).json({error: "Password doesn't match"});
-    }
+        if(password.length < 6){
+            return res.status(400).json({error: "password length must be atleast 6"});
+        }
 
-    const newUser = new User({
-        username,
-        password: hashPassword(password),
-        email,
-    })
+        if(password != confirmPassword){
+            return res.status(400).json({error: "Password doesn't match"});
+        }
 
-    if(newUser){
-        await newUser.save();
+        const hashedPassword =  await hashPassword(password)
 
-        const newprofile = new Profile({
-            userid: newUser._id,
-            email,
-        })
-
-        const new_profile = await newprofile.save();
-
-        res.status(201).json({
-            _id:newUser._id,
+        const newUser = new User({
             username,
+            password: hashedPassword,
             email,
         })
+
+        if(newUser){
+            await newUser.save();
+
+            const newprofile = new Profile({
+                userid: newUser._id,
+                email,
+            })
+
+            const new_profile = await newprofile.save();
+
+            res.status(201).json({
+                _id:newUser._id,
+                username,
+                email,
+            })
+        }
+        else{
+            res.status(400).json({error: "Invalid User Data"});
+        }
     }
-    else{
-        res.status(400).json({error: "Invalid User Data"});
+    catch(error){
+        return res.status(500).json({error: "Internal server error in signupv1"});
     }
 }
 
