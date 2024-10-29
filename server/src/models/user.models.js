@@ -28,7 +28,7 @@ const userSchema = new Schema({
     }
 }, { timestamps: true });
 
-// Profile schema
+// Profile schema ( use same model for TaskParticipant)
 const profileScheme = new Schema({
     userid: {
         type: mongoose.Schema.Types.ObjectId,
@@ -55,6 +55,10 @@ const profileScheme = new Schema({
     profilePic: {
         type: String,
     },
+    aura: {
+        type: Number,
+        default: 0,
+    }
 
 }, { timestamps: true });
 
