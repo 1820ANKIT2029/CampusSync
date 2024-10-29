@@ -1,6 +1,6 @@
-import { Schema } from 'mongoose';
+import { Schema, model } from 'mongoose';
 
-export const eventSchema = new Schema({
+const eventSchema = new Schema({
     name: {
         type: String,
         required: true
@@ -29,7 +29,7 @@ export const eventSchema = new Schema({
     }
 });
 
-export const eventParticipantSchema = new Schema({
+const eventParticipantSchema = new Schema({
     event: {
         type: Schema.Types.ObjectId, 
         ref: 'Event',
@@ -45,3 +45,6 @@ export const eventParticipantSchema = new Schema({
         default: 0 
     }
 });
+
+export const Event = model("Event", eventSchema);
+export const EventParticipant = model("EventParticipant", eventParticipantSchema);
