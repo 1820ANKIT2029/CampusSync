@@ -1,14 +1,16 @@
 import { Router } from 'express';
-import { ensureLoggedIn } from '../middleware/protectRoute';
+import { ensureLoggedIn } from '../middleware/protectRoute.js';
+import { createTask,removeTask } from '../controllers/task.controller.js';
+import { createEvent, removeEvent } from '../controllers/event.controller.js';
 
 const AdminRouter = Router();
 
-AdminRouter.post('/create/Event',ensureLoggedIn, createEvent);
+AdminRouter.post('/event/create',ensureLoggedIn, createEvent);
 
-AdminRouter.post('/create/Event/task',ensureLoggedIn ,);
+AdminRouter.post('/event/task/create',ensureLoggedIn ,createTask);
 
-AdminRouter.delete('/delete/Event/:id',ensureLoggedIn, removeEvent);
+AdminRouter.delete('/event/delete',ensureLoggedIn, removeEvent);
 
-AdminRouter.delete('/delete/Event/task/:id',ensureLoggedIn ,signupV1);
+AdminRouter.delete('/event/task/delete',ensureLoggedIn ,removeTask);
 
 export default AdminRouter;
