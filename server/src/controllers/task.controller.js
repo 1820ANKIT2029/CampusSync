@@ -5,6 +5,7 @@ export const createTask = async (req,res,next) => {
         eventId ,
         name,
         description,
+        submissionType,
         dueDate,
     }  = req.body;
 
@@ -19,6 +20,7 @@ export const createTask = async (req,res,next) => {
             eventId ,
             name,
             description,
+            submissionType,
             dueDate,
         })
 
