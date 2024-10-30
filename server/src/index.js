@@ -5,21 +5,23 @@ import bodyParser from 'body-parser';
 import session from "express-session"
 import passport from 'passport';
 import MongoStore from 'connect-mongo';
+import { v2 as cloudinary } from 'cloudinary';
 
 import { connectToMongoDB } from './db/ConnectMongoDB.js'
 
 import AuthRouter from './routes/auth.routes.js';
 import HomeRouter from './routes/home.routes.js';
 import AdminRouter from './routes/admin.routes.js';
+import SubmissionRouter from './routes/submission.routes.js';
 
 import { googlestrategy, localstrategy} from './strategies/index.js'
 import { User } from './models/user.models.js';
 
+dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
-dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 
@@ -37,7 +39,7 @@ app.use(
             collectionName: 'sessions',
         }),
     })
-)
+);
 
 app.use(passport.initialize());
 app.use(passport.session());
@@ -59,9 +61,16 @@ passport.deserializeUser(async (id, done) => {
 passport.use("google", googlestrategy);
 passport.use("local", localstrategy);
 
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+});
+
 app.use('/', HomeRouter);  // home api routes for testing
 app.use('/auth', AuthRouter);  // auth api router
-app.use('/admin',AdminRouter);
+app.use('/admin',AdminRouter); // admin api router
+app.use('/submit', SubmissionRouter); // submission api router
 
 app.listen(PORT, ()=>{
     connectToMongoDB();
