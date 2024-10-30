@@ -10,8 +10,19 @@ const taskSchema = new Schema({
         type: String, 
         required: true 
     },
-    description: String,
-    dueDate: Date,
+    description: {
+        type: String,
+        required: true
+    },
+    dueDate: {
+        type: Date,
+        required: true
+    },
+    submissionType: {
+        type: String,
+        required: true,
+        enum: ["pdf", "image", "video"]
+    },
     isCompleted: { 
         type: Boolean, 
         default: false 
@@ -19,12 +30,12 @@ const taskSchema = new Schema({
 });
 
 const taskParticipantSchema = new Schema({
-    task: { 
+    taskId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Task', 
         required: true 
     },
-    participant: { 
+    participantId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Profile', 
         required: true 
