@@ -30,12 +30,12 @@ const eventSchema = new Schema({
 });
 
 const eventParticipantSchema = new Schema({
-    event: {
+    eventId: {
         type: Schema.Types.ObjectId, 
         ref: 'Event',
         required: true
     },
-    participant: { 
+    participantId: { 
         type: Schema.Types.ObjectId, 
         ref: 'Profile', 
         required: true 
