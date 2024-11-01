@@ -20,10 +20,6 @@ const localstrategy = new LocalStrategy(
             
             // User found, check the password
             if (comparePassword(password, findUser.password)) {
-                // const result = {
-                //     id: findUser._id,
-                //     username: findUser.username
-                // }
                 return done(null, findUser);
             } else {
                 return done(null, false, { message: "Password doesn't match" });
