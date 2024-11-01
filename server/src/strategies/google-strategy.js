@@ -32,8 +32,11 @@ const googlestrategy = new GoogleStrategy(
                 const newprofile = new Profile({
                     userid: newUser._id,
                     name: profile.displayName,
+                    year: 0,
+                    branch: "",
                     profilePic: profile.photos[0].value,
                     email,
+                    gender: "Not set"
                 })
 
                 const new_profile = await newprofile.save();
