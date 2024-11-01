@@ -13,6 +13,7 @@ import './index.css'
 import Login from './components/login/login.jsx'
 import Home from './components/Home.jsx'
 import Signup from './components/signup/Signup.jsx'
+import Test from './components/Test.jsx'
 
 
 const router = createBrowserRouter(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
         <Route path="" element={<Home/>}/>
         <Route path="/login" element={<Login/>}/>
         <Route path="/signup" element={<Signup/>}/>
+        <Route path="/test" element={<Test/>}/>
         {/* <Route path="about" element={<About/>} /> */}
         {/* <Route path="contact" element={<Contact/>} /> */}
         {/* <Route path="user/:userid" element={<User/>} /> */}
