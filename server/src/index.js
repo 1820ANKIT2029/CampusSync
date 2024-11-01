@@ -13,6 +13,7 @@ import AuthRouter from './routes/auth.routes.js';
 import HomeRouter from './routes/home.routes.js';
 import AdminRouter from './routes/admin.routes.js';
 import SubmissionRouter from './routes/submission.routes.js';
+import UserRouter from './routes/user.routes.js';
 
 import { googlestrategy, localstrategy} from './strategies/index.js'
 import { User } from './models/user.models.js';
@@ -32,6 +33,7 @@ app.use(
         saveUninitialized: false,
         cookie: {
             maxAge: 60000*60,
+            //secure: true
         },
         // define place to store sessions
         store: MongoStore.create({
@@ -50,13 +52,18 @@ passport.serializeUser((user, done) => {
 
 passport.deserializeUser(async (id, done) => {
     try {
-        const findUser = await User.findById(id);
-        if (!findUser) throw new Error("User Not Found");
-        done(null, findUser);
-    } catch (err) {
-        done(err, null);
+        const user = await User.findById(id);
+        if (!user) throw new Error("User not found");
+        const result = {
+            id : user._id,
+            username: user.username
+        };
+        done(null, result);
+    } catch (error) {
+        done(error, null);
     }
 });
+
 
 passport.use("google", googlestrategy);
 passport.use("local", localstrategy);
@@ -71,6 +78,7 @@ app.use('/', HomeRouter);  // home api routes for testing
 app.use('/auth', AuthRouter);  // auth api router
 app.use('/admin',AdminRouter); // admin api router
 app.use('/submit', SubmissionRouter); // submission api router
+app.use('/user', UserRouter);  // get user related value
 
 app.listen(PORT, ()=>{
     connectToMongoDB();
