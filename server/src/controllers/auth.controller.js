@@ -3,10 +3,13 @@ import passport from 'passport';
 import { User, Profile } from '../models/user.models.js';
 import { hashPassword } from "../util/hash_function.js";
 
-export const loginV1 =  passport.authenticate("local", {
-    successRedirect: "/auth/success",
-    failureRedirect: "/auth/error",
-  })
+export const loginV1 =  passport.authenticate("local")
+
+// export const loginV1 = async( req, res) => {
+//     res.status(200).json({
+//         message: "login Success",
+//     })
+// }
 
 export const signupV1 = async (req, res, next) => {
     const {username,password,confirmPassword,email} = req.body;
@@ -39,12 +42,7 @@ export const signupV1 = async (req, res, next) => {
 
             const newprofile = new Profile({
                 userid: newUser._id,
-                name: "",
-                year: 0,
-                branch: "",
                 email: email,
-                gender: "Not set",
-                profilePic: ""
             })
 
             const new_profile = await newprofile.save();
@@ -60,6 +58,7 @@ export const signupV1 = async (req, res, next) => {
         }
     }
     catch(error){
+        console.log(error);
         return res.status(500).json({error: "Internal server error in signupv1"});
     }
 }
@@ -76,18 +75,18 @@ export const googleLoginafter = (req, res, next) => {
 
 export const googlecallback = passport.authenticate('google',
     { 
-        successRedirect: '/auth/success',
-        failureRedirect: '/auth/error'
+        successRedirect: "http://localhost:5173/",
+        failureRedirect: "http://localhost:5173/login",
     }
 );
 
-export const logout = (req, res, next) => {
+export const logout = async (req, res, next) => {
     if(req.isAuthenticated()){
-        req.logout(function (err) {
+        await req.logout(async function (err) {
             if (err) {
               return next(err);
             }
-            req.session.destroy(() => {
+            await req.session.destroy(() => {
               res.clearCookie("connect.sid"); // Clear session cookie (optional)
               res.status(200).json({message: "logout successfully"});
             });
