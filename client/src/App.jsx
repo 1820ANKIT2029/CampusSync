@@ -1,13 +1,11 @@
-import React from 'react';
-import Signup from './components/signup/Signup.jsx';
-import Login from './components/login/login.jsx';
+import React from 'react'
 
 function App() {
   return (
-    <>
-    <Login/>
-    </>
-  );
+    <div>
+      
+    </div>
+  )
 }
 
-export default App;
+export default App
