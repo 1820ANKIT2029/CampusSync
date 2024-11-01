@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios";
+import { Link, useNavigate } from 'react-router-dom';
 
 function Signup() {
     const [values,setValues] = useState({
@@ -9,15 +10,19 @@ function Signup() {
         email:""
     })
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    const navigate = useNavigate();
 
-        console.log(values);
+    const handleSubmit = async (e) => {
+        e.preventDefault();
         
-        axios.post('http://localhost:3000/auth/sighnup/v1',values)
-        .then((response) => {
-            console.log(response);
-        })
+        try{
+          await axios.post('http://localhost:3000/auth/signup/v1',values)
+          .then((response) => {
+              console.log(response);
+          })
+        }catch(error){
+          console.log(error);
+        }
 
         setValues({
             username:"",
@@ -25,24 +30,23 @@ function Signup() {
             confirmPassword:"",
             email:""
         })
+        navigate('/login');
     }
 
-    const handleGoogleSubmit = () => {
-        axios.get('http://localhost:3000/auth/login/Oauth')
-        .then((response) => {
-            console.log(response);
-        })
-    }
+    const loginwithgoogle = ()=>{
+      window.open("http://localhost:3000/auth/login/OAuth/callback","_self")
+  }
+
 
     
   return (
     <>
        <div className="flex items-center justify-center min-h-screen bg-gray-900">
       <div className="bg-gray-800 text-white p-8 rounded-lg w-80 shadow-lg">
-        <h2 className="text-center text-lg font-semibold mb-6">Log in with</h2>
+        <h2 className="text-center text-lg font-semibold mb-6">Sign Up with</h2>
         
         <div className="flex justify-between mb-6">
-          <button onClick={handleGoogleSubmit} className="bg-white text-black w-full py-2 rounded-md mr-2 flex items-center justify-center">
+          <button onClick={loginwithgoogle} className="bg-white text-black w-full py-2 rounded-md mr-2 flex items-center justify-center">
             <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google" className="mr-2"/>
             Google
           </button>
@@ -94,12 +98,12 @@ function Signup() {
             type="submit"
             className="w-full bg-purple-600 py-2 rounded-md hover:bg-purple-700 transition-colors"
           >
-            Log In
+            sign up
           </button>
         </form>
 
         <p className="text-center text-gray-400 text-sm mt-4">
-          Already have an account? <a href="/login" className="text-purple-500">log in</a>
+          Already have an account? <Link to="/login" className="text-purple-500">log in</Link>
         </p>
       </div>
     </div>
