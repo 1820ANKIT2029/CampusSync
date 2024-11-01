@@ -10,6 +10,10 @@ function Login() {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(values);
+        axios.post('http://localhost:3000/auth/login/v1',values)
+        .then((response) => {
+            console.log(response);
+        })
         setValues({
             username:"",
             password:"",

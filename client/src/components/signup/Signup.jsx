@@ -26,6 +26,15 @@ function Signup() {
             email:""
         })
     }
+
+    const handleGoogleSubmit = () => {
+        axios.get('http://localhost:3000/auth/login/Oauth')
+        .then((response) => {
+            console.log(response);
+        })
+    }
+
+    
   return (
     <>
        <div className="flex items-center justify-center min-h-screen bg-gray-900">
@@ -33,7 +42,7 @@ function Signup() {
         <h2 className="text-center text-lg font-semibold mb-6">Log in with</h2>
         
         <div className="flex justify-between mb-6">
-          <button className="bg-white text-black w-full py-2 rounded-md mr-2 flex items-center justify-center">
+          <button onClick={handleGoogleSubmit} className="bg-white text-black w-full py-2 rounded-md mr-2 flex items-center justify-center">
             <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google" className="mr-2"/>
             Google
           </button>
