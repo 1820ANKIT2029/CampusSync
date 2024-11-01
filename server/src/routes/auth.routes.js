@@ -4,7 +4,7 @@ import { loginV1, signupV1, googleLogin, googleLoginafter, googlecallback, logou
 
 const AuthRouter = Router();
 
-AuthRouter.post('/login/v1', loginV1);
+AuthRouter.post('/login/v1', loginV1, success);
 
 AuthRouter.get('/login/OAuth', googleLogin);
 
