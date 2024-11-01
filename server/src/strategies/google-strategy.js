@@ -14,10 +14,6 @@ const googlestrategy = new GoogleStrategy(
     },
     async (accessToken, refreshToken, profile, done) => {
         try {
-            // Extract email from the Google profile
-            // if (profile.domain !== process.env.COLLEGE_DOMAIN) {
-            //     return done(null, false, { message: "Unauthorized domain" });
-            // }
             const email = profile.emails[0].value;
             let findUser = await User.findOne({ email });
             
@@ -32,11 +28,8 @@ const googlestrategy = new GoogleStrategy(
                 const newprofile = new Profile({
                     userid: newUser._id,
                     name: profile.displayName,
-                    year: 0,
-                    branch: "",
                     profilePic: profile.photos[0].value,
                     email,
-                    gender: "Not set"
                 })
 
                 const new_profile = await newprofile.save();
