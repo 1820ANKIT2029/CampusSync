@@ -37,28 +37,28 @@ const profileScheme = new Schema({
     },
     name: {
         type: String,
-        required: true,
+        default: null,
     },
     year: {
         type: Number,
-        required: true,
+        default: 0,
     },
     branch: {
         type: String,
-        required: true,
+        default: null,
     },
     email: {
         type: String,
-        required: true,
+        default: null,
     },
     gender: {
         type: String,
-        required: true,
+        default: "Not set",
         enum: ["male", "female", "Not set"],
     },
     profilePic: {
         type: String,
-        required: true,
+        default: null,
     },
     aura: {
         type: Number,
