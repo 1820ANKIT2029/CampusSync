@@ -6,6 +6,7 @@ import session from "express-session"
 import passport from 'passport';
 import MongoStore from 'connect-mongo';
 import { v2 as cloudinary } from 'cloudinary';
+import cors from 'cors';
 
 import { connectToMongoDB } from './db/ConnectMongoDB.js'
 
@@ -21,6 +22,19 @@ import { User } from './models/user.models.js';
 dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const corsOptions = {
+    origin: ["http://localhost:5173", "https://your-production-url.com"], // Allow specific origins
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE", // Allow specific HTTP methods
+    allowedHeaders: ["Content-Type", "Authorization"], // Allow specific headers
+    exposedHeaders: ["Authorization"], // Expose specific headers to the client
+    credentials: true, // Allow credentials (cookies, authorization headers, etc.)
+    preflightContinue: false, // Pass the CORS preflight response to the next handler
+    optionsSuccessStatus: 204, // Respond with 204 for successful OPTIONS requests
+};
+
+// Apply CORS middleware
+app.use(cors(corsOptions))
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
