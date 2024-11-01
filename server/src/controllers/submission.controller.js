@@ -2,14 +2,31 @@ import { v2 as cloudinary } from 'cloudinary';
 
 import { File } from "../models/file.model.js";
 import { Submission } from "../models/submission.model.js";
-import { error } from "./auth.controller.js";
+import { getResourceType } from "../util/helper.js"
 
 export const upload = async (req, res, next) => {
     const file = req.file;
     console.log(file);
     const { taskId, userId } = req.query;
+    const resource_type = getResourceType(file);
     try {
-        const result = await cloudinary.uploader.upload(file.path);
+        let result;
+        if(resource_type === 'raw'){
+            result = await cloudinary.uploader.upload(file.path, 
+                {
+                    resource_type: "raw",
+                    type: "authenticated",
+                    sign_url: true,
+                    api_secret: process.env.CLOUDINARY_API_SECRET
+                }
+            );
+        }
+        else{
+            result = await cloudinary.uploader.upload(file.path, 
+                { resource_type: resource_type }
+            );
+        }
+        
         console.log(result)
         const newfile = new File({
             cloudId: result.public_id,
