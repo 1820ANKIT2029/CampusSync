@@ -39,7 +39,12 @@ export const signupV1 = async (req, res, next) => {
 
             const newprofile = new Profile({
                 userid: newUser._id,
-                email,
+                name: "",
+                year: 0,
+                branch: "",
+                email: email,
+                gender: "Not set",
+                profilePic: ""
             })
 
             const new_profile = await newprofile.save();
@@ -97,7 +102,7 @@ export const logout = (req, res, next) => {
 export const success = (req, res, next) => {
     res.status(200).json(
         {
-            message: `Login successful! Welcome ${req.user.email}`
+            message: `Login successful! Welcome ${req.user.username}`
         }
     );
 }
