@@ -26,10 +26,6 @@ const userSchema = new Schema({
     email: {
         type: String,
     },
-    isAdmin: {
-        type: Boolean,
-        default: false,
-    }
 }, { timestamps: true });
 
 // Profile schema ( use same model for TaskParticipant)
@@ -41,12 +37,15 @@ const profileScheme = new Schema({
     },
     name: {
         type: String,
+        required: true,
     },
     year: {
         type: Number,
+        required: true,
     },
     branch: {
         type: String,
+        required: true,
     },
     email: {
         type: String,
@@ -54,16 +53,21 @@ const profileScheme = new Schema({
     },
     gender: {
         type: String,
-        enum: ["male", "female"],
+        required: true,
+        enum: ["male", "female", "Not set"],
     },
     profilePic: {
         type: String,
+        required: true,
     },
     aura: {
         type: Number,
         default: 0,
     },
-
+    isAdmin: {
+        type: Boolean,
+        default: false,
+    }
 }, { timestamps: true });
 
 // model of User, Profile
