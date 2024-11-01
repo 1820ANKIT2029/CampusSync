@@ -17,7 +17,7 @@ const eventSchema = new Schema({
     location: String,
     organizer: {
         type: Schema.Types.ObjectId,
-        ref: 'Organizer'
+        ref: 'Profile'
     },
     createdAt: {
         type: Date,
