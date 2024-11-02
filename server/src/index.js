@@ -48,6 +48,7 @@ app.use(
         cookie: {
             maxAge: 60000*60,
             //secure: true
+            httpOnly: false
         },
         // define place to store sessions
         store: MongoStore.create({
