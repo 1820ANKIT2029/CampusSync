@@ -1,5 +1,6 @@
 import { uploadstorage } from "../middleware/upload.js";
 import { EventParticipant } from "../models/event.model.js";
+import { Task, TaskParticipant } from "../models/task.models.js";
 import { Profile } from "../models/user.models.js";
 import { GENDER, BRANCH, YEAR } from "../models/user.models.js";
 
@@ -156,5 +157,58 @@ export const InactiveEvent = async (req, res, next) => {
 
     } catch (error) {
         return res.status(500).json({ error: "Internal server error at user inactive events" });
+    }
+}
+
+export const registerInEvent = async (req, res, next) => {
+    const { eventId } = req.params;
+    const id = req.user.id;
+
+    try{
+        const eventexist = await Event.findById(eventId).select('_id');
+        if(!eventexist){
+            return res.status(400).json({error: "Event do not exist"});
+        }
+        const profile = await Profile.findOne({userid: id}).select('_id');
+        const participant = new EventParticipant({
+            "eventId": eventId,
+            "participantId": profile._id
+        });
+
+        if(profile || participant){
+            return res.status(400).json({error: "Profile or EventParticipant error"});
+        }
+
+        await participant.save();
+        res.status(201).json({message: "registered successfully", result: participant});
+    }catch(err){
+        return res.status(500).json({error: "Internal server error at registerEvent"});
+    }
+}
+
+export const registerInTask = async (req, res, next) => {
+    const { taskId } = req.params;
+    const id = req.user.id;
+
+    try{
+        const taskexist = await Task.findById(taskId).select('_id');
+        if(!taskexist){
+            return res.status(400).json({error: "Task do not exist"});
+        }
+
+        const profile = await Profile.findOne({userid: id}).select('_id');
+        const participant = new TaskParticipant({
+            "taskId": taskId,
+            "participantId": profile._id
+        });
+
+        if(!(profile && participant)){
+            return res.status(400).json({error: "Profile or TaskParticipant error"});
+        }
+
+        await participant.save();
+        res.status(201).json({message: "registered successfully", result: participant});
+    }catch(err){
+        return res.status(500).json({error: "Internal server error at registerEvent"});
     }
 }
