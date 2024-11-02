@@ -4,7 +4,7 @@ export const addNews = async (req,res,next) => {
     const { adminId, headline, description, date } = req.body;
 
     try{
-        const exist = await News.findById({adminId,headline,date});
+        const exist = await News.findOne({adminId,headline,date});
         if(exist){
             res.status(400).json({error: "News already exist"});
         }
