@@ -1,12 +1,16 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
+import { useDispatch, useSelector } from 'react-redux';
+import { setAuth } from '../../features/authentication/authSlice';
 
 function Login() {
     const [values,setValues] = useState({
         username: "",
         password: "",
     })
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const dispatch = useDispatch();
 
     const navigate = useNavigate();
 
@@ -18,8 +22,8 @@ function Login() {
             });
     
             if (response.status === 200) {
-                console.log(response)
-                console.log("login successively");
+                dispatch(setAuth(true))
+                console.log("isAuthenticated: ", isAuthenticated);
                 navigate('/')
             }
             else{
@@ -28,6 +32,7 @@ function Login() {
         } catch (error) {
             console.error("Login failed:", error);
             console.log("unable to login");
+            navigate('/signup')
         }
     };
     
