@@ -1,21 +1,18 @@
 import { Router } from 'express';
-import { ensureLoggedIn } from '../middleware/protectRoute.js';
+import { ensureLoggedIn, ensureAdmin } from '../middleware/protectRoute.js';
 import { createTask,removeTask } from '../controllers/task.controller.js';
 import { createEvent, removeEvent } from '../controllers/event.controller.js';
 import { addNews, removeNews } from '../controllers/news.controller.js';
 
 const AdminRouter = Router();
 
-AdminRouter.post('/event/create',ensureLoggedIn, createEvent);
+AdminRouter.use(ensureLoggedIn, ensureAdmin);
 
-AdminRouter.post('/event/task/create',ensureLoggedIn ,createTask);
-
-AdminRouter.delete('/event/delete',ensureLoggedIn, removeEvent);
-
-AdminRouter.delete('/event/task/delete',ensureLoggedIn ,removeTask);
-
-AdminRouter.post('/news/create',ensureLoggedIn,addNews);
-
-AdminRouter.delete('/news/delete',ensureLoggedIn,removeNews);
+AdminRouter.post('/event/create', createEvent);
+AdminRouter.post('/event/task/create', createTask);
+AdminRouter.delete('/event/delete', removeEvent);
+AdminRouter.delete('/event/task/delete', removeTask);
+AdminRouter.post('/news/create', addNews);
+AdminRouter.delete('/news/delete', removeNews);
 
 export default AdminRouter;
