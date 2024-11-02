@@ -12,7 +12,7 @@ export const loginV1 =  passport.authenticate("local")
 // }
 
 export const signupV1 = async (req, res, next) => {
-    const {username,password,confirmPassword,email} = req.body;
+    const {username,password,confirmPassword,email, isAdmin} = req.body;
 
     try{
         const user = await User.findOne({username});
@@ -39,10 +39,11 @@ export const signupV1 = async (req, res, next) => {
 
         if(newUser){
             await newUser.save();
-
+            
             const newprofile = new Profile({
                 userid: newUser._id,
                 email: email,
+                isAdmin: (isAdmin==='true')?true:false
             })
 
             const new_profile = await newprofile.save();
