@@ -22,10 +22,6 @@ const taskSchema = new Schema({
         type: String,
         required: true,
         enum: ["pdf", "image", "video"]
-    },
-    isCompleted: { 
-        type: Boolean, 
-        default: false 
     }
 });
 
