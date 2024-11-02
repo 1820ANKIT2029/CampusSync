@@ -1,6 +1,15 @@
 import { Router } from 'express';
 import { ensureLoggedIn, ensureUser } from '../middleware/protectRoute.js';
-import { event, profile, handleImageUpload, profileEdit, ActiveEvent, InactiveEvent } from '../controllers/user.controller.js';
+import { 
+    event, 
+    profile, 
+    handleImageUpload, 
+    profileEdit, 
+    ActiveEvent, 
+    InactiveEvent,
+    registerInEvent,
+    registerInTask
+} from '../controllers/user.controller.js';
 
 
 const UserRouter = Router();
@@ -12,6 +21,8 @@ UserRouter.get('/event/active', ActiveEvent);
 UserRouter.get('/event/inactive', InactiveEvent);
 UserRouter.get('/profile', profile);
 UserRouter.post('/profile/edit', handleImageUpload, profileEdit);
+UserRouter.post('/event/register/:eventId', registerInEvent);
+UserRouter.post('/event/task/register/:taskId', registerInTask);
 
 
 export default UserRouter;
