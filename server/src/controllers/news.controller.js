@@ -1,4 +1,5 @@
 import { News } from "../models/news.model.js";
+import { Profile } from "../models/user.models.js";
 
 export const addNews = async (req,res,next) => {
     const { adminId, headline, description, date } = req.body;
@@ -26,7 +27,7 @@ export const addNews = async (req,res,next) => {
 
 export const removeNews = async (req,res,next) => {
     const {_id, adminId} = req.body;
-
+    
     try{
         const news = await news.findById({_id});
 
@@ -43,5 +44,35 @@ export const removeNews = async (req,res,next) => {
         res.status(200).json({message: "news deleted!"});
     }catch(error){
         res.status(500).json({error: "Internal server error found in removeNews"});
+    }
+}
+
+
+export const EditNews = async (req, res, next) => {
+    const { newsId } = req.params;
+    const { headline, description } = req.body;
+    const id = req.user.id;
+    let changes = {};
+
+    if(headline){
+        changes.headline = headline;
+    }
+    if(description){
+        changes.description = description;
+    }
+
+    try{
+        const profile = await Profile.findOne({userid: id}).select('_id');
+        const news = await News.findOneAndUpdate(
+            {adminId: profile._id, _id: newsId},
+            changes,
+            {new: true}
+        );
+        if(!news){
+            return res.status(400).json({error: "News update failed"});
+        }
+        return res.status(204).json({message: "News updated successfully"});
+    }catch(err){
+        res.status(500).json({error: "Internal server error found in edit news"});
     }
 }
