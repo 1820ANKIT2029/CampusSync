@@ -4,6 +4,7 @@ import { File } from "../models/file.model.js";
 import { Task, TaskParticipant } from '../models/task.models.js';
 import { Submission } from "../models/submission.model.js";
 import { getResourceType } from "../util/helper.js"
+import { EventParticipant } from '../models/event.model.js';
 
 export const upload = async (req, res, next) => {
     const file = req.file;
@@ -91,12 +92,15 @@ export const verifySubmission = async (req, res, next) => {
             {TaskParticipant: submission.participantId},
             {isCompleted: IsAccept},
             { new: true }
-        );
-
+        ).populate('taskId');
         if(!(submission && task)){
             return res.status(400).json({error: "Submission or Task update error"});
         }
-
+        const event = await EventParticipant.findOneAndUpdate(
+            {eventId: task.taskId.eventId},
+            { $inc: { points: 10 } },
+            { new: true }     
+        );
         return res.status(200).json({message : "submission verify done"});
     }
     catch(err){
