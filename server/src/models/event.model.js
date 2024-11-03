@@ -19,15 +19,7 @@ const eventSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Profile'
     },
-    createdAt: {
-        type: Date,
-        default: Date.now
-    },
-    updatedAt: {
-        type: Date,
-        default: Date.now
-    }
-});
+}, { timestamps: true });
 
 const eventParticipantSchema = new Schema({
     eventId: {
@@ -44,7 +36,7 @@ const eventParticipantSchema = new Schema({
         type: Number, 
         default: 0 
     }
-});
+}, { timestamps: true });
 
 export const Event = model("Event", eventSchema);
 export const EventParticipant = model("EventParticipant", eventParticipantSchema);

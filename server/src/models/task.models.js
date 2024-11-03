@@ -23,7 +23,7 @@ const taskSchema = new Schema({
         required: true,
         enum: ["pdf", "image", "video"]
     }
-});
+}, { timestamps: true });
 
 const taskParticipantSchema = new Schema({
     taskId: { 
@@ -40,7 +40,7 @@ const taskParticipantSchema = new Schema({
         type: Boolean, 
         default: false 
     }
-});
+}, { timestamps: true });
 
 export const Task = model("Task", taskSchema);
 export const TaskParticipant = model("TaskParticipant", taskParticipantSchema);
