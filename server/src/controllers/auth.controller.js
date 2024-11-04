@@ -70,7 +70,7 @@ export const googleLoginafter = (req, res, next) => {
 
 export const googlecallback = passport.authenticate('google',
     { 
-        successRedirect: "http://localhost:5173/",
+        successRedirect: "http://localhost:5173/home",
         failureRedirect: "http://localhost:5173/login",
     }
 );
