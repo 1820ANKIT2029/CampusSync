@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Socket testing</title>
+</head>
+<body>
+
+    <button id="close-socket" type="button">close</button>
+
+    <div id="notification"></div>
+    
+    <script src="https://cdn.socket.io/4.8.0/socket.io.min.js" integrity="sha384-OoIbkvzsFFQAG88r+IqMAjyOtYDPGO0cqK5HF5Uosdy/zUEGySeAzytENMDynREd" crossorigin="anonymous"></script>
+    <script type="module">
+        import { io } from "https://cdn.socket.io/4.8.0/socket.io.esm.min.js";
+
+        const notification = document.getElementById('notification');
+
+        const socket = io("http://localhost:5000");
+        socket.on("notification", (data)=> {
+            adddata(notification, data);
+        });
+
+        
+        const ele = document.getElementById("close-socket");
+        ele.addEventListener("click", () => {
+            socket.disconnect();
+            adddata(notification, "Socket closed");
+            console.log("Socket closed");
+        })
+
+        function adddata(parentElement, data){
+            const newElement = document.createElement("p");
+            newElement.textContent = JSON.stringify(data);
+            parentElement.appendChild(newElement);
+        }
+    </script>
+</body>
+</html>
