@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { ensureLoggedIn, ensureAdmin } from '../middleware/protectRoute.js';
 import { createTask,removeTask } from '../controllers/task.controller.js';
 import { createEvent, removeEvent } from '../controllers/event.controller.js';
-import { addNews, removeNews } from '../controllers/news.controller.js';
+import { addNews, removeNews, EditNews } from '../controllers/news.controller.js';
+import { verifySubmission } from '../controllers/submission.controller.js'
 import { 
     adminEvents, 
     adminEventById, 
