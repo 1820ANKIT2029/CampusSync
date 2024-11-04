@@ -2,9 +2,7 @@ import express from 'express';
 import http from 'http';
 import { Server } from 'socket.io';
 import dotenv from 'dotenv';
-
-import { connectToMongoDB } from './db/ConnectMongoDB.js';
-
+import { GlobalLeaderBoard } from './controllers/LeaderBoard.controller.js';
 
 dotenv.config();
 
@@ -23,6 +21,8 @@ const notification = io.of("notification");
 const leaderBoard = io.of("leaderBoard");
 const eventLeaderboard = io.of("eventLeaderboard");
 const chatRoom = io.of("chatRoom");
+
+leaderBoard.on('connection', GlobalLeaderBoard);
 
 
 // Set up an HTTP endpoint (optional)
@@ -65,8 +65,7 @@ setInterval(() => {
 }, 10000);
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.SECOND_PORT;
 server.listen(PORT, () => {
-    connectToMongoDB()
     console.log(`Server is running on http://localhost:${PORT}`);
 });
