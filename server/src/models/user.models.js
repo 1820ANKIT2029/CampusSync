@@ -43,6 +43,10 @@ const profileScheme = new Schema({
         type: String,
         default: null,
     },
+    bio: {
+        type: String,
+        default: null
+    },
     year: {
         type: Number,
         default: 0,
