@@ -21,6 +21,7 @@ export const addNews = async (req,res,next) => {
 
         return res.status(200).json({message: "news created"});
     }catch(error){
+        console.log(error);
         res.status(500).json({error: "Internal Server Error in addNews"});
     }
 }

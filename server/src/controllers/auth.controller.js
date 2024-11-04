@@ -82,22 +82,23 @@ export const googlecallback = passport.authenticate('google',
 );
 
 export const logout = async (req, res, next) => {
-    if(req.isAuthenticated()){
-        await req.logout(async function (err) {
-            if (err) {
-              return next(err);
-            }
-            await req.session.destroy(() => {
-              res.clearCookie("connect.sid"); // Clear session cookie (optional)
-              res.status(200).json({message: "logout successfully"});
+    if (req.isAuthenticated()) {
+        try {
+            await req.logout(); // Logout the user
+            req.session.destroy((err) => {
+                if (err) {
+                    return next(err);
+                }
+                res.clearCookie("connect.sid"); // Clear session cookie (optional)
+                res.status(200).json({ message: "Logged out successfully" });
             });
-        });
+        } catch (err) {
+            return next(err); // Handle errors in logout process
+        }
+    } else {
+        res.status(401).json({ error: "Already logged out" });
     }
-    else{
-        res.status(401).json({error: "already logout"});
-    }
-    
-  }
+};
 
 export const success = (req, res, next) => {
     res.status(200).json(
