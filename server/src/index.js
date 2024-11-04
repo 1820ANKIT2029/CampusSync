@@ -15,6 +15,7 @@ import HomeRouter from './routes/home.routes.js';
 import AdminRouter from './routes/admin.routes.js';
 import SubmissionRouter from './routes/submission.routes.js';
 import UserRouter from './routes/user.routes.js';
+import ApiRouter from './routes/api.routes.js';
 
 import { googlestrategy, localstrategy} from './strategies/index.js'
 import { User } from './models/user.models.js';
@@ -47,7 +48,6 @@ app.use(
         saveUninitialized: false,
         cookie: {
             maxAge: 60000*60,
-            //secure: true
             httpOnly: false
         },
         // define place to store sessions
@@ -94,6 +94,7 @@ app.use('/auth', AuthRouter);  // auth api router
 app.use('/admin',AdminRouter); // admin api router
 app.use('/submit', SubmissionRouter); // submission api router
 app.use('/user', UserRouter);  // get user related value
+app.use('/api', ApiRouter); // get events, news etc data (login not require)
 
 app.listen(PORT, ()=>{
     connectToMongoDB();

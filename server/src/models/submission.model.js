@@ -1,9 +1,9 @@
 import { Schema, model } from 'mongoose';
 
 const submissionSchema = new Schema({
-    userId: {
+    participantId: {
         type: Schema.Types.ObjectId, 
-        ref: 'User', 
+        ref: 'Profile', 
         required: true 
     },
     taskId: { 
