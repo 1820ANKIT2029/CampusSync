@@ -4,7 +4,7 @@ export const addNews = async (req,res,next) => {
     const { adminId, headline, description, date } = req.body;
 
     try{
-        const exist = await News.findById({adminId,headline,date});
+        const exist = await News.findOne({adminId,headline,date});
         if(exist){
             res.status(400).json({error: "News already exist"});
         }
@@ -20,6 +20,7 @@ export const addNews = async (req,res,next) => {
 
         return res.status(200).json({message: "news created"});
     }catch(error){
+        console.log(error);
         res.status(500).json({error: "Internal Server Error in addNews"});
     }
 }
