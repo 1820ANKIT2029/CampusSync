@@ -1,4 +1,3 @@
-import { profile } from "../controllers/user.controller";
 import { Profile } from "../models/user.models.js";
 
 // user authenticated then redirect to next page
