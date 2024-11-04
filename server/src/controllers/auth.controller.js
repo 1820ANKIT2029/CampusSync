@@ -5,12 +5,6 @@ import { hashPassword } from "../util/hash_function.js";
 
 export const loginV1 =  passport.authenticate("local")
 
-// export const loginV1 = async( req, res) => {
-//     res.status(200).json({
-//         message: "login Success",
-//     })
-// }
-
 export const signupV1 = async (req, res, next) => {
     const {username,password,confirmPassword,email, isAdmin} = req.body;
 
@@ -82,23 +76,22 @@ export const googlecallback = passport.authenticate('google',
 );
 
 export const logout = async (req, res, next) => {
-    if (req.isAuthenticated()) {
-        try {
-            await req.logout(); // Logout the user
-            req.session.destroy((err) => {
-                if (err) {
-                    return next(err);
-                }
-                res.clearCookie("connect.sid"); // Clear session cookie (optional)
-                res.status(200).json({ message: "Logged out successfully" });
+    if(req.isAuthenticated()){
+        await req.logout(async function (err) {
+            if (err) {
+              return next(err);
+            }
+            await req.session.destroy(() => {
+              res.clearCookie("connect.sid"); // Clear session cookie (optional)
+              res.status(200).json({message: "logout successfully"});
             });
-        } catch (err) {
-            return next(err); // Handle errors in logout process
-        }
-    } else {
-        res.status(401).json({ error: "Already logged out" });
+        });
     }
-};
+    else{
+        res.status(401).json({error: "already logout"});
+    }
+    
+  }
 
 export const success = (req, res, next) => {
     res.status(200).json(
