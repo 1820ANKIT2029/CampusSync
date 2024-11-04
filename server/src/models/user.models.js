@@ -1,15 +1,19 @@
 import mongoose, { Schema, model } from 'mongoose';
 
-// Image schema use in profile schema
-const imageSchema = new Schema({
-    userid: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Profile'
-    },
-    name: String,
-    data: Buffer,
-    contentType: String
-}, { timestamps: true });
+export const GENDER = ["male", "female", "Not set"];
+export const BRANCH = [
+    "Computer Science and Engineering", 
+    "Electronics and Communication Engineering", 
+    "Electrical Engineering", 
+    "Mechanical Engineering", 
+    "Civil Engineering", 
+    "Biotechnology", 
+    "Chemical Engineering",
+    "Production and Industrial Engineering",
+    "Engineering and Computational Mechanics",
+    "Not set"
+];
+export const YEAR = [0, 1, 2, 3, 4];
 
 // User schema
 const userSchema = new Schema({
@@ -39,13 +43,19 @@ const profileScheme = new Schema({
         type: String,
         default: null,
     },
+    bio: {
+        type: String,
+        default: null
+    },
     year: {
         type: Number,
         default: 0,
+        enum: YEAR
     },
     branch: {
         type: String,
-        default: null,
+        default: "Not set",
+        enum: BRANCH
     },
     email: {
         type: String,
@@ -54,11 +64,11 @@ const profileScheme = new Schema({
     gender: {
         type: String,
         default: "Not set",
-        enum: ["male", "female", "Not set"],
+        enum: GENDER,
     },
     profilePic: {
         type: String,
-        default: null,
+        default: "https://res.cloudinary.com/dwlputtun/image/upload/v1730522067/ysuvwnriqlpqtdlyqysk.png",
     },
     aura: {
         type: Number,
@@ -73,4 +83,3 @@ const profileScheme = new Schema({
 // model of User, Profile
 export const User = model("User", userSchema);
 export const Profile = model("Profile", profileScheme);
-export const Image = model("Image", imageSchema);

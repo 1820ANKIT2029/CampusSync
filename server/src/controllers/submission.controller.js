@@ -1,15 +1,22 @@
 import { v2 as cloudinary } from 'cloudinary';
 
 import { File } from "../models/file.model.js";
+import { Task, TaskParticipant } from '../models/task.models.js';
 import { Submission } from "../models/submission.model.js";
 import { getResourceType } from "../util/helper.js"
+import { EventParticipant } from '../models/event.model.js';
 
 export const upload = async (req, res, next) => {
     const file = req.file;
-    console.log(file);
     const { taskId, userId } = req.query;
     const resource_type = getResourceType(file);
+
     try {
+        const taskexist = await Task.findById(taskId).select('_id');
+        if(!taskexist){
+            return res.status(400).json({error: "Task do not exist"});
+        }
+
         let result;
         if(resource_type === 'raw'){
             result = await cloudinary.uploader.upload(file.path, 
@@ -48,11 +55,55 @@ export const upload = async (req, res, next) => {
         }
         else{
             await cloudinary.uploader.destroy(result.publicId);
-            res.status(400).json({error: "file not uploaded"});
+            return res.status(400).json({error: "file not uploaded"});
         }
-        res.status(200).json({message: "file upload successfully"});
+        return res.status(200).json({message: "file upload successfully"});
     } catch (error) {
         console.error('Error uploading file:', error);
-        res.status(500).send('Internal server Error uploading file');
+        return res.status(500).send('Internal server Error uploading file');
+    }
+}
+
+export const verifySubmission = async (req, res, next) => {
+    const { submissionId } = req.params;
+    const { IsAccept } = req.body;
+    const { id } = req.user.id;
+
+    if (typeof(IsAccept) !== 'boolean') {
+        return res.status(400).json({ error: "isAccept must be a boolean." });
+    }
+
+    try{
+        const submissionexist = await Submission.findById(submissionId);
+        if(!submissionexist){
+            return res.status(400).json({error: "Submission does not exist"});
+        }
+
+        if(submissionexist.isCheck){
+            return res.status(429).json({error: "Already done"});
+        }
+
+        const submission = await Submission.findByIdAndUpdate(
+            submissionId,
+            { 'isCheck': true },
+            { new: true }
+        );
+        const task = await TaskParticipant.findOneAndUpdate(
+            {TaskParticipant: submission.participantId},
+            {isCompleted: IsAccept},
+            { new: true }
+        ).populate('taskId');
+        if(!(submission && task)){
+            return res.status(400).json({error: "Submission or Task update error"});
+        }
+        const event = await EventParticipant.findOneAndUpdate(
+            {eventId: task.taskId.eventId},
+            { $inc: { points: 10 } },
+            { new: true }     
+        );
+        return res.status(200).json({message : "submission verify done"});
+    }
+    catch(err){
+        return res.status(500).json({error: "Internal server error at verifySubmission"});
     }
 }
