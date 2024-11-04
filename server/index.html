@@ -17,7 +17,7 @@
 
         const notification = document.getElementById('notification');
 
-        const socket = io("http://localhost:3000");
+        const socket = io("http://localhost:5000");
         socket.on("notification", (data)=> {
             adddata(notification, data);
         });
