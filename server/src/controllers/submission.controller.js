@@ -4,7 +4,8 @@ import { File } from "../models/file.model.js";
 import { Task, TaskParticipant } from '../models/task.models.js';
 import { Submission } from "../models/submission.model.js";
 import { getResourceType } from "../util/helper.js"
-import { EventParticipant } from '../models/event.model.js';
+import { Event, EventParticipant } from '../models/event.model.js';
+import { Profile } from '../models/user.models.js';
 
 export const upload = async (req, res, next) => {
     const file = req.file;
@@ -66,21 +67,29 @@ export const upload = async (req, res, next) => {
 
 export const verifySubmission = async (req, res, next) => {
     const { submissionId } = req.params;
-    const { IsAccept } = req.body;
     const { id } = req.user.id;
 
-    if (typeof(IsAccept) !== 'boolean') {
-        return res.status(400).json({ error: "isAccept must be a boolean." });
+    if(!submissionId){
+        return res.status(400).json({error: "Submission ID not provided."});
     }
 
     try{
-        const submissionexist = await Submission.findById(submissionId);
+        const profile = await Profile.findOne({userId: id}).select('_id');
+        const submissionexist = await Submission.findById(submissionId).populate('taskId');
         if(!submissionexist){
             return res.status(400).json({error: "Submission does not exist"});
         }
 
+        const isadminevent = await Event.findOne({
+            _id: submissionexist.taskId.eventId,
+            organizer: profile._id
+        });
+        if(!isadminevent){
+            return res.status(400).json({error: "submission does not belong to your event"});
+        }
+
         if(submissionexist.isCheck){
-            return res.status(429).json({error: "Already done"});
+            return res.status(400).json({error: "Already done"});
         }
 
         const submission = await Submission.findByIdAndUpdate(
@@ -90,14 +99,14 @@ export const verifySubmission = async (req, res, next) => {
         );
         const task = await TaskParticipant.findOneAndUpdate(
             {TaskParticipant: submission.participantId},
-            {isCompleted: IsAccept},
-            { new: true }
-        ).populate('taskId');
+            {isCompleted: true},
+            {new: true }
+        );
         if(!(submission && task)){
             return res.status(400).json({error: "Submission or Task update error"});
         }
         const event = await EventParticipant.findOneAndUpdate(
-            {eventId: task.taskId.eventId},
+            {eventId: submissionexist.taskId.eventId},
             { $inc: { points: 10 } },
             { new: true }     
         );
@@ -105,5 +114,56 @@ export const verifySubmission = async (req, res, next) => {
     }
     catch(err){
         return res.status(500).json({error: "Internal server error at verifySubmission"});
+    }
+}
+
+export const removeVerifysubmission = async (req, res, next) => {
+    const { submissionId } = req.params;
+    const { id } = req.user.id;
+
+    if(!submissionId){
+        return res.status(400).json({error: "Submission ID not provided."});
+    }
+
+    try{
+        const profile = await Profile.findOne({userId: id}).select('_id');
+        const submissionexist = await Submission.findById(submissionId).populate('taskId');
+        if(!submissionexist){
+            return res.status(400).json({error: "Submission does not exist"});
+        }
+
+        const isadminevent = await Event.findOne({
+            _id: submissionexist.taskId.eventId,
+            organizer: profile._id
+        });
+        if(!isadminevent){
+            return res.status(400).json({error: "submission does not belong to your event"});
+        }
+
+        if(!submissionexist.isCheck){
+            return res.status(400).json({error: "Already done"});
+        }
+
+        const submission = await Submission.findByIdAndUpdate(
+            submissionId,
+            { 'isCheck': false },
+            { new: true }
+        );
+        const task = await TaskParticipant.findOneAndUpdate(
+            {TaskParticipant: submission.participantId},
+            {isCompleted: false},
+            {new: true }
+        );
+        if(!(submission && task)){
+            return res.status(400).json({error: "Submission or Task update error"});
+        }
+        const event = await EventParticipant.findOneAndUpdate(
+            {eventId: submissionexist.taskId.eventId},
+            { $inc: { points: -10 } },
+            { new: true }     
+        );
+        return res.status(200).json({message : "submission remove verify done"});
+    }catch(error){
+        return res.status(500).json({error: "Internal server error at removeVerifysubmission"});
     }
 }
