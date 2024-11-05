@@ -38,7 +38,7 @@ export const upload = async (req, res, next) => {
         const newfile = new File({
             cloudId: result.public_id,
             filename: file.originalname,
-            url: result.url,
+            url: result.secure_url,
             type: file.mimetype,
             size: file.size
         });

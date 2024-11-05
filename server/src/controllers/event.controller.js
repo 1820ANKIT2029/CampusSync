@@ -1,5 +1,6 @@
-import {Event} from "../models/event.model.js";
+import { Event } from "../models/event.model.js";
 import { Task } from "../models/task.models.js";
+import { Profile } from "../models/user.models.js";
 
 export const createEvent = async (req,res,next) => {
     const {
@@ -7,12 +8,17 @@ export const createEvent = async (req,res,next) => {
         description,
         startTime,
         endTime,
-        location,
-        organizer
+        location
     } = req.body;
+    const id = req.user.id;
+
+    if(!(name && description && startTime && endTime && location)){
+        return res.status(400).json({error: "Invalid Event form values"});
+    }
 
     try{
-        const existance = await Event.findOne({organizer});
+        const profile = await Profile.findOne({userid: id}).select('_id');
+        const existance = await Event.findOne({organizer: profile._id});
         
         if(existance){
             return res.status(409).json({error: "event already present"});
@@ -21,10 +27,10 @@ export const createEvent = async (req,res,next) => {
         const newEvent = new Event({
             name,
             description,
-            startTime,
-            endTime,
+            startTime: new Date(startTime),
+            endTime: new Date(endTime),
             location,
-            organizer
+            organizer : profile._id
         });
 
         const event = await newEvent.save();
@@ -36,17 +42,24 @@ export const createEvent = async (req,res,next) => {
 }
 
 export const removeEvent = async (req,res,next) => {
-    const { id } = req.query;
+    const { EventId } = req.query;
+
+    const id = req.user.id;
+
+    if(!EventId){
+        return res.status(400).json({error: "need event ID"});
+    }
 
     try{
-        const exist = Event.findById({_id:id});
+        const profile = await Profile.findOne({userid: id}).select('_id');
+        const exist = Event.findOne({_id:EventId, organizer: profile._id});
 
         if(!exist){
             return res.status(404).json({error: "task doesn't exist"});
         }
 
-        await Event.findByIdAndDelete({_id:id});
-        await Task.deleteMany({eventId: id});
+        await Event.findByIdAndDelete(EventId);
+        await Task.deleteMany({eventId: EventId});
         
         return res.status(200).json({message: "event deleted successively."});
     }catch{error}{
