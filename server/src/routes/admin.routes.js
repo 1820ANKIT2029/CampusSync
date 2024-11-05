@@ -3,7 +3,7 @@ import { ensureLoggedIn, ensureAdmin } from '../middleware/protectRoute.js';
 import { createTask,removeTask } from '../controllers/task.controller.js';
 import { createEvent, removeEvent } from '../controllers/event.controller.js';
 import { addNews, removeNews, EditNews } from '../controllers/news.controller.js';
-import { verifySubmission } from '../controllers/submission.controller.js'
+import { removeVerifysubmission, verifySubmission } from '../controllers/submission.controller.js'
 import { 
     adminEvents, 
     adminEventById, 
@@ -24,8 +24,9 @@ AdminRouter.delete('/event/delete', removeEvent);
 AdminRouter.delete('/event/task/delete', removeTask);
 AdminRouter.post('/news/create', addNews);
 AdminRouter.put('/news/edit/:newsId', EditNews);
-AdminRouter.delete('/news/delete', removeNews);
+AdminRouter.delete('/news/delete/:newsId', removeNews);
 AdminRouter.put('/submission/verify/:submissionId', verifySubmission);
+AdminRouter.put('/submission/removeVerify/:submissionId', removeVerifysubmission);
 
 AdminRouter.get('/event', adminEvents);
 AdminRouter.get('/event/details/:eventId', adminEventById);
@@ -34,7 +35,7 @@ AdminRouter.get('/event/inactive', adminInactiveEvents);
 AdminRouter.get('/news', adminNews);
 AdminRouter.get('/news/:newsId', adminNewsById)
 
-AdminRouter.get('profile', profile);
+AdminRouter.get('/profile', profile);
 AdminRouter.post('/profile/edit', handleImageUpload, profileEdit);
 
 export default AdminRouter;
