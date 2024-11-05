@@ -19,6 +19,10 @@ const eventSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'Profile'
     },
+    auraDistributed: {
+        type: Boolean,
+        default: false
+    }
 }, { timestamps: true });
 
 const eventParticipantSchema = new Schema({

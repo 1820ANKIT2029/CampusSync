@@ -7,6 +7,10 @@ export const loginV1 =  passport.authenticate("local")
 
 export const signupV1 = async (req, res, next) => {
     const {username,password,confirmPassword,email, isAdmin} = req.body;
+    
+    if(!(username && password && confirmPassword && email && isAdmin)){
+        return res.status(400).json({error: "Some (field is/fields are) missing."});
+    }
 
     try{
         const user = await User.findOne({username});
@@ -14,11 +18,9 @@ export const signupV1 = async (req, res, next) => {
         if(user){
             return res.status(400).json({error: "User already exists"});
         }
-
         if(password.length < 6){
             return res.status(400).json({error: "password length must be atleast 6"});
         }
-
         if(password != confirmPassword){
             return res.status(400).json({error: "Password doesn't match"});
         }
@@ -53,7 +55,6 @@ export const signupV1 = async (req, res, next) => {
         }
     }
     catch(error){
-        console.log(error);
         return res.status(500).json({error: "Internal server error in signupv1"});
     }
 }

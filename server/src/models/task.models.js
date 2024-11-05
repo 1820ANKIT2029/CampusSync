@@ -1,5 +1,7 @@
 import { Schema, model } from 'mongoose';
 
+export const SUBMISSION_TYPE = ["raw", "image", "video"];
+
 const taskSchema = new Schema({
     eventId: { 
         type: Schema.Types.ObjectId, 
@@ -21,7 +23,7 @@ const taskSchema = new Schema({
     submissionType: {
         type: String,
         required: true,
-        enum: ["pdf", "image", "video"]
+        enum: SUBMISSION_TYPE
     }
 }, { timestamps: true });
 
