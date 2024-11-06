@@ -1,7 +1,6 @@
 import React from 'react';
 
-const EventCount = ({ title, value, percentage, increase }) => {
-
+const EventCount = ({ value }) => {
   return (
     <div className="flex items-center justify-between bg-white p-6 rounded-lg shadow-md w-full md:w-80 md-m-4">
       <div>
