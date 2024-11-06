@@ -1,34 +1,11 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Participants from "../cards/Participant.jsx";
 import EventCount from "../cards/EventCount.jsx";
 import Contribution from "../cards/Contribution.jsx";
 import Events from '../event/Events.jsx';
+import axios from 'axios';
 
 
-
-const cardData = [
-  {
-    id: 1,
-    title: "Clients Added",
-    value: 197,
-    percentage: 2.5,
-    increase: true,
-  },
-  {
-    id: 2,
-    title: "Orders Completed",
-    value: 745,
-    percentage: 1.8,
-    increase: true,
-  },
-  {
-    id: 3,
-    title: "New Leads",
-    value: 120,
-    percentage: -0.5,
-    increase: false,
-  },
-];
 
 const EventsData = [
   {
@@ -140,6 +117,30 @@ const EventsData = [
 
 
 const AdminProfile = () => {
+  const [eventData,setEventData] = useState({
+    "totalBlogs":0,
+    "totalEvents":0,
+    "totalParticipants":0,
+  })
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/admin/getStats', {
+          withCredentials: true 
+        });
+        // console.log(response);
+        setEventData(response.data);
+        console.log(eventData);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    
+    fetchData();
+  }, []);
+
+
   return (
     <div className="flex flex-col items-center p-4">
       {/* Top Section */}
@@ -147,15 +148,15 @@ const AdminProfile = () => {
         <div className="p-4 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 md:m-4 gap-6">
             <Participants
               key={0}
-              value={cardData[0].value}
+              value={eventData.totalParticipants}
             />
             <EventCount
               key={1}
-              value={cardData[1].value}
+              value={eventData.totalEvents}
             />
             <Contribution
               key={2}
-              value={cardData[2].value}
+              value={2*eventData.totalEvents + eventData.totalParticipants + 0.5*eventData.totalBlogs}
             />
         </div>
       </div>
