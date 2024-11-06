@@ -1,9 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { setAdmin } from '../../features/isAdmin/adminSlice';
 
 function Hero() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const handleSubmit = () => {
+        dispatch(setAdmin(false));
         navigate('/login')
     }
   return (
