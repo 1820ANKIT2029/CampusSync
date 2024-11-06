@@ -1,5 +1,6 @@
 import { Event, EventParticipant } from '../models/event.model.js';
 import { Profile } from '../models/user.models.js';
+import { History } from '../models/history.model.js';
 
 export const updateGlobalAura = async () => {
     const now = new Date();
@@ -25,5 +26,20 @@ export const updateGlobalAura = async () => {
         }
     }catch(error){
         console.log(error);
+    }
+};
+
+export const deleteOldNotification = async () => {
+    const oneWeekAgo = new Date();
+    oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+    try{
+        const oldnotification = await History.deleteMany({
+            seen: true,
+            createdAt : { $lt: oneWeekAgo }
+        })
+
+        console.log(`Deleted ${oldnotification.deletedCount} old seen notifications.`);
+    }catch(err){
+        console.log(err)
     }
 }

@@ -1,4 +1,5 @@
 import { Profile } from "../models/user.models.js"
+import jwt from 'jsonwebtoken';
 
 export const SocketTokenGenerater = async (userId) => {
     try{
@@ -33,7 +34,7 @@ export const SocketTokenVerify = async (token) => {
     }
 }
 
-export const setSocketAuthToken = async (req, res, next){
+export const setSocketAuthToken = async (req, res, next) => {
     const token = await SocketTokenGenerater(req.user.id);
     if(token){
         req.socket_token = token;
