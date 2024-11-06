@@ -5,6 +5,6 @@ import { ensureLoggedIn } from '../middleware/protectRoute.js';
 
 const SubmissionRouter = Router();
 
-SubmissionRouter.put("/upload", ensureLoggedIn, uploadstorage.single('file'), upload);
+SubmissionRouter.post("/upload", ensureLoggedIn, uploadstorage.single('file'), upload);
 
 export default SubmissionRouter;

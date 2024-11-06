@@ -35,6 +35,63 @@
             newElement.textContent = JSON.stringify(data);
             parentElement.appendChild(newElement);
         }
+/*
+        // Assume you have stored the token from login in a variable or local storage
+const token = "your-generated-jwt-token";
+
+const socket = io("/orders", {
+    auth: { token }
+});
+
+const token = "your-auth-token";
+const eventID = "event-123"; // Example eventID
+
+// Connect to the /orders namespace with both token and eventID
+const socket = io("/orders", {
+    auth: { token },  // Send token for authentication
+    query: { eventID }  // Send eventID as a query parameter
+});
+
+const orderSocket = io.of("/orders");
+
+orderSocket.use((socket, next) => {
+    const token = socket.handshake.auth.token; // Authentication token
+    const eventID = socket.handshake.query.eventID; // Event ID from the query parameter
+
+    if (!token) {
+        return next(new Error("Authentication error"));
+    }
+
+    // Verify token
+    if (!SocketTokenVerify(token)) {
+        return next(new Error("Invalid token"));
+    }
+
+    // Optionally, handle eventID (e.g., check if the event exists)
+    console.log("Event ID:", eventID);
+
+    next(); // Proceed with the connection if everything is valid
+});
+
+orderSocket.on("connection", (socket) => {
+    console.log(`User connected to /orders for event ${socket.handshake.query.eventID}`);
+
+    // Handle the rest of your socket logic...
+});
+
+
+
+
+socket.on("connect", () => {
+    console.log("Connected to /orders with authentication");
+    // Emit events as needed
+});
+
+socket.on("connect_error", (err) => {
+    console.log(`Connection failed: ${err.message}`);
+});
+*/
+
     </script>
 </body>
 </html>
