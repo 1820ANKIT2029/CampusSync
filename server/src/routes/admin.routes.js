@@ -10,7 +10,8 @@ import {
     adminActiveEvents, 
     adminInactiveEvents,
     adminNews,
-    adminNewsById
+    adminNewsById,
+    getStats
 } from '../controllers/admin.controller.js';
 import { profile, profileEdit, handleImageUpload } from '../controllers/user.controller.js';
 
@@ -36,5 +37,7 @@ AdminRouter.get('/news/:newsId', adminNewsById)
 
 AdminRouter.get('profile', profile);
 AdminRouter.post('/profile/edit', handleImageUpload, profileEdit);
+
+AdminRouter.get('/getStats',getStats);
 
 export default AdminRouter;

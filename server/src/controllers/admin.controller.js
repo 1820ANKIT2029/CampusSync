@@ -1,3 +1,4 @@
+import { table } from "console";
 import { Event, EventParticipant } from "../models/event.model.js";
 import { News } from "../models/news.model.js";
 import { Submission } from "../models/submission.model.js";
@@ -138,3 +139,32 @@ export const adminNewsById = async (req, res, next) => {
         return res.status(500).json({error : "Internal server error at admin News"});
     }
 };
+
+export const getStats = async (req, res, next) => {
+    const id = req.user.id;
+
+    try{
+        const profile = await Profile.findOne({userid: id}).select('_id');
+
+        if(!profile){
+            return res.status(400).json({error: "Admin doesn't exist"});
+        }
+
+        var totalParticipants = 0;
+        var totalEvents = 0;
+        var totalBlogs = 0;
+        const events = await Event.find({organizer:profile._id});
+        for(const event in events){
+            totalParticipants += await EventParticipant.countDocuments({ eventId: event._id });
+        }
+
+        totalBlogs = await News.countDocuments({adminId:profile._id});
+        totalEvents = events.length;
+        
+        return res.status(200).json({totalEvents,totalParticipants,totalBlogs});
+       
+    }catch(err){
+        return res.status(500).json({error : "Internal server error at admin News"});
+    }
+};
+
