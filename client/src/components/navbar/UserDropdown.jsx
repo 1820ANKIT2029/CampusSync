@@ -53,7 +53,7 @@ const UserDropdown = () => {
   }
 
   return (
-    <div className="rounded-lg relative inline-block" ref={dropdownRef}>
+    <div className={`rounded-lg relative inline-block`} ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
         className="flex items-center justify-center w-10 h-10 rounded-full "
