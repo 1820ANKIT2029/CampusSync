@@ -65,7 +65,7 @@ export const upload = async (req, res, next) => {
     }
 }
 
-export const verifySubmission = async (req, res, next) => {
+export const ValidSubmission = async (req, res, next) => {
     const { submissionId } = req.params;
     const { id } = req.user.id;
 
@@ -117,7 +117,7 @@ export const verifySubmission = async (req, res, next) => {
     }
 }
 
-export const removeVerifysubmission = async (req, res, next) => {
+export const InvalidSubmission = async (req, res, next) => {
     const { submissionId } = req.params;
     const { id } = req.user.id;
 
@@ -146,7 +146,7 @@ export const removeVerifysubmission = async (req, res, next) => {
 
         const submission = await Submission.findByIdAndUpdate(
             submissionId,
-            { 'isCheck': false },
+            { 'isCheck': true },
             { new: true }
         );
         const task = await TaskParticipant.findOneAndUpdate(

@@ -3,7 +3,7 @@ import { ensureLoggedIn, ensureAdmin } from '../middleware/protectRoute.js';
 import { createTask,removeTask } from '../controllers/task.controller.js';
 import { createEvent, removeEvent } from '../controllers/event.controller.js';
 import { addNews, removeNews, EditNews } from '../controllers/news.controller.js';
-import { removeVerifysubmission, verifySubmission } from '../controllers/submission.controller.js'
+import { ValidSubmission, InvalidSubmission } from '../controllers/submission.controller.js'
 import { 
     adminEvents, 
     adminEventById, 
@@ -25,8 +25,8 @@ AdminRouter.delete('/event/task/delete', removeTask);
 AdminRouter.post('/news/create', addNews);
 AdminRouter.put('/news/edit/:newsId', EditNews);
 AdminRouter.delete('/news/delete/:newsId', removeNews);
-AdminRouter.put('/submission/verify/:submissionId', verifySubmission);
-AdminRouter.put('/submission/removeVerify/:submissionId', removeVerifysubmission);
+AdminRouter.put('/submission/valid/:submissionId', ValidSubmission);
+AdminRouter.put('/submission/invalid/:submissionId', InvalidSubmission);
 
 AdminRouter.get('/event', adminEvents);
 AdminRouter.get('/event/details/:eventId', adminEventById);
