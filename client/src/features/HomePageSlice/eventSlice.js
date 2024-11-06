@@ -9,11 +9,7 @@ export const eventSlice = createSlice({
     initialState,
     reducers: {
         setEventAtHome: (state, action) => {
-            if (typeof action.payload === 'integer') {
-                state.event = action.payload;
-            } else {
-                console.error("Payload for setEventAtHome should be a boolean");
-            }
+            state.event = action.payload;
         },
     },
 });
