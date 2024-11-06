@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuth } from '../../features/authentication/authSlice';
+import { setAuth } from '../../features/authentication/authSlice.js';
 
 function LoginCard() {
     const [values,setValues] = useState({
@@ -10,8 +10,8 @@ function LoginCard() {
         password: "",
     })
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const isAdmin = useSelector((state) => state.admin.isAdmin);
     const dispatch = useDispatch();
-
     const navigate = useNavigate();
 
     const loginWithLocal = async (e) => {
@@ -23,8 +23,8 @@ function LoginCard() {
     
             if (response.status === 200) {
                 dispatch(setAuth(true))
-                console.log("isAuthenticated: ", isAuthenticated);
-                navigate('/home')
+                if(isAdmin) navigate('/admin');
+                else navigate('/home');
             }
             else{
               console.log(response);
@@ -44,16 +44,19 @@ function LoginCard() {
   return (
     <div className="flex items-center justify-center bg-blue-100">
       <div className="bg-gray-800 text-white p-8 rounded-lg w-80 shadow-lg">
-        <h2 className="text-center text-lg font-semibold mb-6">Log in with</h2>
+        <h2 className={`${(isAdmin)?"hidden":""} text-center text-lg font-semibold mb-6`}>Log in with</h2>
+
+        <h2 className={`${(isAdmin)?"":"hidden"} text-center text-lg font-semibold mb-6`}>Entering as Admin</h2>
         
-        <div className="flex justify-between mb-6">
+        <div className={`${(isAdmin)?"hidden":""} flex justify-between mb-6`}>
           <button onClick={loginwithgoogle} className="bg-white text-black w-full py-2 rounded-md mr-2 flex items-center justify-center">
             <img src="https://img.icons8.com/color/24/000000/google-logo.png" alt="Google" className="mr-2"/>
             Google
           </button>
         </div>
         
-        <p className="text-center text-sm text-gray-400 mb-4">or</p>
+        <p className={`${(isAdmin)?"hidden":""} text-center text-sm text-gray-400 mb-4`}>or</p>
+
         
         <form onSubmit={loginWithLocal}>
           <input
