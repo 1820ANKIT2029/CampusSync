@@ -1,23 +1,32 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import EventCard from './EventCard';
+import { useDispatch, useSelector } from 'react-redux';
+import { setEventAtHome } from '../../../features/HomePageSlice/eventSlice.js'
 
-function EventCarousel({events}) {
+function EventCarousel({ events }) {
+  const it = useSelector((state) => state.event.event)
+  const dispatch = useDispatch();
   
+  const handleClick = (index) => {
+      dispatch(setEventAtHome(index));
+  };
 
-  const handleClick = (index) => {}
   return (
     <div className="overflow-hidden w-full custom-scrollbar">
       <div className="relative w-full flex gap-4 py-6 overflow-x-auto">
-
-        {
-          events.map((event,index)=>{
-            return (
-              <>
-                  <div onClick={(index) => handleClick(index)} className="h-48 aspect-video rounded-sm bg-cover bg-center bg-gray-500" style={{ backgroundImage: "url('https://source.unsplash.com/random/241x361/?1')" }}></div>
-              </>
-            )
-          })
-        }
+        {events.map((event, index) => (
+          <div
+            key={index}
+            onClick={() => handleClick(index)}
+            className="h-48 aspect-video rounded-sm bg-cover bg-center "
+          >
+            <EventCard
+             key={index}
+             title={event.title} 
+             creator={event.creator} 
+             />
+          </div>
+        ))}
       </div>
     </div>
   );
