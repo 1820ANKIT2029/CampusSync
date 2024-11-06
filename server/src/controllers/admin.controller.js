@@ -28,7 +28,7 @@ export const adminEventById = async (req, res, next) => {
 
     try{
         const profile = await Profile.findOne({userid: id}).select('_id');
-        const event = await Event.find({
+        const event = await Event.findOne({
             _id: eventId,
             organizer: profile._id
         });
@@ -39,12 +39,15 @@ export const adminEventById = async (req, res, next) => {
         const eventParticipant = await EventParticipant.find({eventId: eventId});
 
         const task = await Task.find({eventId: eventId});
+        let TaskObject = [];
         for(let i=0; i<task.length; i++){
             const taskParticipant = await TaskParticipant.find({taskId: task[i]._id});
-            task[0].participant = taskParticipant;
-
             const submission = await Submission.find({taskId: task[i]._id}).populate('fileId');
-            task[0].submission = submission;
+
+            let t = task[i].toObject();
+            t.participant = taskParticipant;
+            t.submission = submission;
+            TaskObject.push(t);
         }
 
         /*
@@ -56,7 +59,7 @@ export const adminEventById = async (req, res, next) => {
         return res.status(200).json({
             "event": event,
             "eventParticipant": eventParticipant,
-            "tasks": task,
+            "tasks": TaskObject,
         });
 
     }catch(err){
@@ -66,6 +69,7 @@ export const adminEventById = async (req, res, next) => {
 
 export const adminActiveEvents = async (req, res, next) => {
     const id = req.user.id;
+    const now = new Date();
 
     try{
         const profile = await Profile.findOne({userid: id}).select('_id');
@@ -87,6 +91,7 @@ export const adminActiveEvents = async (req, res, next) => {
 
 export const adminInactiveEvents = async (req, res, next) => {
     const id = req.user.id;
+    const now = new Date();
 
     try{
         const profile = await Profile.findOne({userid: id}).select('_id');
