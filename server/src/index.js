@@ -41,23 +41,23 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cookieParser());
 
-app.use(
-    session({
-        secret: process.env.SESSION_SECRET,
-        resave: false,
-        saveUninitialized: false,
-        cookie: {
-            maxAge: 60000*60,
-            httpOnly: false
-        },
-        // define place to store sessions
-        store: MongoStore.create({
-            mongoUrl: process.env.MONGO_DB_URI,
-            collectionName: 'sessions',
-        }),
-    })
-);
+const sessionMiddleware = session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 60000*60*24,
+        httpOnly: false,
+        secure: false
+    },
+    // define place to store sessions
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGO_DB_URI,
+        collectionName: 'sessions',
+    }),
+})
 
+app.use(sessionMiddleware);
 app.use(passport.initialize());
 app.use(passport.session());
 
