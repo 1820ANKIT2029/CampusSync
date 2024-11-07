@@ -16,7 +16,13 @@ export const updateGlobalAura = async () => {
                 const profile = await Profile.findByIdAndUpdate(
                     participant.participantId,
                     { $inc: { aura: participant.points } }
-                )
+                );
+
+                // notification part
+                const notification = new History({
+                    ProfileId: participant.participantId,
+                    message: `${participant.points} added from ${event.name}`
+                }).save();
             }
 
             await Event.findByIdAndUpdate(
