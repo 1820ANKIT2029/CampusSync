@@ -1,20 +1,33 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const CreateBlog = () => {
   const [blogData, setBlogData] = useState({
-    title: "",
+    headline: "",
     description: "",
-    creationDate: "",
+    date: "",
   });
 
   const handleChange = (e) => {
     setBlogData({ ...blogData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Logic for submitting the blog data
-    console.log(blogData);
+    try{
+      const res = await axios.post('http://localhost:3000/admin/news/create',blogData,{
+        withCredentials:true,
+      })
+      console.log(res.data);
+      alert("blog created");
+    }catch(error){
+      console.log(error);
+    }
+    setBlogData({
+      headline: "",
+      description: "",
+      date: "",
+    })
   };
 
   return (
@@ -22,13 +35,13 @@ const CreateBlog = () => {
       <h2 className="text-2xl font-bold mb-4 text-white">Create Blog</h2>
       <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-4">
         <div>
-          <label className="block text-white font-medium mb-1">Title</label>
+          <label className="block text-white font-medium mb-1">headline</label>
           <input
             type="text"
-            name="title"
-            value={blogData.title}
+            name="headline"
+            value={blogData.headline}
             onChange={handleChange}
-            placeholder="Enter blog title"
+            placeholder="Enter blog headline"
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-violet-300 placeholder-white text-white"
           />
         </div>
@@ -49,8 +62,8 @@ const CreateBlog = () => {
           <label className="block text-white font-medium mb-1">Creation Date</label>
           <input
             type="date"
-            name="creationDate"
-            value={blogData.creationDate}
+            name="date"
+            value={blogData.date}
             onChange={handleChange}
             className="w-full p-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-violet-300 text-white"
           />

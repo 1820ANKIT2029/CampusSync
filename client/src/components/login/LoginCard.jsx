@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
-import { setAuth } from '../../features/authentication/authSlice.js';
+import { setAuth } from '../../redux/features/authentication/authSlice.js';
 
 function LoginCard() {
     const [values,setValues] = useState({
