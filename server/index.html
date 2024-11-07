@@ -90,6 +90,34 @@ socket.on("connect", () => {
 socket.on("connect_error", (err) => {
     console.log(`Connection failed: ${err.message}`);
 });
+
+io.on('connection', (socket) => {
+    console.log(`Client connected: ${socket.id}`);
+
+    socket.on('request_notification', (data) => {
+        console.log(`Notification request received from ${socket.id}:`, data);
+
+        socket.emit('notification', {
+            message: 'This is your custom notification!',
+            timestamp: new Date(),
+        });
+    });
+
+    socket.on('disconnect', () => {
+        console.log(`Client disconnected: ${socket.id}`);
+    });
+});
+
+function broadcastNotification(message) {
+    io.emit('notification', {
+        message: message || 'New notification for all users!',
+        timestamp: new Date(),
+    });
+}
+
+setInterval(() => {
+    broadcastNotification('This is a scheduled notification!');
+}, 10000);
 */
 
     </script>

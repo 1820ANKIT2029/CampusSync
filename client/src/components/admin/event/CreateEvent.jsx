@@ -1,6 +1,9 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const CreateEvent = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     description: "",
@@ -32,6 +35,8 @@ const CreateEvent = () => {
     }));
   };
 
+
+
   const addTask = () => {
     setFormData((prevData) => ({
       ...prevData,
@@ -48,9 +53,45 @@ const CreateEvent = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Event Data:", formData);
+    // console.log("Event Data:", formData);
+
+    try{
+      const values = {
+        name:formData.name,
+        description:formData.description,
+        startTime:formData.startDate,
+        endTime:formData.endDate,
+        location: "Academic building",
+      }
+      const response = await axios.post('http://localhost:3000/admin/event/create',values,{
+        withCredentials: true
+      });
+
+      const eventId = response.data.eventId;
+      for (const task of formData.tasks) {
+        try {
+          const response = await axios.post(
+            'http://localhost:3000/admin/event/task/create',
+            { ...task, eventId },
+            { withCredentials: true }
+          );
+          console.log(response);
+        } catch (error) {
+          console.log("Error in task creation:", error);
+        }
+      }
+      
+      console.log("EventCreated!!!!!!!!");
+      navigate('/admin');
+      
+
+    }catch(error){
+      console.log("event")
+      console.log(error);
+    }
+
     setFormData({
       name: "",
       description: "",
@@ -59,6 +100,8 @@ const CreateEvent = () => {
       tasks: []
     });
   };
+
+  
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-violet-400 shadow-md rounded-lg">

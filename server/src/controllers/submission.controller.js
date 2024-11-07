@@ -6,6 +6,7 @@ import { Submission } from "../models/submission.model.js";
 import { getResourceType } from "../util/helper.js"
 import { Event, EventParticipant } from '../models/event.model.js';
 import { Profile } from '../models/user.models.js';
+import { History } from '../models/history.model.js';
 
 export const upload = async (req, res, next) => {
     const file = req.file;
@@ -110,6 +111,13 @@ export const ValidSubmission = async (req, res, next) => {
             { $inc: { points: 10 } },
             { new: true }     
         );
+
+        // notification part
+        const notification = new History({
+            ProfileId: participant.participantId,
+            message: `Your submission in ${submissionexist.taskId.name} task`
+        }).save();
+        
         return res.status(200).json({message : "submission verify done"});
     }
     catch(err){
