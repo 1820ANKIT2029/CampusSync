@@ -3,7 +3,7 @@ import passport from 'passport';
 import { User, Profile } from '../models/user.models.js';
 import { hashPassword } from "../util/hash_function.js";
 
-export const loginV1 =  passport.authenticate("local")
+export const loginV1 =  passport.authenticate("local");
 
 export const signupV1 = async (req, res, next) => {
     const {username,password,confirmPassword,email, isAdmin} = req.body;
