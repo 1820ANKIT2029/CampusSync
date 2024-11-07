@@ -10,26 +10,20 @@ import BlogsSection from "../blog/BlogsSection";
 
 const AdminProfile = () => {
   const dispatch = useDispatch();
-  // const { stats, events, blogs, status } = useSelector((state) => state.adminData);
-  // console.log(stats);
-  // console.log(events);
-  // console.log(blogs);
-  // console.log(status);
-  const res = useSelector((state) => state.adminData);
-  console.log(res);
+  const { stats, events, blogs, status } = useSelector((state) => state.adminData);
 
   useEffect(() => {
     if (status === "idle") {
-      dispatch(fetchAdminData());
+      dispatch(fetchAdminData()); 
     }
   }, [status, dispatch]);
 
   if (status === "loading") {
-    return <p>Loading...</p>;
+    return <h2>Loading...</h2>;
   }
 
   if (status === "failed") {
-    return <p>Failed to load data.</p>;
+    return <h2>Failed to load data.</h2>;
   }
 
   return (

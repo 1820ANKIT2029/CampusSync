@@ -7,13 +7,13 @@ import { setAdmin } from '../../redux/features/isAdmin/adminSlice';
 import axios from 'axios';
 
 const Navbar = () => {
-  const isAdmin = useSelector((state) => state.admin.isAdmin);
+  const {isAdmin} = useSelector((state) => state.userProfile);
+  const isadmin = useSelector((state) => state.admin.isadmin);
+  console.log("navbar");console.log(isAdmin);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  console.log(isAdmin);
-  console.log(isAuthenticated)
 
   const logOut = async (e) => {
     e.preventDefault();
@@ -70,7 +70,7 @@ const Navbar = () => {
 
           <div className="flex-grow"></div> {/* This empty div will push the button to the right */}
 
-          {!isAuthenticated && !isAdmin && (
+          {!isAuthenticated && (!isadmin) && (
             <ul className="sm:text-center list-none md:inline-flex md:items-center space-y-2 md:space-y-0">
               <li>
                 <button
@@ -83,7 +83,7 @@ const Navbar = () => {
             </ul>
           )}
 
-        {!isAuthenticated && isAdmin && (
+        {!isAuthenticated && (isadmin) && (
             <ul className="sm:text-center list-none md:inline-flex md:items-center space-y-2 md:space-y-0">
               <li>
                 <button
