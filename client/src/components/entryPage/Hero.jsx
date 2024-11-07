@@ -1,11 +1,28 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { setAdmin } from '../../features/isAdmin/adminSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { setAdmin } from '../../redux/features/isAdmin/adminSlice';
+import { setAuth } from '../../redux/features/authentication/authSlice';
 
 function Hero() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const { isAdmin } = useSelector((state)=> state.userProfile);
+
+    useEffect(()=>{
+      if(isAdmin && isAuthenticated){
+        navigate('/admin');
+      }
+      else if(!isAdmin && isAuthenticated){
+        navigate('/home');
+      }
+      else{
+        dispatch(setAdmin(false));
+        dispatch(setAuth(false));
+      }
+    },[])
+
     const handleSubmit = () => {
         dispatch(setAdmin(false));
         navigate('/login')

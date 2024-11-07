@@ -2,10 +2,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { Route, RouterProvider, createBrowserRouter, createRoutesFromElements } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import { store } from './app/store.js';
-
-import Layout from './Layout.jsx';
+import { store } from './redux/store/store.js';
 import './index.css';
+
+import Layout from './pages/Layout.jsx';
 import Login from './components/login/login.jsx';
 import Home from './components/home/Home.jsx';
 import Signup from './components/signup/Signup.jsx';
@@ -14,7 +14,7 @@ import Event from './components/eventsSection/Event.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
 import Profile from './components/profile/Profile.jsx';
 import Hero from './components/entryPage/Hero.jsx';
-import Admin from './components/admin/Admin.jsx';
+import Admin from './pages/Admin.jsx';
 import AdminProfile from './components/admin/admin-profile/AdminProfile.jsx';
 import CreateEvent from './components/admin/event/CreateEvent.jsx';
 import CreateBlog from './components/admin/blog/CreateBlog.jsx';
@@ -22,6 +22,9 @@ import EventDetails from './components/admin/event/EventDetails.jsx';
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import EnsureAdmin from './auth/ensureAdmin.jsx';
+import LeaderBoard from './components/leaderboard/LeaderBoard.jsx';
+import NotificationSection from './components/notifications/NotificationSection.jsx';
+import EditProfile from './components/profile/EditProfile.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -30,11 +33,12 @@ const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />
       <Route path="/signup" element={<Signup />} />
 
+      {/* user Routes */}
       <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/events" element={<ProtectedRoute><EventsPage /></ProtectedRoute>} />
-      <Route path="/events/event" element={<ProtectedRoute><Event /></ProtectedRoute>} />
+      <Route path="/events/:id" element={<ProtectedRoute><Event /></ProtectedRoute>} />
 
       {/* Admin Routes */}
       <Route path="/admin" element={<ProtectedRoute><EnsureAdmin><Admin /></EnsureAdmin></ProtectedRoute>}>
@@ -44,6 +48,9 @@ const router = createBrowserRouter(
         <Route path="event-details" element={<EventDetails />} />
       </Route>
 
+      {/* testing */}
+      <Route path='/leaderboard' element={<LeaderBoard/>} />
+      <Route path='/notifications' element={<NotificationSection/>} />
     </Route>
   )
 );

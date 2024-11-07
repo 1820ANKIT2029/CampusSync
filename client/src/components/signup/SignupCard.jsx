@@ -10,7 +10,7 @@ function SignupCard() {
         confirmPassword:"",
         email:""
     })
-    const isAdmin = useSelector((state) => state.admin.isAdmin);
+    const isAdmin = useSelector((state) => state.userProfile);
 
     const navigate = useNavigate();
 

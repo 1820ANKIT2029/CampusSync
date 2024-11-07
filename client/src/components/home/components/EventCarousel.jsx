@@ -1,7 +1,7 @@
 import React from 'react';
 import EventCard from './EventCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { setEventAtHome } from '../../../features/HomePageSlice/eventSlice.js'
+import { setEventAtHome } from '../../../redux/features/HomePageSlice/eventSlice.js'
 
 function EventCarousel({ events }) {
   const it = useSelector((state) => state.event.event)
