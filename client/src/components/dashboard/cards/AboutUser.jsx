@@ -14,7 +14,7 @@ const AboutUser = ({ user }) => {
       <div className="p-6 text-center shadow-lg">
         <h2 className="text-2xl font-bold text-gray-800">{user.name}</h2>
         <p className='text-xs text-gray-600'>{user.username}</p>
-        <p className="mt-2 text-gray-600">{user.bio}</p>
+        <p className="mt-2 text-gray-600">2nd year, Computer Science</p>
       </div>
     </div>
   );
