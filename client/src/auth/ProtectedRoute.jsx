@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setAuth } from '../features/authentication/authSlice';
+import { setAuth } from '../redux/features/authentication/authSlice';
 import Cookies from 'js-cookie';
-import { setAdmin } from '../features/isAdmin/adminSlice';
+import { setAdmin } from '../redux/features/isAdmin/adminSlice';
 
 const ProtectedRoute = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
