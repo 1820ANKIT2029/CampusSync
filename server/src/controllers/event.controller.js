@@ -18,7 +18,7 @@ export const createEvent = async (req,res,next) => {
 
     try{
         const profile = await Profile.findOne({userid: id}).select('_id');
-        const existance = await Event.findOne({organizer: profile._id});
+        const existance = await Event.findOne({organizer: profile._id, name:name});
         
         if(existance){
             return res.status(409).json({error: "event already present"});
@@ -35,7 +35,7 @@ export const createEvent = async (req,res,next) => {
 
         const event = await newEvent.save();
 
-        return res.status(200).json({message: "event created"});
+        return res.status(200).json({message: "event created",eventId:event._id});
     }catch(error){
         return res.status(500).json({error:"Internal server error in createEvent"});
     }

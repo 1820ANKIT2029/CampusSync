@@ -39,10 +39,10 @@ const ResponsiveGrid = ({ events }) => {
         {events.map((event, index) => (
           <div
             key={index}
-            className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center"
+            className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center min-w-80"
             style={{ height: "100px" }}
           >
-            <Event title={event.title} />
+            <Event key={index} name={event.name} />
           </div>
         ))}
       </div>
