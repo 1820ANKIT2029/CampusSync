@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    isAdmin: false,
+    isadmin: false,
 }
 
 export const adminSlice = createSlice({
@@ -10,7 +10,7 @@ export const adminSlice = createSlice({
     reducers: {
         setAdmin: (state, action) => {
             if (typeof action.payload === 'boolean') {
-                state.isAdmin = action.payload;
+                state.isadmin = action.payload;
             } else {
                 console.error("Payload for setAuth should be a boolean");
             }

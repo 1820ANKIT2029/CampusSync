@@ -6,6 +6,10 @@ export const fetchAdminData = createAsyncThunk("admin/fetchAdminData", async () 
     const res2 = await axios.get("http://localhost:3000/admin/event", { withCredentials: true });
     const res3 = await axios.get("http://localhost:3000/admin/news", { withCredentials: true }); 
 
+    console.log("res1: ");console.log(res1);
+    console.log("res2: ");console.log(res2);
+    console.log("res3: ");console.log(res3);
+
     return {
         stats: res1.data,
         events: res2.data,
@@ -25,7 +29,7 @@ const initialState = {
     error: null,
 };
 
-const adminSlice = createSlice({
+const adminDataSlice = createSlice({
     name: "adminData",
     initialState,
     reducers: {},
@@ -47,4 +51,4 @@ const adminSlice = createSlice({
     },
 });
 
-export default adminSlice.reducer;
+export default adminDataSlice.reducer;
