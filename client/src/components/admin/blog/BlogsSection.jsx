@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import Blog from "./Blog";
 
-const ResponsiveGrid = ({ events }) => {
+const BlogsSection = ({ blogs }) => {
   const [showMore, setShowMore] = useState(false);
   const gridRef = useRef(null);
   
@@ -36,13 +36,13 @@ const ResponsiveGrid = ({ events }) => {
           w-full max-w-4xl
         "
       >
-        {events.map((event, index) => (
+        {blogs.map((blog, index) => (
           <div
             key={index}
             className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center"
             style={{ height: "100px" }}
           >
-            <Blog title={event.title} />
+            <Blog title={blog.headline} />
           </div>
         ))}
       </div>
@@ -57,4 +57,4 @@ const ResponsiveGrid = ({ events }) => {
   );
 };
 
-export default ResponsiveGrid;
+export default BlogsSection;

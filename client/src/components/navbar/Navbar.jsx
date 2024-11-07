@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { NavLink,useNavigate } from 'react-router-dom';
 import { useSelector,useDispatch } from 'react-redux';
 import UserDropdown from './UserDropdown';
-import { setAuth } from '../../features/authentication/authSlice';
-import { setAdmin } from '../../features/isAdmin/adminSlice';
+import { setAuth } from '../../redux/features/authentication/authSlice';
+import { setAdmin } from '../../redux/features/isAdmin/adminSlice';
 import axios from 'axios';
 
 const Navbar = () => {
-  const isAdmin = useSelector((state) => state.admin.isAdmin);
+  const {isAdmin} = useSelector((state) => state.userProfile);
+  const isadmin = useSelector((state) => state.admin.isadmin);
+  console.log("navbar");console.log(isAdmin);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  console.log(isAdmin);
-  console.log(isAuthenticated)
 
   const logOut = async (e) => {
     e.preventDefault();
@@ -70,7 +70,7 @@ const Navbar = () => {
 
           <div className="flex-grow"></div> {/* This empty div will push the button to the right */}
 
-          {!isAuthenticated && !isAdmin && (
+          {!isAuthenticated && (!isadmin) && (
             <ul className="sm:text-center list-none md:inline-flex md:items-center space-y-2 md:space-y-0">
               <li>
                 <button
@@ -83,7 +83,7 @@ const Navbar = () => {
             </ul>
           )}
 
-        {!isAuthenticated && isAdmin && (
+        {!isAuthenticated && (isadmin) && (
             <ul className="sm:text-center list-none md:inline-flex md:items-center space-y-2 md:space-y-0">
               <li>
                 <button
@@ -124,7 +124,7 @@ const Navbar = () => {
               <li className={`${(isAdmin)?"hidden":""}`}>
                 <NavLink
                   to={'/home'}
-                  className={({isActive}) => `border-b-2 
+                  className={({isActive}) => `md:border-b-2 
                   px-2 py-6 text-sm leading-[22px]
                    text-gray-500 hover:border-cyan-600 hover:text-cyan-500
                    md:px-3 md:px-6
@@ -137,7 +137,7 @@ const Navbar = () => {
               <li className={`${(isAdmin)?"hidden":""}`}>
                 <NavLink
                   to={'/dashboard'}
-                  className={({isActive}) => `border-b-2 
+                  className={({isActive}) => `md:border-b-2 
                    px-2 py-6 text-sm leading-[22px]
                     text-gray-500 hover:border-cyan-600 hover:text-cyan-500
                     md:px-3 md:px-6
@@ -150,7 +150,7 @@ const Navbar = () => {
               <li className={`${(isAdmin)?"hidden":""}`}>
                 <NavLink
                   to={'/events'}
-                  className={({isActive}) => `border-b-2 
+                  className={({isActive}) => `md:border-b-2 
                   px-2 py-6 text-sm leading-[22px]
                    text-gray-500 hover:border-cyan-600 hover:text-cyan-500
                    md:px-3 md:px-6
@@ -162,8 +162,8 @@ const Navbar = () => {
               </li>
               <li className={`${(isAdmin)?"hidden":""}`}>
                 <NavLink
-                  to={'/admin '}
-                  className={({isActive}) => `border-b-2 
+                  to={'/leaderboard'}
+                  className={({isActive}) => `md:border-b-2 
                   px-2 py-6 text-sm leading-[22px]
                    text-gray-500 hover:border-cyan-600 hover:text-cyan-500
                    md:px-3 md:px-6
@@ -177,7 +177,7 @@ const Navbar = () => {
               <li className={`${(isAdmin)?"":"hidden"}`}>
                   <button
                     onClick={toCreateEvent}
-                    className={`hover:border-b-2
+                    className={`hover:md:border-b-2
                                 px-2 py-6 text-sm leading-[22px]
                                 text-gray-500 hover:border-cyan-600 hover:text-cyan-500
                                 md:px-3 md:px-6
@@ -190,7 +190,7 @@ const Navbar = () => {
               <li className={`${(isAdmin)?"":"hidden"}`}>
                   <button
                     onClick={toCreateBlog}
-                    className={`hover:border-b-2
+                    className={`hover:md:border-b-2
                                 px-2 py-6 text-sm leading-[22px]
                                 text-gray-500 hover:border-cyan-600 hover:text-cyan-500
                                 md:px-3 md:px-6
@@ -203,7 +203,7 @@ const Navbar = () => {
               <li className={`${(isAdmin)?"":"hidden"}`}>
                   <NavLink
                     to={'/leaderboard'}
-                    className={`hover:border-b-2
+                    className={`hover:md:border-b-2
                                 px-2 py-6 text-sm leading-[22px]
                                 text-gray-500 hover:border-cyan-600 hover:text-cyan-500
                                 md:px-3 md:px-6
@@ -216,7 +216,7 @@ const Navbar = () => {
                   <button
                     onClick={logOut}
                     to={''}
-                    className={`hover:border-b-2
+                    className={`hover:md:border-b-2
                                 px-2 py-6 text-sm leading-[22px]
                                 text-red-500 font-bold hover:border-cyan-600 hover:text-cyan-500
                                 md:px-3 md:px-6
@@ -225,6 +225,28 @@ const Navbar = () => {
                     Logout
                   </button>
               </li>
+              {isAuthenticated && (
+                <>
+                  <li className={`${isAdmin ? "hidden" : ""}`}>
+                  <NavLink to={'/notifications'} className="px-3 py-6 sm:pl-4 md:m-12 text-gray-500 hover:text-cyan-500 relative">
+                    <svg
+                      className="w-6 h-6"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-5-5.917V5a2 2 0 10-4 0v.083A6.002 6.002 0 004 11v3.159c0 .538-.214 1.055-.595 1.437L2 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                      ></path>
+                    </svg>
+                  </NavLink>
+                </li>
+                </>
+              )}
             </ul>
            {(!isAdmin) && ( <UserDropdown />)}
               

@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useDispatch,useSelector } from 'react-redux';
-import { setAuth } from '../../features/authentication/authSlice';
+import { setAuth } from '../../redux/features/authentication/authSlice';
 
 const UserDropdown = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -53,7 +53,7 @@ const UserDropdown = () => {
   }
 
   return (
-    <div className={`rounded-lg relative inline-block`} ref={dropdownRef}>
+    <div className={`rounded-lg relative inline-block pt-4`} ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
         className="flex items-center justify-center w-10 h-10 rounded-full "
@@ -62,11 +62,11 @@ const UserDropdown = () => {
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 w-32 mt-2  rounded-md  z-10">
+        <div className="md:absolute md:right-0 w-32 mt-2  rounded-md  z-10">
           <div className="py-1 rounded-lg" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
             <button
               className="block w-full text-center px-4 py-2 text-sm text-white rounded-t bg-violet-400 hover:bg-white hover:text-black"
-              onClick={() => handleOptionClick('Profile')}
+              onClick={() => {navigate('/profile')}}
             >
               Profile
             </button>
