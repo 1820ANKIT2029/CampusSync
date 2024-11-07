@@ -19,8 +19,8 @@ const AdminRouter = Router();
 
 AdminRouter.use(ensureLoggedIn, ensureAdmin);
 
-AdminRouter.put('/event/create', createEvent);
-AdminRouter.put('/event/task/create', createTask);
+AdminRouter.post('/event/create', createEvent);
+AdminRouter.post('/event/task/create', createTask);
 AdminRouter.delete('/event/delete', removeEvent);
 AdminRouter.delete('/event/task/delete', removeTask);
 AdminRouter.post('/news/create', addNews);
