@@ -55,7 +55,7 @@ const profileScheme = new Schema({
     branch: {
         type: String,
         default: "Not set",
-        enum: BRANCH
+        default: null
     },
     email: {
         type: String,
