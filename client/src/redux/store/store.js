@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
+import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/authentication/authSlice.js';
 import eventReducer from '../features/HomePageSlice/eventSlice.js';
 import adminReducer from '../features/isAdmin/adminSlice.js';
-import { configureStore } from '@reduxjs/toolkit';
 import adminDataReducer from '../features/adminData/adminDataSlice.js';
 import userProfileReducer from '../features/user/userProfileSlice.js';
-import adminProfileReducer from '../features/adminProfile/adminProfileSlice.js';
+import blogsReducer from '../features/blogs/blogsSlice.js';
 
 
 
@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   admin:adminReducer,
   adminData:adminDataReducer,
   userProfile:userProfileReducer,
-  adminProfile:adminProfileReducer,
+  blogs:blogsReducer,
 });
 
 export const store = configureStore({
