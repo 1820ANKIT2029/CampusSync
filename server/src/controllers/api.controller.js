@@ -22,12 +22,12 @@ export const getevents = async (req, res, next) => {
 
     if (isActive === 'true') {
         const now = new Date();
-        filter.startTime = { ...filter.startTime, $lte: now };
-        filter.endTime = { ...filter.endTime, $gte: now };
+        filter.startTime = { $lte: now };
+        filter.endTime = { $gte: now };
     }
 
     try {
-        const events = await Event.find(filter);
+        const events = await Event.find(filter).sort({createdAt: -1}).limit(30);
         if(!events){
             return res.status(404).json({error: "unable to fetch events"});
         }
