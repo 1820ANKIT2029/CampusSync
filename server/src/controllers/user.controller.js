@@ -50,7 +50,6 @@ export const profileEdit = async (req, res, next) => {
         changes.gender = gender;
     }
     if(profilePic){
-        console.log(profilePic);
         if(Number(req.profilePic.size) > 1000000){
             return res.status(400).json({error: "image size must be less than 1MB"});
         }
