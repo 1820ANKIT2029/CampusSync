@@ -9,7 +9,6 @@ import axios from 'axios';
 const Navbar = () => {
   const {isAdmin} = useSelector((state) => state.userProfile);
   const isadmin = useSelector((state) => state.admin.isadmin);
-  console.log("navbar");console.log(isAdmin);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
