@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getevents, getnews, eventinfo } from '../controllers/api.controller.js';
+import { getevents, getnews, eventinfo, getnewss } from '../controllers/api.controller.js';
 
 const ApiRouter = Router();
 
@@ -7,6 +7,8 @@ const ApiRouter = Router();
 ApiRouter.get('/events', getevents);
 // /api/news?date=<DATE>&AdminName=<NAME> 
 ApiRouter.get('/news/:num', getnews);
+ApiRouter.get('/news', getnewss);
+
 
 ApiRouter.get('/event/info', eventinfo);
 

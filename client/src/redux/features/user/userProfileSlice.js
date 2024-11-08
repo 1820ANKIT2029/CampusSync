@@ -7,17 +7,23 @@ export const fetchuserProfile = createAsyncThunk("user/fetchUserProfile", async 
     return res1.data;
 });
 
+export const updateuserProfile = createAsyncThunk("user/updateUserProfile", async () => {
+    const res1 = await axios.get("http://localhost:3000/profile", { withCredentials: true })
+    console.log("user profile"); console.log(res1);
+    return res1.data;
+});
+
 const initialState = {
     userId: null,
-    name:"",
-    bio: "",
+    name:"your name",
+    bio: "your bio",
     year: 0,
-    branch: "",
-    email: "",
+    branch: "your branch",
+    email: "XYZ@mnnt.ac.in",
     aura: 0,
-    gender: "",
+    gender: "your gender",
     isAdmin: false,
-    profilePic: null,
+    profilePic: "https://via.placeholder.com/150",
     status: "idle",
     error: null,
 };
@@ -25,7 +31,12 @@ const initialState = {
 const userProfileSlice = createSlice({
     name: "userProfile",
     initialState,
-    reducers: {},
+    reducers: {
+        updateUserProfile: (state,action) => {
+            console.log("update profile");
+            state = action.payload;
+        },
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchuserProfile.pending, (state) => {
@@ -50,3 +61,5 @@ const userProfileSlice = createSlice({
 });
 
 export default userProfileSlice.reducer;
+
+export const { updateUserProfile } = userProfileSlice.actions;

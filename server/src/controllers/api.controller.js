@@ -71,6 +71,25 @@ export const getnews = async (req, res, next) => {
     
 };
 
+export const getnewss = async (req, res, next) => {
+    try {
+        const result = await News
+                            .find({})
+                            .sort({ _id: -1 }) // Sort by most recent entries if needed
+                            .limit(10); // No need for toArray with Mongoose
+
+        if (!result || result.length === 0) {
+            return res.status(404).json({ error: "No news data available" });
+        }
+
+        return res.status(200).json(result);
+    } catch (err) {
+        return res.status(500).json({ error: "Internal server error at getnewss" });
+    }
+};
+
+
+
 export const eventinfo = async (req, res, next) => {
     const { eventId } = req.query;
 
