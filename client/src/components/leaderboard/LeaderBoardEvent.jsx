@@ -26,6 +26,8 @@ const Leaderboard = () => {
   const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
 
   useEffect(() => {
+
+    
     const filteredData = leaderboardData[event].filter((user) =>
       user.name.toLowerCase().includes(searchTerm)
     );
