@@ -9,7 +9,7 @@ AuthRouter.post('/login/v1', loginV1, setSocketAuthToken, success);
 
 AuthRouter.get('/login/OAuth', googleLogin);
 
-AuthRouter.get('/login/OAuth/callback',setSocketAuthToken, googlecallback);
+AuthRouter.get('/login/OAuth/callback', googlecallback);
 
 AuthRouter.post('/signup/v1', signupV1);
 
