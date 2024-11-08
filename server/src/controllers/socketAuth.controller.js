@@ -37,7 +37,9 @@ export const SocketTokenVerify = async (token) => {
 export const setSocketAuthToken = async (req, res, next) => {
     const token = await SocketTokenGenerater(req.user.id);
     if(token){
-        req.socket_token = token;
+        res.cookie('socket_token', token, {
+            maxAge: 24*60*60*1000
+        });
     }
     next();
 }
