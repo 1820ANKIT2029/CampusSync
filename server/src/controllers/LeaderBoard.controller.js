@@ -5,7 +5,7 @@ const getTopProfiles = async () => {
     return await Profile.find()
         .sort({ aura: -1 })
         .limit(100)
-        .select("name aura profilePic")
+        .select("name aura profilePic year branch")
         .exec();
 };
 

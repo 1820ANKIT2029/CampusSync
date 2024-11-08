@@ -17,6 +17,26 @@
 
         const notification = document.getElementById('notification');
 
+        const socket_leaderboard = io("http://localhost:5000/leaderBoard");
+
+        socket_leaderboard.on("leaderboardUpdate", (data)=> {
+            updateLeaderboard(notification, data);
+        });
+
+        function updateLeaderboard(parentElement, data){
+            
+            parentElement.innerHTML = "";
+            let i = 1;
+            for(const ele of data){
+                const newElement = document.createElement("p");
+                newElement.textContent = i.toString()+ " " + JSON.stringify(ele);
+                parentElement.appendChild(newElement);
+                i++;
+            }
+        }
+
+        /*
+
         const socket = io("http://localhost:5000");
         socket.on("notification", (data)=> {
             adddata(notification, data);
@@ -35,6 +55,7 @@
             newElement.textContent = JSON.stringify(data);
             parentElement.appendChild(newElement);
         }
+        */
 /*
         // Assume you have stored the token from login in a variable or local storage
 const token = "your-generated-jwt-token";
