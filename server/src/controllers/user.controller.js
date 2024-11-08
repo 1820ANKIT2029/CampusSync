@@ -19,6 +19,7 @@ export const handleImageUpload = async (req, res, next) => {
     if(profilePic){
         uploadstorage.single('picfilePic')
     }
+    next();
 }
 
 export const profileEdit = async (req, res, next) => {
