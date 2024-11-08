@@ -1,8 +1,11 @@
+import { v2 as cloudinary } from 'cloudinary';
+
 import { uploadstorage } from "../middleware/upload.js";
 import { EventParticipant } from "../models/event.model.js";
 import { Task, TaskParticipant } from "../models/task.models.js";
 import { Profile } from "../models/user.models.js";
 import { GENDER, YEAR } from "../models/user.models.js";
+
 
 export const profile = async (req, res, next) => {
     const result = await Profile.findOne({userid: req.user.id});
@@ -14,17 +17,18 @@ export const profile = async (req, res, next) => {
     return res.status(200).json(result);
 }
 
-export const handleImageUpload = async (req, res, next) => {
-    const { profilePic } = req.body
-    if(profilePic){
-        uploadstorage.single('picfilePic')
-    }
-    next();
-}
+export const handleImageUpload = uploadstorage.single('profilePic');
+
+// export const handleImageUpload = async (req, res, next) => {
+//     const { profilePic } = req.body
+//     if(profilePic){
+//         uploadstorage.single('profilePic');
+//     }
+//     next();
+// }
 
 export const profileEdit = async (req, res, next) => {
     const { name, year, branch, email, gender, profilePic } = req.body;
-    let image;
 
     let changes = {}
 
@@ -49,19 +53,19 @@ export const profileEdit = async (req, res, next) => {
         }
         changes.gender = gender;
     }
-    if(profilePic){
-        if(Number(req.profilePic.size) > 1000000){
+    if(req.file){
+        if(Number(req.file.size) > 1000000){
             return res.status(400).json({error: "image size must be less than 1MB"});
         }
-        if(!req.profilePic.mimetype.startsWith('image/')){
+        if(!req.file.mimetype.startsWith('image/')){
             return res.status(400).json({error: "invalid image file"});
         }
 
-        const cloudupload = await cloudinary.uploader.upload(req.profilePic.path, 
+        const cloudupload = await cloudinary.uploader.upload(req.file.path, 
             { resource_type: 'image' }
         );
 
-        profilePic = cloudupload.secure_url;
+        changes.profilePic = cloudupload.secure_url;
     }
 
     try{
@@ -73,7 +77,7 @@ export const profileEdit = async (req, res, next) => {
         if(!updateprofile){
             return res.status(400).json({error: "profile update error"});
         }
-        return res.status(204).json({message: "profile Updated Successfully"});
+        return res.status(200).json({message: "profile Updated Successfully"});
     }catch(err){
         return res.status(500).json({ error: "Internal server error at profile edit" });
     }
