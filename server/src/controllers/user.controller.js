@@ -2,7 +2,7 @@ import { uploadstorage } from "../middleware/upload.js";
 import { EventParticipant } from "../models/event.model.js";
 import { Task, TaskParticipant } from "../models/task.models.js";
 import { Profile } from "../models/user.models.js";
-import { GENDER, BRANCH, YEAR } from "../models/user.models.js";
+import { GENDER, YEAR } from "../models/user.models.js";
 
 export const profile = async (req, res, next) => {
     const result = await Profile.findOne({userid: req.user.id});
@@ -38,9 +38,6 @@ export const profileEdit = async (req, res, next) => {
         changes.year = Number(year);
     }
     if(branch){
-        if(!BRANCH.includes(branch)){
-            return res.status(400).json({error: "invalid Branch"});
-        }
         changes.branch = branch;
     }
     if(email){
