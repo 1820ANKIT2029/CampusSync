@@ -28,7 +28,7 @@ export const handleImageUpload = uploadstorage.single('profilePic');
 // }
 
 export const profileEdit = async (req, res, next) => {
-    const { name, year, branch, email, gender, profilePic } = req.body;
+    const { name, year, branch, email, bio, profilePic } = req.body;
 
     let changes = {}
 
@@ -47,11 +47,8 @@ export const profileEdit = async (req, res, next) => {
     if(email){
         changes.email = email;
     }
-    if(gender){
-        if(!GENDER.includes(gender)){
-            return res.status(400).json({error: "invalid Gender"});
-        }
-        changes.gender = gender;
+    if(bio){
+        changes.bio = bio;
     }
     if(req.file){
         if(Number(req.file.size) > 1000000){
