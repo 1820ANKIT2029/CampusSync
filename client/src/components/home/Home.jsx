@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import LeaderboardCard from '../leaderboard/LeaderboardCard';
 import Blogs from './components/Blogs';
 import EventCarousel from './components/EventCarousel';
+import { fetchBlogs } from '../../redux/features/blogs/blogsSlice';
 
 
 const Events = [
@@ -74,7 +75,15 @@ const Events = [
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {blogs,status} = useSelector((state) => state.blogs);
   const index = useSelector((state) => state.event.event);
+
+  useEffect(()=>{
+    console.log(status)
+    if(status === "idle"){
+      dispatch(fetchBlogs());
+    }
+  },[status, dispatch]);
 
   return (
     <>
