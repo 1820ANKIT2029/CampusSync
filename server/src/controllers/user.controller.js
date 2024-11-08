@@ -73,7 +73,7 @@ export const profileEdit = async (req, res, next) => {
         if(!updateprofile){
             return res.status(400).json({error: "profile update error"});
         }
-        return res.status(204).json({message: "profile Updated Successfully"});
+        return res.status(200).json({message: "profile Updated Successfully"});
     }catch(err){
         return res.status(500).json({ error: "Internal server error at profile edit" });
     }
