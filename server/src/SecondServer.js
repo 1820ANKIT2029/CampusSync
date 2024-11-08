@@ -5,6 +5,8 @@ import http from 'http';
 import { Server } from 'socket.io';
 import cron from 'node-cron';
 
+import { connectToMongoDB } from './db/ConnectMongoDB.js';
+
 import { updateGlobalAura, deleteOldNotification } from './controllers/cron.controller.js';
 
 import { GlobalLeaderBoard, LocalLeaderBoard } from './controllers/LeaderBoard.controller.js';
@@ -47,5 +49,6 @@ app.get('/', (req, res) => {
 });
 
 server.listen(PORT, () => {
+    connectToMongoDB();
     console.log(`Server is running on http://localhost:${PORT}`);
 });
