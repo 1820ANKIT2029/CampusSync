@@ -14,13 +14,15 @@ export const profile = async (req, res, next) => {
     return res.status(200).json(result);
 }
 
-export const handleImageUpload = async (req, res, next) => {
-    const { profilePic } = req.body
-    if(profilePic){
-        uploadstorage.single('profilePic')
-    }
-    next();
-}
+export const handleImageUpload = uploadstorage.single('profilePic');
+
+// export const handleImageUpload = async (req, res, next) => {
+//     const { profilePic } = req.body
+//     if(profilePic){
+//         uploadstorage.single('profilePic');
+//     }
+//     next();
+// }
 
 export const profileEdit = async (req, res, next) => {
     const { name, year, branch, email, gender, profilePic } = req.body;
