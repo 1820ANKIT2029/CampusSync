@@ -54,7 +54,11 @@ export const getnews = async (req, res, next) => {
     }
 
     try{
-        const result = await News.find(filter).skip((Number(num)-1)*10).limit(10);
+        const result = await News.find(filter)
+        .sort({createdAt: -1})
+        .skip((Number(num)-1)*10)
+        .limit(10)
+        .populate('adminId', 'profilePic name bio');
 
         if(!result){
             return res.status(404).json({error: "unable to fetch news"});
