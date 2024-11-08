@@ -17,7 +17,7 @@ export const profile = async (req, res, next) => {
 export const handleImageUpload = async (req, res, next) => {
     const { profilePic } = req.body
     if(profilePic){
-        uploadstorage.single('picfilePic')
+        uploadstorage.single('profilePic')
     }
     next();
 }
