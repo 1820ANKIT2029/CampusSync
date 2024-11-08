@@ -3,7 +3,7 @@ import EventCard from './EventCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEventAtHome } from '../../../redux/features/HomePageSlice/eventSlice.js'
 
-function EventCarousel({ events }) {
+function EventCarousel({ blogs }) {
   const it = useSelector((state) => state.event.event)
   const dispatch = useDispatch();
   
@@ -14,7 +14,7 @@ function EventCarousel({ events }) {
   return (
     <div className="overflow-hidden w-full custom-scrollbar">
       <div className="relative w-full flex gap-4 py-6 overflow-x-auto">
-        {events.map((event, index) => (
+        {blogs.map((blog, index) => (
           <div
             key={index}
             onClick={() => handleClick(index)}
@@ -22,8 +22,8 @@ function EventCarousel({ events }) {
           >
             <EventCard
              key={index}
-             title={event.title} 
-             creator={event.creator} 
+             title={blog.headline} 
+             creator={blog.adminId.name}
              />
           </div>
         ))}
