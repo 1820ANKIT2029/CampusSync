@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import LeaderboardCard from '../leaderboard/LeaderboardCard';
@@ -75,22 +74,29 @@ const Events = [
 const Home = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {blogs,status} = useSelector((state) => state.blogs);
+  const {blogs, status} = useSelector((state) => state.blogs);
   const index = useSelector((state) => state.event.event);
+  console.log("home")
+  console.log(blogs);
+  console.log(index);
+  console.log(status);
 
   useEffect(()=>{
-    console.log(status)
-    if(status === "idle"){
       dispatch(fetchBlogs());
-    }
-  },[status, dispatch]);
+  },[]);
+
+  if(status === "failed"){
+    return (
+      <p>Error while fetching the data</p>
+    )
+  }
 
   return (
     <>
     <div className="min-h-screen bg-blue-100 flex justify-center p-4">
       <div className="grid gap-4 w-full max-w-screen-lg">
         
-        {/* Desktop layout */}
+        
         <div className="hidden md:grid md:grid-cols-4 md:gap-4 w-full h-screen">
           <div
             className="col-span-3 h-full overflow-y-auto rounded p-4 hide-scrollbar"
@@ -100,10 +106,11 @@ const Home = () => {
               overflowY: 'scroll', scrollbarWidth: 'none', msOverflowStyle: 'none'
             }}
           >
-            <Blogs key={index} event={Events[index]} />
+            {(status === "succeeded") && blogs[index] && (<Blogs blogs={blogs[index]} />)}
+            {status !== "succeeded" && <p>Loading...</p>}
           </div>
           
-          {/* Leaderboard Section */}
+          
           <div className="col-span-1 rounded p-4">
             <LeaderboardCard />
           </div>
@@ -114,7 +121,8 @@ const Home = () => {
           <div
             className="bg-gradient-to-r from-teal-400 to-purple-600 text-white rounded p-4"
           >
-            <Blogs key={index} event={Events[index]} />
+            {(status === "succeeded") && blogs[index] && (<Blogs blogs={blogs[index]} />)}
+            {status !== "succeeded" && <p>Loading...</p>}
           </div>
           <div className="rounded">
             <LeaderboardCard />
@@ -123,7 +131,7 @@ const Home = () => {
       </div>
     </div>
     <div>
-    <EventCarousel events={Events}/>
+    <EventCarousel blogs={blogs}/>
   </div>
   </>
   );
