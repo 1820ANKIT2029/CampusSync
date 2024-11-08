@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
+// import Leaderboard from './LeaderBoardEvent.jsx';
+import LeaderBoardComp from './LeaderBoardComp.jsx';
 import { io } from 'socket.io-client';
 
-const Leaderboard = () => {
+const GlobalLeaderBoard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
-  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
     const socket = io("http://localhost:5000/leaderBoard");
 
     socket.on("leaderboardUpdate", (data) => {
       setLeaderboardData(data);
+      console.log(leaderboardData);
     });
 
     return () => {
@@ -17,31 +19,17 @@ const Leaderboard = () => {
     };
   }, []);
 
-  // Filter the leaderboard data based on the search term
-  const filteredData = leaderboardData.filter((user) =>
-    user.name.toLowerCase().includes(searchTerm.toLowerCase()) // Case-insensitive filtering
-  );
+  useEffect(() => {
+    if (leaderboardData.length > 0) {
+      console.log("Updated leaderboard data:", leaderboardData);
+    }
+  }, [leaderboardData]);
 
   return (
-    <div>
-      <input
-        type="text"
-        placeholder="Search..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)} // Update search term
-      />
-      
-      <div id="notification">
-        {filteredData.length > 0 ? (
-          filteredData.map((user, index) => (
-            <p key={index}>{JSON.stringify(user)}</p> // Display user info as JSON
-          ))
-        ) : (
-          <p>No users found</p>
-        )}
-      </div>
-    </div>
+    <>
+      <LeaderBoardComp leaderboardData={leaderboardData}/>
+    </>
   );
 };
 
-export default Leaderboard;
+export default GlobalLeaderBoard;
