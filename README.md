@@ -1,10 +1,36 @@
-## Hack3
+## Hash3
 
 # AuraTracker (CodeSangam 2024)
 
 
 This project is a Campus College Tracker Web App that gamifies academic life for college students, making studying, attending lectures, and participating in campus events more engaging and rewarding. It’s designed for students juggling multiple responsibilities who need help staying organized and motivated.
 
+
+## Environment Variables
+
+To run this project, you will need to add the following environment variables to your .env file
+
+`PORT`
+
+`SECOND_PORT`
+
+`MONGO_DB_URI`
+
+`GOOGLE_CLIENT_ID`
+
+`GOOGLE_CLIENT_SECRET`
+
+`GOOGLE_CALLBACK`
+
+`SESSION_SECRET`
+
+`CLOUDINARY_CLOUD_NAME`
+
+`CLOUDINARY_API_KEY`
+
+`CLOUDINARY_API_SECRET`
+
+`CLOUDINARY_URL`
 
 ## Run Locally
 
@@ -15,10 +41,12 @@ AuraTracker-CodeSangam
 ├── server
 │   ├── server.js
 │   ├── SecondServer.js
+│   ├── .env
 │   │ ...
 │   └── package.json
 ├── client
 │   ├── index.html
+│   ├── src
 │   │   ├── main.jsx
 │   │   │ ...
 │   │   └── index.css
@@ -85,18 +113,9 @@ Stop client server
 ```
 
 
-## Environment Variables
-
-To run this project, you will need to add the following environment variables to your .env file
-
-`API_KEY`
-
-`ANOTHER_API_KEY`
-
-
 ## Demo
 
-Insert gif or link to demo
+Soon
 
 
 ## Developers
