@@ -6,18 +6,6 @@ import TaskForm from './TaskForm.jsx';
 import Task from './Task.jsx';
 import { fetchEventInfo } from '../../redux/features/events/eventInfoSlice.js';
 
-const tasks = [
-  { title: "Design Homepage", description: "Create a visually appealing homepage layout for the new website." },
-  { title: "API Development", description: "Develop and document the RESTful API for the application." },
-  { title: "User Testing", description: "Conduct user testing sessions to gather feedback on the user interface." },
-  { title: "Database Setup", description: "Set up the PostgreSQL database and configure necessary schemas." },
-  { title: "SEO Optimization", description: "Optimize website content for search engines to improve visibility." },
-  { title: "Marketing Strategy", description: "Develop a comprehensive marketing strategy for the product launch." },
-  { title: "Feature Implementation", description: "Implement the user authentication feature with OAuth." },
-  { title: "Performance Tuning", description: "Analyze and improve application performance for faster load times." },
-  { title: "Accessibility Audit", description: "Perform an accessibility audit to ensure compliance with WCAG standards." }
-];
-
 function Event() {
   const eventId = useParams();
   const dispatch = useDispatch();

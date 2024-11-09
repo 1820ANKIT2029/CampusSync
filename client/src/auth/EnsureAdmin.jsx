@@ -13,16 +13,17 @@ const EnsureAdmin = ({ children }) => {
   if(state === "idle")
     dispatch(fetchuserProfile());
 
-  useEffect(() => {
+  useEffect( () => {
     const myCookie = Cookies.get('connect.sid');
     if(myCookie && isAdmin){
-
+        dispatch(setAdmin(true));
     }
     if(!myCookie){
       dispatch(setAdmin(false));
       dispatch(setAuth(false));
       navigate('/')
     }
+    
   }, [dispatch, navigate]);
 
   return isAdmin ? children : null;
