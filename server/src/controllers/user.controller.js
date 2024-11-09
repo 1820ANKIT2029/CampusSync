@@ -1,7 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 
 import { uploadstorage } from "../middleware/upload.js";
-import { EventParticipant } from "../models/event.model.js";
+import { Event, EventParticipant } from "../models/event.model.js";
 import { Task, TaskParticipant } from "../models/task.models.js";
 import { Profile } from "../models/user.models.js";
 import { GENDER, YEAR } from "../models/user.models.js";
@@ -178,13 +178,14 @@ export const registerInEvent = async (req, res, next) => {
             "participantId": profile._id
         });
 
-        if(profile || participant){
+        if(!(profile && participant)){
             return res.status(400).json({error: "Profile or EventParticipant error"});
         }
 
         await participant.save();
         res.status(201).json({message: "registered successfully", result: participant});
     }catch(err){
+        console.log(err);
         return res.status(500).json({error: "Internal server error at registerEvent"});
     }
 }
