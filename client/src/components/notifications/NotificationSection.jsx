@@ -1,5 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import NotificationItem from "./NotificationItem.jsx";
+import Cookies from 'js-cookie';
+import  {io } from 'socket.io-client';
+import axios from 'axios';
 
 const notificationsData = [
   { id: 1, message: "You have a new message from Arib!", read: false, timestamp: "2024-08-01T10:15:00" },
@@ -8,9 +11,34 @@ const notificationsData = [
   { id: 4, message: "New event: Coding Contest is starting soon!", read: false, timestamp: "2024-08-04T14:20:00" },
 ];
 
+let socketToken = Cookies.get('socket_token');
+let socket;
+if (!socketToken) {
+  const res = await axios.post("http://localhost:3000/auth/SocketAuthToken", {}, { withCredentials: true });
+  socketToken = Cookies.get('socket_token');
+}
+
+socket = io("http://localhost:5000/notification", {
+  auth: { token: socketToken }
+});
+
+
 
 const NotificationSection = () => {
   const [notifications, setNotifications] = useState(notificationsData);
+
+  useEffect(() => {
+      socket.on("NotificationUpdate", (data) => {
+        console.log("data here");
+        console.log(data);
+        setNotifications(data);
+      });
+
+      socket.on("authError", (data)=>{
+        console.log(data);
+      })
+  }, []);
+  
 
   const markAsRead = (id) => {
     setNotifications((prevNotifications) =>
