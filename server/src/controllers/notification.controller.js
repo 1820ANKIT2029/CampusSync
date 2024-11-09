@@ -18,10 +18,15 @@ const getNotification = async (profileId) => {
 
 export const NotificationSocket = async (socket) => {
     const ProfileId = jwt.verify(socket.handshake.auth.token, process.env.SESSION_SECRET).profileId;
-    
+    console.log(`Client disconnected: ${socket.id}, profileId: ${ProfileId}`);
     const sendNoticaficationUpdate = async () => {
         const result = await getNotification(ProfileId);
-        socket.emit("NotificationUpdate", result);
+        if(result){
+            socket.emit("NotificationUpdate", result);
+        }
+        else{
+            socket.emit("NotificationUpdate", "no data");
+        }
     };
 
     await sendNoticaficationUpdate();
