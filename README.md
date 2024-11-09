@@ -1,4 +1,4 @@
-## HACH3
+## Hack3
 
 # AuraTracker (CodeSangam 2024)
 
