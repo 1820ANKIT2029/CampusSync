@@ -1,9 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import Event from "./Event.jsx";
+import { useNavigate } from "react-router-dom";
 
 const ResponsiveGrid = ({ events }) => {
   const [showMore, setShowMore] = useState(false);
   const gridRef = useRef(null);
+  const navigate = useNavigate();
   
   useEffect(() => {
     if (gridRef.current) {
@@ -23,6 +25,11 @@ const ResponsiveGrid = ({ events }) => {
     }
   };
 
+  const handleClick = (index) => {
+    console.log(index);
+    navigate(`event/${index}`);
+  }
+
   return (
     <div className="flex flex-col items-center">
       <div
@@ -38,11 +45,12 @@ const ResponsiveGrid = ({ events }) => {
       >
         {events.map((event, index) => (
           <div
+            onClick={() => handleClick(index)}
             key={index}
             className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center min-w-80"
             style={{ height: "100px" }}
           >
-            <Event key={index} name={event.name} />
+            <Event onlClick={() => handleClick(index)} key={index} name={event.name} />
           </div>
         ))}
       </div>

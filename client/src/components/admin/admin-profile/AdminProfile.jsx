@@ -13,10 +13,8 @@ const AdminProfile = () => {
   const { stats, events, blogs, status } = useSelector((state) => state.adminData);
 
   useEffect(() => {
-    if (status === "idle") {
       dispatch(fetchAdminData()); 
-    }
-  }, [status, dispatch]);
+  }, []);
 
   if (status === "loading") {
     return <h2>Loading...</h2>;
