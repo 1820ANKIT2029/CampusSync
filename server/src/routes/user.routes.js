@@ -22,8 +22,8 @@ UserRouter.get('/event/active', ActiveEvent);
 UserRouter.get('/event/inactive', InactiveEvent);
 UserRouter.get('/profile', profile);
 UserRouter.post('/profile/edit', handleImageUpload, profileEdit);
-UserRouter.post('/event/register/:eventId', registerInEvent);
-UserRouter.post('/event/task/register/:taskId', registerInTask);
+UserRouter.post('/event/register', registerInEvent);
+UserRouter.post('/event/task/register', registerInTask);
 
 UserRouter.get('/todo', todolist);
 UserRouter.get('/todo/:todoId', todo);
