@@ -1,7 +1,10 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { fetchAdminData } from '../../../redux/features/adminData/adminDataSlice.js';
 import Details from '../../eventsSection/Details.jsx';
 import Task from '../../eventsSection/Task.jsx';
 import SubmissionLayout from './SubmissionLayout.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 const tasks = [
   { title: "Design Homepage", description: "Create a visually appealing homepage layout for the new website." },
@@ -16,6 +19,15 @@ const tasks = [
 ];
 
 function EventDetails() {
+  const dispatch = useDispatch();
+  const { events } = useSelector((state) => state.adminData);
+  const { id } = useParams();
+
+  console.log(events);
+  console.log(id);
+  useEffect(() => {
+    dispatch(fetchAdminData()); 
+  }, []);
   return (
     <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto p-6">
       <div className="md:flex items-stretch space-x-6 w-full bg-blue-100 h-auto">

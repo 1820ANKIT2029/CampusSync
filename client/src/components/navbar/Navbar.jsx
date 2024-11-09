@@ -211,19 +211,6 @@ const Navbar = () => {
                     Leaderboard
                   </NavLink>
               </li>
-              <li className={`${(isAdmin)?"":"hidden"}`}>
-                  <button
-                    onClick={logOut}
-                    to={''}
-                    className={`hover:md:border-b-2
-                                px-2 py-6 text-sm leading-[22px]
-                                text-red-500 font-bold hover:border-cyan-600 hover:text-cyan-500
-                                md:px-3 md:px-6
-                              `}
-                  >
-                    Logout
-                  </button>
-              </li>
               {isAuthenticated && (
                 <>
                   <li className={`${isAdmin ? "hidden" : ""}`}>
@@ -247,7 +234,7 @@ const Navbar = () => {
                 </>
               )}
             </ul>
-           {(!isAdmin) && ( <UserDropdown />)}
+            <UserDropdown />
               
           </nav>)}
         </div>
