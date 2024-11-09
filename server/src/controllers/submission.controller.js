@@ -7,10 +7,12 @@ import { getResourceType } from "../util/helper.js"
 import { Event, EventParticipant } from '../models/event.model.js';
 import { Profile } from '../models/user.models.js';
 import { History } from '../models/history.model.js';
+import { addNotification } from './notification.controller.js';
 
 export const upload = async (req, res, next) => {
     const file = req.file;
-    const { taskId, userId } = req.query;
+    const id = req.user.id;
+    const { taskId } = req.query;
     const resource_type = getResourceType(file);
 
     try {
@@ -35,8 +37,7 @@ export const upload = async (req, res, next) => {
                 { resource_type: resource_type }
             );
         }
-        
-        console.log(result)
+
         const newfile = new File({
             cloudId: result.public_id,
             filename: file.originalname,
@@ -48,12 +49,16 @@ export const upload = async (req, res, next) => {
         if(newfile){
             await newfile.save();
 
+            const profile = await Profile.findOne({userid: id}).select('_id');
+            const task = await Task.findById(taskId).select('name');
+
             const newsubmission = new Submission({
-                userId: userId,
+                participantId: profile._id,
                 taskId: taskId,
                 fileId: newfile._id,
             })
             await newsubmission.save();
+            addNotification(profile._id, `Your Submmission for ${task.name}`);
         }
         else{
             await cloudinary.uploader.destroy(result.publicId);
@@ -113,10 +118,7 @@ export const ValidSubmission = async (req, res, next) => {
         );
 
         // notification part
-        const notification = new History({
-            ProfileId: participant.participantId,
-            message: `Your submission in ${submissionexist.taskId.name} task`
-        }).save();
+        addNotification(participant.participantId, `Your submission for task ${task.name} is Verified by the event admin`);
         
         return res.status(200).json({message : "submission verify done"});
     }
@@ -170,6 +172,7 @@ export const InvalidSubmission = async (req, res, next) => {
             { $inc: { points: -10 } },
             { new: true }     
         );
+        addNotification(participant.participantId, `Your submission for task ${task.name} is rejected by the event admin`);
         return res.status(200).json({message : "submission remove verify done"});
     }catch(error){
         return res.status(500).json({error: "Internal server error at removeVerifysubmission"});
