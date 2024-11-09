@@ -51,6 +51,14 @@ export const profileEdit = async (req, res, next) => {
     if(bio){
         changes.bio = bio;
     }
+    /*
+    if(gender){
+        if(!GENDER.includes(gender)){
+            return res.status(400).json({error: `invalid gender: ${GENDER.toString()}}`});
+        }
+        changes.gender = gender;
+    }
+    */
     if(req.file){
         if(Number(req.file.size) > 1000000){
             return res.status(400).json({error: "image size must be less than 1MB"});
