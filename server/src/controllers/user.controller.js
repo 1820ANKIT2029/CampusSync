@@ -264,7 +264,7 @@ export const UserStat = async (req, res, nex) => {
         }
 
         let result2 = [];
-        if(result.length==0){
+        if(result.length===0){
             for(let i=0; i<3; i++){
                 result2.push({
                     participantId: 'No data',
@@ -277,7 +277,7 @@ export const UserStat = async (req, res, nex) => {
             }
         }
         return res.status(200).json({
-            events: (result.length==0)?result2:result,
+            events: (result.length===0)?result2:result,
             totalEvents: countEvents, 
             totalTasks: countTasks
         });
