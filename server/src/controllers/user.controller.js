@@ -194,7 +194,7 @@ export const registerInTask = async (req, res, next) => {
     const { taskId } = req.query;
     const id = req.user.id;
 
-    if(!eventId){
+    if(!taskId){
         return res.status(400).json({error: "provide taskId as query '?taskId=<taskId>'"})
     }
 
