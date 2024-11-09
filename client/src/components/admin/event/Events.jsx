@@ -25,9 +25,9 @@ const ResponsiveGrid = ({ events }) => {
     }
   };
 
-  const handleClick = (index) => {
+  const handleClick = (eventId) => {
     console.log(index);
-    navigate(`event/${index}`);
+    navigate(`event/${eventId}`);
   }
 
   return (
@@ -50,7 +50,7 @@ const ResponsiveGrid = ({ events }) => {
             className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center min-w-80"
             style={{ height: "100px" }}
           >
-            <Event onlClick={() => handleClick(index)} key={index} name={event.name} />
+            <Event onlClick={() => handleClick(event._id)} key={index} name={event.name} />
           </div>
         ))}
       </div>
