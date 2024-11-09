@@ -20,6 +20,6 @@ AuthRouter.post('/logout', logout);
 AuthRouter.get('/success', success);
 AuthRouter.get('/error', error);
 
-AuthRouter.get('/SocketAuthToken',ensureLoggedIn, setSocketAuthToken)
+AuthRouter.post('/SocketAuthToken',ensureLoggedIn, setSocketAuthToken)
 
 export default AuthRouter;
