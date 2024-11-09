@@ -8,7 +8,8 @@
     "start:dev": "nodemon ./src/index.js",
     "start:secondServer:dev": "nodemon ./src/secondServer.js",
     "start": "node ./src/index.js",
-    "start:secondServer": "node ./src/secondServer.js"
+    "start:secondServer": "node ./src/secondServer.js",
+    "stop": "pkill -f 'node ./src/index.js' && pkill -f 'node ./src/secondServer.js'"
   },
   "keywords": [],
   "author": "",

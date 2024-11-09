@@ -1,6 +1,7 @@
 import { Event } from "../models/event.model.js";
 import { Task } from "../models/task.models.js";
 import { Profile } from "../models/user.models.js";
+import { addNotification } from "./notification.controller.js";
 
 export const createEvent = async (req,res,next) => {
     const {
@@ -35,6 +36,8 @@ export const createEvent = async (req,res,next) => {
 
         const event = await newEvent.save();
 
+        addNotification(profile._id, `${name} event registered`);
+
         return res.status(200).json({message: "event created",eventId:event._id});
     }catch(error){
         return res.status(500).json({error:"Internal server error in createEvent"});
@@ -52,7 +55,7 @@ export const removeEvent = async (req,res,next) => {
 
     try{
         const profile = await Profile.findOne({userid: id}).select('_id');
-        const exist = Event.findOne({_id:EventId, organizer: profile._id});
+        const exist = Event.findOne({_id:EventId, organizer: profile._id}).select('name');
 
         if(!exist){
             return res.status(404).json({error: "task doesn't exist"});
@@ -60,6 +63,8 @@ export const removeEvent = async (req,res,next) => {
 
         await Event.findByIdAndDelete(EventId);
         await Task.deleteMany({eventId: EventId});
+
+        addNotification(profile._id, `${exist.name} event removed`);
         
         return res.status(200).json({message: "event deleted successively."});
     }catch{error}{

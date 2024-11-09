@@ -1,5 +1,6 @@
 import { News } from "../models/news.model.js";
 import { Profile } from "../models/user.models.js";
+import { addNotification } from "./notification.controller.js";
 
 export const addNews = async (req,res,next) => {
     const { headline, description, date } = req.body;
@@ -29,6 +30,8 @@ export const addNews = async (req,res,next) => {
         })
 
         await newNews.save();
+
+        addNotification(profile._id, `${headline} added to news section`);
 
         return res.status(200).json({message: "news created"});
     }catch(error){
