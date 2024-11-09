@@ -1,10 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchuserstats } from '../../../redux/features/user/userStatsSlice';
 import Buttons from './Buttons';
 
-const names = ["Events", "Rated tasks", "Highest Rank"];
-
-const StatisticsCard = ({ stats }) => {
+const StatisticsCard = () => {
+  const {events, totalEvents, totalTasks, status} = useSelector((state) => state.userStats);
+  const names = ["Events", "Tasks", "Highest Rank"];
+  const data = {"Events":totalEvents,"Tasks": totalTasks,"Highest Rank":"nil"};
+  const dispatch = useDispatch();
+  useEffect(()=> {
+    dispatch(fetchuserstats());
+  },[dispatch])
+  
+  
   const [stat, setStat] = useState("Events");
+  console.log(data[stat]);
+
+  
+  if(status === "pending"){
+    return (<p>Loading</p>);
+  }
+  if(status === "failed"){
+    return (<p>failed to load the data.</p>);
+  }
 
   return (
     <div className="bg-white rounded-lg shadow-lg p-6 bg-gradient-to-b from-white to-indigo-100">
@@ -24,7 +42,7 @@ const StatisticsCard = ({ stats }) => {
         </ul>
         <div className="h-full w-full flex items-center justify-center pt-12">
           <div className="rounded-full flex w-32 h-32 cursor-pointer items-center justify-center bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg transition-transform duration-300 hover:scale-105">
-            <p className="text-center text-3xl">Score</p>
+            <p className="text-center text-5xl">{data[stat]}</p>
           </div>
         </div>
       </div>

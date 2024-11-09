@@ -7,7 +7,8 @@ import adminDataReducer from '../features/adminData/adminDataSlice.js';
 import userProfileReducer from '../features/user/userProfileSlice.js';
 import blogsReducer from '../features/blogs/blogsSlice.js';
 import eventsReducer from '../features/events/eventsSlice.js';
-import eventParticipationReducer from '../features/user/eventParticipationSlice.js'
+import userStatsReducer from '../features/user/userStatsSlice.js';
+import userEventsReducer from '../features/user/userEventsSlice.js';
 
 
 
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
   userProfile:userProfileReducer,
   blogs:blogsReducer,
   events:eventsReducer,
-  eventParticipation:eventParticipationReducer,
+  userStats:userStatsReducer,
+  userEvents:userEventsReducer,
 });
 
 export const store = configureStore({
