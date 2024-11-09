@@ -24,6 +24,7 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import EnsureAdmin from './auth/ensureAdmin.jsx';
 import LeaderBoard from './components/leaderboard/LeaderBoard.jsx';
 import NotificationSection from './components/notifications/NotificationSection.jsx';
+import TaskPage from './components/tasks/TaskPage.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -50,6 +51,7 @@ const router = createBrowserRouter(
       {/* testing */}
       <Route path='/leaderboard' element={<ProtectedRoute> <LeaderBoard/> </ProtectedRoute>} />
       <Route path='/notifications' element={<ProtectedRoute> <NotificationSection/> </ProtectedRoute>} />
+      <Route path='/tasks' element={<ProtectedRoute> <TaskPage/> </ProtectedRoute>} />
     </Route>
   )
 );
