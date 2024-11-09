@@ -3,6 +3,20 @@ import { SocketTokenVerify } from "./socketAuth.controller.js"
 import jwt from 'jsonwebtoken';
 
 
+export const addNotification = async (profileId, message) => {
+    try {
+        const notification = new History({
+            ProfileId: profileId,
+            message: message
+        });
+        await notification.save();
+        console.log("Notification added successfully");
+    } catch (error) {
+        console.error("Error adding notification:", error);
+    }
+};
+
+
 const getNotification = async (profileId) => {
     try{
         const notifications = await History.find({ProfileId: profileId, seen: false}).sort({createdAt: -1});

@@ -1,3 +1,10 @@
+import { connectToMongoDB } from "./src/db/ConnectMongoDB.js"
+import dotenv from 'dotenv';
+dotenv.config();
+
+await connectToMongoDB();
+
+
 import { History } from "./src/models/history.model.js"
 
 for(let i=0; i<100; i++){
