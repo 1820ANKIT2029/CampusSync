@@ -252,7 +252,7 @@ export const UserStat = async (req, res, nex) => {
         const result = await EventParticipant.find({
             participantId: profile._id,
             eventId: { $in: activeEventIds }
-        }).populate('eventId')
+        }).populate('eventId', 'name')
         .sort({ createdAt: -1 })
         .limit(3);
 
@@ -263,8 +263,21 @@ export const UserStat = async (req, res, nex) => {
             return res.status(404).json({error: "unable to fetch UserStat 2"});
         }
 
+        let result2 = [];
+        if(result.length==0){
+            for(let i=0; i<3; i++){
+                result2.push({
+                    participantId: 'No data',
+                    eventId: {
+                        _id: "No data",
+                        name: "No data"
+                    },
+                    points:  0
+                });
+            }
+        }
         return res.status(200).json({
-            events: result,
+            events: (result.length==0)?result2:result,
             totalEvents: countEvents, 
             totalTasks: countTasks
         });
