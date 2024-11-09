@@ -37,6 +37,7 @@ export const signupV1 = async (req, res, next) => {
             await newUser.save();
             
             const newprofile = new Profile({
+                name: username,
                 userid: newUser._id,
                 email: email,
                 isAdmin: (isAdmin==='true')?true:false
