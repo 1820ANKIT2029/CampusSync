@@ -27,7 +27,10 @@ export const getevents = async (req, res, next) => {
     }
 
     try {
-        const events = await Event.find(filter).sort({createdAt: -1}).limit(30);
+        const events = await Event.find(filter)
+        .sort({createdAt: -1})
+        .limit(30)
+        .populate("organizer", "name bio profilePic");
         if(!events){
             return res.status(404).json({error: "unable to fetch events"});
         }
