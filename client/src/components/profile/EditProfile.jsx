@@ -30,8 +30,6 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
     if (file) {
       const fileType = file.type.split('/')[0];
       const fileSizeInMB = file.size / (1024 * 1024); 
-      console.log("File size (in bytes):", file.size);
-      console.log("File size (in MB):", fileSizeInMB);
   
       if (fileType !== "image") {
         setError("Only image files are allowed.");
@@ -62,8 +60,6 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
     Object.keys(formData).forEach((key) => {
       formSubmitData.append(key, formData[key]);
     });
-
-    console.log(formData);
 
     let data = {};
     if(formData.name !== ''){

@@ -38,7 +38,7 @@ const router = createBrowserRouter(
       <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
       <Route path="/events" element={<ProtectedRoute><EventsPage /></ProtectedRoute>} />
-      <Route path="/event/:id" element={<ProtectedRoute><Event /></ProtectedRoute>} />
+      <Route path="/event/:eventId" element={<ProtectedRoute><Event /></ProtectedRoute>} />
 
       {/* Admin Routes */}
       <Route path="/admin" element={<ProtectedRoute><EnsureAdmin><Admin /></EnsureAdmin></ProtectedRoute>}>
