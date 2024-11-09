@@ -73,14 +73,14 @@ export const upload = async (req, res, next) => {
 
 export const ValidSubmission = async (req, res, next) => {
     const { submissionId } = req.params;
-    const { id } = req.user.id;
+    const id  = req.user.id;
 
     if(!submissionId){
         return res.status(400).json({error: "Submission ID not provided."});
     }
 
     try{
-        const profile = await Profile.findOne({userId: id}).select('_id');
+        const profile = await Profile.findOne({userid: id}).select('_id');
         const submissionexist = await Submission.findById(submissionId).populate('taskId');
         if(!submissionexist){
             return res.status(400).json({error: "Submission does not exist"});
@@ -104,7 +104,7 @@ export const ValidSubmission = async (req, res, next) => {
             { new: true }
         );
         const task = await TaskParticipant.findOneAndUpdate(
-            {TaskParticipant: submission.participantId},
+            {participantId: submission.participantId},
             {isCompleted: true},
             {new: true }
         );
@@ -123,13 +123,14 @@ export const ValidSubmission = async (req, res, next) => {
         return res.status(200).json({message : "submission verify done"});
     }
     catch(err){
+        console.log(err);
         return res.status(500).json({error: "Internal server error at verifySubmission"});
     }
 }
 
 export const InvalidSubmission = async (req, res, next) => {
     const { submissionId } = req.params;
-    const { id } = req.user.id;
+    const id = req.user.id;
 
     if(!submissionId){
         return res.status(400).json({error: "Submission ID not provided."});
@@ -160,7 +161,7 @@ export const InvalidSubmission = async (req, res, next) => {
             { new: true }
         );
         const task = await TaskParticipant.findOneAndUpdate(
-            {TaskParticipant: submission.participantId},
+            {participantId: submission.participantId},
             {isCompleted: false},
             {new: true }
         );
