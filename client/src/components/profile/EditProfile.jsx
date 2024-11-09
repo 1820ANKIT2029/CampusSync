@@ -85,7 +85,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
        data.profilePic = formData.profilePic;
      }
    try {
-     const result = await axios.post('http://localhost:3000/profile/edit', data , { withCredentials: true });
+     const result = await axios.post('http://localhost:3000/profile/edit', data , { withCredentials: true,headers: { 'Content-Type': 'multipart/form-data' } });
      if(formData.profilePic != null) formData.profilePic = URL.createObjectURL(data.profilePic);
      dispatch(fetchuserProfile());
    } catch (err) {
