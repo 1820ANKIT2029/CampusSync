@@ -8,9 +8,11 @@ import {
     ActiveEvent, 
     InactiveEvent,
     registerInEvent,
-    registerInTask
+    registerInTask,
+    UserStat
 } from '../controllers/user.controller.js';
 import { todolist, todo, todoadd, tododelete, tododone } from '../controllers/todo.controller.js';
+import { User } from '../models/user.models.js';
 
 
 const UserRouter = Router();
@@ -21,6 +23,7 @@ UserRouter.get('/event', event );
 UserRouter.get('/event/active', ActiveEvent);
 UserRouter.get('/event/inactive', InactiveEvent);
 UserRouter.get('/profile', profile);
+UserRouter.get('/stats', UserStat);
 UserRouter.post('/profile/edit', handleImageUpload, profileEdit);
 UserRouter.post('/event/register', registerInEvent);
 UserRouter.post('/event/task/register', registerInTask);
