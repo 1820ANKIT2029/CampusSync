@@ -17,6 +17,19 @@
 
         const notification = document.getElementById('notification');
 
+
+        const socket_leaderboard = io("http://localhost:5000/notification", {
+            auth: {token: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJwcm9maWxlSWQiOiI2NzJlOTAxZGRjMmRkMjZjOWVhY2EzZTEiLCJpYXQiOjE3MzExMzAyMTUsImV4cCI6MTczMTIxNjYxNX0.Xw_tAY27lxnnpk4ZJDhCUlOpopx9Vj6KN71j53Z0MXo"}
+        });
+
+        socket_leaderboard.on("authError", (data) => {
+            console.log(JSON.stringify(data));
+        });
+
+        socket_leaderboard.on("NotificationUpdate", (data)=>{
+            console.log(JSON.stringify(data));
+        });
+        /*
         const socket_leaderboard = io("http://localhost:5000/leaderBoard");
 
         socket_leaderboard.on("leaderboardUpdate", (data)=> {
@@ -34,6 +47,7 @@
                 i++;
             }
         }
+            */
 
         /*
 
