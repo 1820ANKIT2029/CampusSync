@@ -41,7 +41,7 @@ export const adminEventById = async (req, res, next) => {
         const task = await Task.find({eventId: eventId});
         let SubmissionObject = [];
         for(let i=0; i<task.length; i++){
-            const submission = await Submission.find({taskId: task[i]._id}).populate('fileId participantId');
+            const submission = await Submission.find({taskId: task[i]._id}).populate('fileId participantId taskId');
             for(const x of submission){
                 SubmissionObject.push(x)
             }
