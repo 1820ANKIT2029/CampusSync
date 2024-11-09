@@ -39,27 +39,19 @@ export const adminEventById = async (req, res, next) => {
         const eventParticipant = await EventParticipant.find({eventId: eventId});
 
         const task = await Task.find({eventId: eventId});
-        let TaskObject = [];
+        let SubmissionObject = [];
         for(let i=0; i<task.length; i++){
-            const taskParticipant = await TaskParticipant.find({taskId: task[i]._id});
-            const submission = await Submission.find({taskId: task[i]._id}).populate('fileId');
-
-            let t = task[i].toObject();
-            t.participant = taskParticipant;
-            t.submission = submission;
-            TaskObject.push(t);
+            const submission = await Submission.find({taskId: task[i]._id}).populate('fileId participantId');
+            for(const x of submission){
+                SubmissionObject.push(x)
+            }
         }
 
-        /*
-        task = [
-        {... , participant: taskParticipantObject, submission : submissionObject},
-        {... , participant: taskParticipantObject, submission : submissionObject}
-        ]
-        */
         return res.status(200).json({
             "event": event,
-            "eventParticipant": eventParticipant,
-            "tasks": TaskObject,
+            "eventParticipants": eventParticipant,
+            "tasks": task,
+            "submissions": SubmissionObject
         });
 
     }catch(err){
