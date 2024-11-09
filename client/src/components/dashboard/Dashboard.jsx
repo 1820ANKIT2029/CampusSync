@@ -1,6 +1,9 @@
-import React from 'react';
+import React ,{useEffect} from 'react';
 import { AboutUser, AuraScore, LastEventCard, StatisticsCard } from './cards/index.js';
 import Course_Events from './courseAndEvents/Course_Events.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchuserProfile } from '../../redux/features/user/userProfileSlice.js';
+import { fetchUserEvents } from '../../redux/features/user/eventParticipationSlice.js';
 
 const user = {
   name: 'John Doe',
@@ -25,14 +28,21 @@ const stats = {
 };
 
 const Dashboard = () => {
+  const {name,username,email,aura,year,branch,profilePic} = useSelector((state) => state.userProfile);
+  const dispatch = useDispatch();
+  useEffect(()=> {
+    dispatch(fetchuserProfile());
+    dispatch(fetchUserEvents());
+  },[dispatch])
+
   return (
     <>
       <div className="flex bg-blue-100">
         <div className="flex-grow flex flex-col items-center justify-center overflow-y-auto px-8">
           <div className="flex flex-col items-center justify-center py-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-4xl bg-blue-100 p-6 rounded-lg shadow-lg">
-              <AboutUser user={user} />
-              <AuraScore score={user.aura} />
+              <AboutUser name={name} username={username} email={email} year={year} branch={branch} profilePic={profilePic} />
+              <AuraScore score={aura} />
               <LastEventCard events={events} />
               <StatisticsCard stats={stats} />
             </div>

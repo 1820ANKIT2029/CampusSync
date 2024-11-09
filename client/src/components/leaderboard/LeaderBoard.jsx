@@ -13,4 +13,4 @@ function LeaderBoard() {
   )
 }
 
-export default LeaderBoard
+export default LeaderBoard;
