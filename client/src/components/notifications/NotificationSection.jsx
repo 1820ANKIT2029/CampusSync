@@ -12,35 +12,54 @@ const notificationsData = [
 ];
 
 
-let socket, socketToken;
-try{
-  socketToken = Cookies.get('socket_token');
-  socket;
-  if (!socketToken) {
-    const res = await axios.post("http://localhost:3000/auth/SocketAuthToken", {}, { withCredentials: true });
-    socketToken = Cookies.get('socket_token');
-  }
-  
-  socket = io("http://localhost:5000/notification", {
-    auth: { token: socketToken }
-  });
-}catch(error){
-  console.log(error);
-}
+let socket;
 
 const NotificationSection = () => {
   const [notifications, setNotifications] = useState(notificationsData);
 
-  useEffect(async () => {
-      socket.on("NotificationUpdate", (data) => {
-        console.log("data here");
-        console.log(data);
-        setNotifications(data);
-      });
+  useEffect(() => {
+    // Async function to handle socket setup
+    const setupSocket = async () => {
+      try {
+        let socketToken = Cookies.get('socket_token');
 
-      socket.on("authError", (data)=>{
-        console.log(data);
-      })
+        // Request token if not available
+        if (!socketToken) {
+          await axios.post("http://localhost:3000/auth/SocketAuthToken", {}, { withCredentials: true });
+          socketToken = Cookies.get('socket_token');
+        }
+
+        // Initialize socket connection
+        socket = io("http://localhost:5000/notification", {
+          auth: { token: socketToken }
+        });
+
+        // Listen for notifications and authentication errors
+        socket.on("NotificationUpdate", (data) => {
+          console.log("Received data:", data);
+          setNotifications(data);
+        });
+
+        socket.on("authError", (data) => {
+          console.log("Auth error:", data);
+          socket.disconnect();
+        });
+      } catch (error) {
+        console.log("Socket setup error:", error);
+      }
+    };
+
+    // Call the async function
+    setupSocket();
+
+    // Cleanup socket on component unmount
+    return () => {
+      if (socket) {
+        socket.off("NotificationUpdate");
+        socket.off("authError");
+        socket.disconnect();
+      }
+    };
   }, []);
   
 
