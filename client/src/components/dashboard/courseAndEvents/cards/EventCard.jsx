@@ -1,8 +1,10 @@
 // EventCard.jsx
 import React from 'react';
+import { Link } from 'react-router-dom';
 
-const EventCard = ({ eventName, creation ,color }) => {
+const EventCard = ({ eventName, eventId ,color }) => {
     return (
+        <Link to={`/event/${eventId}`}>
         <div className={`border border-gray-300 rounded-lg shadow-md p-4 transition-colors ${color}`}>
             <div className="flex items-center flex-wrap">
                 <div className='w-full'>
@@ -10,6 +12,7 @@ const EventCard = ({ eventName, creation ,color }) => {
                 </div>
             </div>
         </div>
+        </Link>
     );
 };
 

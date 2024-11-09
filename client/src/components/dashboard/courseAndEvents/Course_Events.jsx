@@ -86,7 +86,7 @@ function Course_Events() {
             {isEvent?events.map((event, index) => {
                     const colorClass = colors[Math.floor(index / 3) % colors.length];
                     return (
-                            <EventCard key={index} eventName={event.eventId.name} start={event.createdAt} color={colorClass} />
+                            <EventCard key={index} eventName={event.eventId.name} eventId={event.eventId._id} color={colorClass} />
                     );
                 }):(
                   <p>There is no data for courses now</p>
