@@ -1,8 +1,10 @@
 import { Event, EventParticipant } from '../models/event.model.js';
 import { Profile } from '../models/user.models.js';
 import { History } from '../models/history.model.js';
+import { addNotification } from './notification.controller.js';
 
 export const updateGlobalAura = async () => {
+    console.log("running update Global Aura cron worker");
     const now = new Date();
     try{
         const events = await Event.find({
@@ -19,10 +21,7 @@ export const updateGlobalAura = async () => {
                 );
 
                 // notification part
-                const notification = new History({
-                    ProfileId: participant.participantId,
-                    message: `${participant.points} added from ${event.name}`
-                }).save();
+                addNotification(participant.participantId, `${participant.points} added from ${event.name}`);
             }
 
             await Event.findByIdAndUpdate(
@@ -33,9 +32,12 @@ export const updateGlobalAura = async () => {
     }catch(error){
         console.log(error);
     }
+
+    console.log("done running update Global Aura cron worker");
 };
 
 export const deleteOldNotification = async () => {
+    console.log("Delete Old Notification running")
     const oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     try{

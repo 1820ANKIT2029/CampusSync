@@ -160,8 +160,12 @@ export const InactiveEvent = async (req, res, next) => {
 }
 
 export const registerInEvent = async (req, res, next) => {
-    const { eventId } = req.params;
+    const { eventId } = req.query;
     const id = req.user.id;
+
+    if(!eventId){
+        return res.status(400).json({error: "provide eventId as query '?eventId=<eventId>'"})
+    }
 
     try{
         const eventexist = await Event.findById(eventId).select('_id');
@@ -186,8 +190,12 @@ export const registerInEvent = async (req, res, next) => {
 }
 
 export const registerInTask = async (req, res, next) => {
-    const { taskId } = req.params;
+    const { taskId } = req.query;
     const id = req.user.id;
+
+    if(!eventId){
+        return res.status(400).json({error: "provide taskId as query '?taskId=<taskId>'"})
+    }
 
     try{
         const taskexist = await Task.findById(taskId).select('_id');
