@@ -1,7 +1,7 @@
 // src/components/AdminProfile.jsx
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAdminData } from "../../../redux/features/adminData/adminDataSlice.js";
+import { fetchAdminData,fetchAdminEvent } from "../../../redux/features/adminData/adminDataSlice.js";
 import Participants from "../cards/Participant";
 import EventCount from "../cards/EventCount";
 import Contribution from "../cards/Contribution";
@@ -15,6 +15,15 @@ const AdminProfile = () => {
   useEffect(() => {
       dispatch(fetchAdminData()); 
   }, []);
+
+  // const dispatch = useDispatch();
+  const { event } = useSelector((state) => state.adminData);
+  // const { eventId } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchAdminEvent("6729da0646fde707de80f15f")); 
+  }, [dispatch]);
+  console.log(event);
 
   if (status === "loading") {
     return <h2>Loading...</h2>;
