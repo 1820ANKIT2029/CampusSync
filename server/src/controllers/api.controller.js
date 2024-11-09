@@ -120,7 +120,7 @@ export const eventinfo = async (req, res, next) => {
     }
 
     try{
-        const event = await Event.findById(eventId);
+        const event = await Event.findById(eventId).populate('organizer', "name profilePic bio");
 
         if(!event){
             return res.status(400).json({error: "No event exist with given eventId"});

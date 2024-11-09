@@ -2,7 +2,7 @@ import React from "react";
 
 
 const NotificationItem = ({ notification, onMarkRead, onDelete }) => {
-    // Format the timestamp
+    console.log(notification.timestamp);
     const formattedTime = new Date(notification.timestamp).toLocaleString();
   
     return (

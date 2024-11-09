@@ -5,10 +5,7 @@ import  {io } from 'socket.io-client';
 import axios from 'axios';
 
 const notificationsData = [
-  { id: 1, message: "You have a new message from Arib!", read: false, timestamp: "2024-08-01T10:15:00" },
-  { id: 2, message: "Your profile has been updated successfully.", read: false, timestamp: "2024-08-02T12:30:00" },
-  { id: 3, message: "Dylan commented on your post.", read: true, timestamp: "2024-08-03T09:45:00" },
-  { id: 4, message: "New event: Coding Contest is starting soon!", read: false, timestamp: "2024-08-04T14:20:00" },
+  { id: 1, message: "No Notification till now!", read: false, timestamp: "" },
 ];
 
 
