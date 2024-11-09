@@ -34,23 +34,25 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
 
       {/* user Routes */}
-      <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/events" element={<ProtectedRoute><EventsPage /></ProtectedRoute>} />
-      <Route path="/event/:eventId" element={<ProtectedRoute><Event /></ProtectedRoute>} />
+      <Route path="/home" element={<ProtectedRoute> <Home /> </ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
+      <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
+      <Route path="/events" element={<ProtectedRoute> <EventsPage /> </ProtectedRoute>} />
+      <Route path="/event/:eventId" element={<ProtectedRoute> <Event /> </ProtectedRoute>} />
+      <Route path='/notifications' element={<ProtectedRoute> <NotificationSection/> </ProtectedRoute>}/>
 
       {/* Admin Routes */}
       <Route path="/admin" element={<ProtectedRoute><EnsureAdmin><Admin /></EnsureAdmin></ProtectedRoute>}>
         <Route path="" element={<AdminProfile />} />
         <Route path="create-event" element={<CreateEvent />} />
         <Route path="create-blog" element={<CreateBlog />} />
-        <Route path="event/:id" element={<EventDetails />} />
+        <Route path="event/:eventId" element={<EventDetails />} />
+        <Route path='notifications' element={<NotificationSection/>}/>
       </Route>
 
       {/* testing */}
+      <Route path="events/event" element={<EventDetails />} />
       <Route path='/leaderboard' element={<ProtectedRoute> <LeaderBoard/> </ProtectedRoute>} />
-      <Route path='/notifications' element={<ProtectedRoute> <NotificationSection/> </ProtectedRoute>} />
       <Route path='/tasks' element={<ProtectedRoute> <TaskPage/> </ProtectedRoute>} />
     </Route>
   )
