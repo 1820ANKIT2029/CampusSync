@@ -2,7 +2,7 @@ import { Profile } from "../models/user.models.js";
 import { EventParticipant } from "../models/event.model.js";
 
 const getTopProfiles = async () => {
-    return await Profile.find()
+    return await Profile.find({isAdmin: false})
         .sort({ aura: -1 })
         .limit(100)
         .select("name aura profilePic year branch")

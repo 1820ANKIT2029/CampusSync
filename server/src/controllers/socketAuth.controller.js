@@ -1,5 +1,6 @@
 import { Profile } from "../models/user.models.js"
 import jwt from 'jsonwebtoken';
+import { error } from "./auth.controller.js";
 
 export const SocketTokenGenerater = async (userId) => {
     try{
@@ -40,7 +41,13 @@ export const setSocketAuthToken = async (req, res, next) => {
         res.cookie('socket_token', token, {
             maxAge: 24*60*60*1000
         });
+
+        return res.status(200).json({message: "cookies set"});
     }
+
+    return res.status(400).json({error: "error in Set Socket Auth token"});
+
+    
 }
 
 export const CheckTokenInSocket = async (socket, next) => {
