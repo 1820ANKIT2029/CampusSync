@@ -1,9 +1,17 @@
 import { News } from "../models/news.model.js"
-import { Event } from "../models/event.model.js"
+import { Event, EventParticipant } from "../models/event.model.js"
 import { Task } from "../models/task.models.js";
+import { Profile } from "../models/user.models.js";
 
 export const getevents = async (req, res, next) => {
     const { name, isActive, startTime, endTime, organizer } = req.query;
+
+    let id;
+    try{
+        id = req.user.id;
+    }catch(err){
+        console(err);
+    }
 
     let filter = {};
 
@@ -27,6 +35,12 @@ export const getevents = async (req, res, next) => {
     }
 
     try {
+        let profile, userevent;
+        if(id){
+            profile = await Profile.findOne({userid: id}).select('_id');
+            userevent = await EventParticipant.find({participantId: profile._id}).select('eventId');
+            filter._id = { $nin: participatedEventIds };
+        }
         const events = await Event.find(filter)
         .sort({createdAt: -1})
         .limit(30)
