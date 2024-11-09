@@ -22,12 +22,10 @@ socket = io("http://localhost:5000/notification", {
   auth: { token: socketToken }
 });
 
-
-
 const NotificationSection = () => {
   const [notifications, setNotifications] = useState(notificationsData);
 
-  useEffect(() => {
+  useEffect(async () => {
       socket.on("NotificationUpdate", (data) => {
         console.log("data here");
         console.log(data);

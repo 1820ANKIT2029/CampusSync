@@ -20,9 +20,10 @@ export const addNotification = async (profileId, message) => {
 const getNotification = async (profileId) => {
     try{
         const notifications = await History.find({ProfileId: profileId, seen: false}).sort({createdAt: -1});
-        for(const notification of notifications){
-            await History.findByIdAndUpdate(notification._id, {seen: true});
-        }
+        await History.updateMany(
+            { ProfileId: profileId, seen: false },
+            { $set: { seen: true } }
+        );
         return notifications;
     }catch(error){
         throw new Error("Error in Get Notification");
@@ -31,11 +32,12 @@ const getNotification = async (profileId) => {
 
 
 export const NotificationSocket = async (socket) => {
-    const ProfileId = jwt.verify(socket.handshake.auth.token, process.env.SESSION_SECRET).profileId;
-    console.log(`Client connected: ${socket.id}, profileId: ${ProfileId}`);
+    const ProfileId = socket.profileId;
+
     const sendNoticaficationUpdate = async () => {
         try{
             const result = await getNotification(ProfileId);
+            
             if(result.length != 0){
                 socket.emit("NotificationUpdate", result);
             }
