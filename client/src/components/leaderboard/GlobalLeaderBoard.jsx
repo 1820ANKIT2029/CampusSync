@@ -5,29 +5,23 @@ import { io } from 'socket.io-client';
 
 const GlobalLeaderBoard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
+  let socket;
 
   useEffect(() => {
-    const socket = io("http://localhost:5000/leaderBoard");
+    socket = io("http://localhost:5000/leaderBoard");
 
     socket.on("leaderboardUpdate", (data) => {
+      console.log("data here");
+      console.log(data);
       setLeaderboardData(data);
-      console.log(leaderboardData);
     });
 
-    return () => {
-      socket.disconnect();
-    };
   }, []);
 
-  useEffect(() => {
-    if (leaderboardData.length > 0) {
-      console.log("Updated leaderboard data:", leaderboardData);
-    }
-  }, [leaderboardData]);
 
   return (
     <>
-      <LeaderBoardComp leaderboardData={leaderboardData}/>
+      {leaderboardData.length>0 && (<LeaderBoardComp leaderboardData={leaderboardData}/>)}
     </>
   );
 };

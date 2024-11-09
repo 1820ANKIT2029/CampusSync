@@ -24,7 +24,6 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import EnsureAdmin from './auth/ensureAdmin.jsx';
 import LeaderBoard from './components/leaderboard/LeaderBoard.jsx';
 import NotificationSection from './components/notifications/NotificationSection.jsx';
-import EditProfile from './components/profile/EditProfile.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -45,7 +44,7 @@ const router = createBrowserRouter(
         <Route path="" element={<AdminProfile />} />
         <Route path="create-event" element={<CreateEvent />} />
         <Route path="create-blog" element={<CreateBlog />} />
-        <Route path="event-details" element={<EventDetails />} />
+        <Route path="event/:id" element={<EventDetails />} />
       </Route>
 
       {/* testing */}
