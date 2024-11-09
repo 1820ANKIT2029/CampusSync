@@ -18,20 +18,22 @@ const getNotification = async (profileId) => {
 
 export const NotificationSocket = async (socket) => {
     const ProfileId = jwt.verify(socket.handshake.auth.token, process.env.SESSION_SECRET).profileId;
-    console.log(`Client disconnected: ${socket.id}, profileId: ${ProfileId}`);
+    console.log(`Client connected: ${socket.id}, profileId: ${ProfileId}`);
     const sendNoticaficationUpdate = async () => {
-        const result = await getNotification(ProfileId);
-        if(result){
-            socket.emit("NotificationUpdate", result);
+        try{
+            const result = await getNotification(ProfileId);
+            if(result.length != 0){
+                socket.emit("NotificationUpdate", result);
+            }
+        }catch(err){
+            socket.emit("authError", "error");
         }
-        else{
-            socket.emit("NotificationUpdate", "no data");
-        }
+        
     };
 
     await sendNoticaficationUpdate();
 
-    const NotificationInterval = setInterval(sendLeaderboardUpdate, 60000*5);
+    const NotificationInterval = setInterval(sendNoticaficationUpdate, 60000);
 
     socket.on('disconnect', () => {
         clearInterval(NotificationInterval);
