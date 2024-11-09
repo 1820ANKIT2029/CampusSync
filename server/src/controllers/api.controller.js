@@ -39,6 +39,7 @@ export const getevents = async (req, res, next) => {
         if(id){
             profile = await Profile.findOne({userid: id}).select('_id');
             userevent = await EventParticipant.find({participantId: profile._id}).select('eventId');
+            const participatedEventIds = userevent.map(event => event.eventId);
             filter._id = { $nin: participatedEventIds };
         }
         const events = await Event.find(filter)
