@@ -16,7 +16,7 @@ function EventsPage() {
   }
 
   if (status === "failed") {
-    return <h2>Failed to load data.</h2>;
+    return <h2>Failed to load data</h2>;
   }
 
   return (
