@@ -10,7 +10,6 @@ function EventDetails() {
   const dispatch = useDispatch();
   const { eventData, eventDetailsStatus } = useSelector((state) => state.adminData);
   let { eventId } = useParams();
-  eventId = "6729da0646fde707de80f15f";
 
   useEffect(() => {
     dispatch(fetchAdminEvent(eventId));
