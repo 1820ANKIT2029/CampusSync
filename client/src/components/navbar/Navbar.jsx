@@ -13,6 +13,9 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  if(isAdmin){
+    dispatch(setAdmin(true));
+  }
 
   const logOut = async (e) => {
     e.preventDefault();
