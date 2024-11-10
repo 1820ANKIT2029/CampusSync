@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import Event from "./Event.jsx";
+import { useNavigate } from "react-router-dom";
 
 const ResponsiveGrid = ({ events }) => {
   const [showMore, setShowMore] = useState(false);
@@ -42,7 +43,7 @@ const ResponsiveGrid = ({ events }) => {
             className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center min-w-80"
             style={{ height: "100px" }}
           >
-            <Event key={index} name={event.name} />
+            <Event key={index} eventId={event._id} name={event.name} />
           </div>
         ))}
       </div>

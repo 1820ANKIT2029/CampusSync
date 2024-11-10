@@ -7,12 +7,6 @@ export const fetchuserProfile = createAsyncThunk("user/fetchUserProfile", async 
     return res1.data;
 });
 
-export const updateuserProfile = createAsyncThunk("user/updateUserProfile", async () => {
-    const res1 = await axios.get("http://localhost:3000/profile", { withCredentials: true })
-    console.log("user profile"); console.log(res1);
-    return res1.data;
-});
-
 const initialState = {
     userId: null,
     name:"your name",
@@ -21,7 +15,7 @@ const initialState = {
     branch: "your branch",
     email: "XYZ@mnnt.ac.in",
     aura: 0,
-    gender: "your gender",
+    bio: "your bio",
     isAdmin: false,
     profilePic: "https://via.placeholder.com/150",
     status: "idle",

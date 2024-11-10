@@ -1,22 +1,29 @@
 // src/components/AdminProfile.jsx
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAdminData } from "../../../redux/features/adminData/adminDataSlice.js";
+import { fetchAdminData,fetchAdminEvent } from "../../../redux/features/adminData/adminDataSlice.js";
 import Participants from "../cards/Participant";
 import EventCount from "../cards/EventCount";
 import Contribution from "../cards/Contribution";
 import Events from "../event/Events";
 import BlogsSection from "../blog/BlogsSection";
+import { useParams } from "react-router-dom";
 
 const AdminProfile = () => {
   const dispatch = useDispatch();
   const { stats, events, blogs, status } = useSelector((state) => state.adminData);
 
   useEffect(() => {
-    if (status === "idle") {
       dispatch(fetchAdminData()); 
-    }
-  }, [status, dispatch]);
+  }, []);
+
+  // const dispatch = useDispatch();
+  const { event } = useSelector((state) => state.adminData);
+  const { eventId } = useParams();
+
+  useEffect(() => {
+    dispatch(fetchAdminEvent(eventId)); 
+  }, [dispatch]);
 
   if (status === "loading") {
     return <h2>Loading...</h2>;

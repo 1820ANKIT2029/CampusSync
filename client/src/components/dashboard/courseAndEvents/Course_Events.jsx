@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector,useDispatch } from 'react-redux';
+import { fetchuserEvents } from '../../../redux/features/user/userEventsSlice';
 import EventCard from './cards/Eventcard';
 
 // testing data
-const events = [
+const Events = [
     { eventName: "Music Festival", creator: "Alice Johnson" },
     { eventName: "Art Exhibition", creator: "Bob Smith" },
     { eventName: "Tech Conference", creator: "Charlie Brown" },
@@ -18,6 +20,12 @@ const events = [
 ];
 
 function Course_Events() {
+  const {events, status} = useSelector((state) => state.userEvents);
+  const dispatch = useDispatch();
+  useEffect(()=> {
+    dispatch(fetchuserEvents());
+  },[dispatch]);
+
   const [isEvent, setEvent] = useState(true);
 
   const handleCourseClick = () => {
@@ -27,6 +35,15 @@ function Course_Events() {
   const handleEventClick = () => {
     setEvent(true);
   };
+
+  if (status === "loading") {
+    return <h2>Loading...</h2>;
+  }
+
+  if (status === "failed") {
+    return <h2>Failed to load data.</h2>;
+  }
+
 
   const colors = ["bg-red-200", "bg-green-200"];
 
@@ -69,14 +86,11 @@ function Course_Events() {
             {isEvent?events.map((event, index) => {
                     const colorClass = colors[Math.floor(index / 3) % colors.length];
                     return (
-                            <EventCard key={index} eventName={event.eventName} creator={event.creator} color={colorClass} />
+                            <EventCard key={index} eventName={event.eventId.name} eventId={event.eventId._id} color={colorClass} />
                     );
-                }):events.map((event, index) => {
-                  const colorClass = colors[Math.floor(index / 3) % colors.length];
-                  return (
-                          <EventCard key={index} eventName={event.eventName} creator={event.creator} color={colorClass} />
-                  );
-              })}
+                }):(
+                  <p>There is no data for courses now</p>
+                )}
             </div>
         </div>
     </section>

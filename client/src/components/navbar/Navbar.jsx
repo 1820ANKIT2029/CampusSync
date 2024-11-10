@@ -13,6 +13,9 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  if(isAdmin){
+    dispatch(setAdmin(true));
+  }
 
   const logOut = async (e) => {
     e.preventDefault();
@@ -211,22 +214,9 @@ const Navbar = () => {
                     Leaderboard
                   </NavLink>
               </li>
-              <li className={`${(isAdmin)?"":"hidden"}`}>
-                  <button
-                    onClick={logOut}
-                    to={''}
-                    className={`hover:md:border-b-2
-                                px-2 py-6 text-sm leading-[22px]
-                                text-red-500 font-bold hover:border-cyan-600 hover:text-cyan-500
-                                md:px-3 md:px-6
-                              `}
-                  >
-                    Logout
-                  </button>
-              </li>
               {isAuthenticated && (
                 <>
-                  <li className={`${isAdmin ? "hidden" : ""}`}>
+                  <li className={`${isAdmin ? "" : ""}`}>
                   <NavLink to={'/notifications'} className="px-3 py-6 sm:pl-4 md:m-12 text-gray-500 hover:text-cyan-500 relative">
                     <svg
                       className="w-6 h-6"
@@ -247,7 +237,7 @@ const Navbar = () => {
                 </>
               )}
             </ul>
-           {(!isAdmin) && ( <UserDropdown />)}
+            <UserDropdown />
               
           </nav>)}
         </div>

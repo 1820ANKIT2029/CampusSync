@@ -1,38 +1,51 @@
 import React, {useState} from 'react';
+import { verifySub, rejectSub } from '../../../redux/features/adminData/adminDataSlice';
 import { FaEye, FaCheck, FaTimes } from 'react-icons/fa';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const submissions = [
-    { username: 'Username1', task: 'Task Name', submissionId: 1 },
-    { username: 'Username2', task: 'Task Name', submissionId: 2 },
-    { username: 'Username3', task: 'Task Name', submissionId: 3 },
-    { username: 'Username4', task: 'Task Name', submissionId: 4 },
-  ];
-
-  const docs = [
-    { uri: "https://res.cloudinary.com/dwlputtun/image/upload/v1730522067/ysuvwnriqlpqtdlyqysk.png" },
-  ];
-
-const SubmissionLayout = () => {
+const SubmissionLayout = ({submissions}) => {
+    const {verifyStatus, rejectionStatus, eventDetailsStatus} = useSelector((state) => state.adminData);
     const [isOpen, setisOpen] = useState(false);
     const [currentDocument, setCurrentDocument] = useState('');
     const [tasksub,setTasksub] = useState(submissions);
+    const dispatch = useDispatch();
 
-    const verifySubmission = (submissionId) => {
-        const userSubmission = tasksub.find((sub) => sub.submissionId === submissionId);
-        console.log(userSubmission);
-        console.log("submission accepted");
+    const verifySubmission = async (submissionId) => {
+        await dispatch(verifySub(submissionId));
         
-        setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub.submissionId !== submissionId));
+        if(verifyStatus === "succeeded"){
+          setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub.submissionId !== submissionId));
+        }
+        else{
+          console.log("failed to pass the submission");
+        }
     };
 
-    const rejectSubmission = (submissionId) => {
-        const userSubmission = tasksub.find((sub) => sub.submissionId === submissionId);
-        console.log(userSubmission);
-        console.log("submission rejected")
-        
-        setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub.submissionId !== submissionId));
+    const rejectSubmission = async (submissionId) => {
+        await dispatch(rejectSub(submissionId));
+        if(rejectionStatus === "succeeded"){
+          setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub.submissionId !== submissionId));
+        }
+        else{
+          console.log("failed to reject the submission")
+        }
     };
+
+    if(eventDetailsStatus === "pending"){
+      return (<p>loading...</p>);
+    }
+    if(eventDetailsStatus === "failed"){
+      return (<p>failed to load data</p>);
+    }
+
+    if(submissions.length === 0){
+      return (
+        <>
+        <div>No submissions</div>
+        </>
+      )
+    }
     
 
   return (
@@ -42,19 +55,19 @@ const SubmissionLayout = () => {
       </div>
 
 
-      {tasksub.map((submission) => (
+      {tasksub.map((submission,index) => (
         <div
-          key={submission.submissionId}
+          key={index}
           className="flex items-center bg-pink-100 px-4 py-2 mb-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 ease-in-out"
         >
           {/* User and Task Info */}
           <div className="flex-1">
-            <div className="font-semibold text-gray-900">{submission.username}</div>
-            <div className="text-gray-600 text-sm">{submission.task}</div>
+            <div className="font-semibold text-gray-900">{submission.participantId.name}</div>
+            <div className="text-gray-600 text-sm">{submission.taskId.name}</div>
           </div>
 
           <div className="flex gap-2">
-            <Link to={docs[0].uri} target='_blank'>
+            <Link to={submission.fileId.url} target='_blank'>
             <div
               className="w-8 h-8 flex items-center justify-center bg-blue-500 text-white rounded-full cursor-pointer hover:bg-blue-600 transition duration-200"
               title="View"
@@ -63,14 +76,14 @@ const SubmissionLayout = () => {
             </div>
             </Link>
             <div
-              onClick={() => verifySubmission(submission.submissionId)}
+              onClick={() => verifySubmission(submission._id)}
               className="w-8 h-8 flex items-center justify-center bg-green-500 text-white rounded-full cursor-pointer hover:bg-green-600 transition duration-200"
               title="Accept"
             >
               <FaCheck />
             </div>
             <div
-              onClick={() => rejectSubmission(submission.submissionId)}
+              onClick={() => rejectSubmission(submission._id)}
               className="w-8 h-8 flex items-center justify-center bg-red-500 text-white rounded-full cursor-pointer hover:bg-red-600 transition duration-200"
               title="Reject"
             >

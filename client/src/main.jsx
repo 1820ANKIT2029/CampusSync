@@ -24,7 +24,7 @@ import ProtectedRoute from './auth/ProtectedRoute.jsx';
 import EnsureAdmin from './auth/ensureAdmin.jsx';
 import LeaderBoard from './components/leaderboard/LeaderBoard.jsx';
 import NotificationSection from './components/notifications/NotificationSection.jsx';
-import EditProfile from './components/profile/EditProfile.jsx';
+import TaskPage from './components/tasks/TaskPage.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -34,23 +34,26 @@ const router = createBrowserRouter(
       <Route path="/signup" element={<Signup />} />
 
       {/* user Routes */}
-      <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-      <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
-      <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-      <Route path="/events" element={<ProtectedRoute><EventsPage /></ProtectedRoute>} />
-      <Route path="/events/:id" element={<ProtectedRoute><Event /></ProtectedRoute>} />
+      <Route path="/home" element={<ProtectedRoute> <Home /> </ProtectedRoute>} />
+      <Route path="/profile" element={<ProtectedRoute> <Profile /> </ProtectedRoute>} />
+      <Route path="/dashboard" element={<ProtectedRoute> <Dashboard /> </ProtectedRoute>} />
+      <Route path="/events" element={<ProtectedRoute> <EventsPage /> </ProtectedRoute>} />
+      <Route path="/event/:eventId" element={<ProtectedRoute> <Event /> </ProtectedRoute>} />
+      <Route path='/notifications' element={<ProtectedRoute> <NotificationSection/> </ProtectedRoute>}/>
 
       {/* Admin Routes */}
       <Route path="/admin" element={<ProtectedRoute><EnsureAdmin><Admin /></EnsureAdmin></ProtectedRoute>}>
         <Route path="" element={<AdminProfile />} />
         <Route path="create-event" element={<CreateEvent />} />
         <Route path="create-blog" element={<CreateBlog />} />
-        <Route path="event-details" element={<EventDetails />} />
+        <Route path="event/:eventId" element={<EventDetails />} />
+        <Route path='notifications' element={<NotificationSection/>}/>
       </Route>
 
       {/* testing */}
-      <Route path='/leaderboard' element={<LeaderBoard/>} />
-      <Route path='/notifications' element={<NotificationSection/>} />
+      <Route path="events/event" element={<EventDetails />} />
+      <Route path='/leaderboard' element={<ProtectedRoute> <LeaderBoard/> </ProtectedRoute>} />
+      <Route path='/tasks' element={<ProtectedRoute> <TaskPage/> </ProtectedRoute>} />
     </Route>
   )
 );
