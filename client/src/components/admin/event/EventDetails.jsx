@@ -29,7 +29,7 @@ function EventDetails() {
       <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto p-6">
         <div className="md:flex items-stretch space-x-6 w-full bg-blue-100 h-auto">
           <div className="flex-1 m-1 bg-white rounded-lg shadow-md bg-violet-400">
-            {/* <Details event={eventData} /> */}
+            <Details event={eventData} />
           </div>
           <div className="flex-1 m-1 rounded-lg">
             <SubmissionLayout submissions={eventData.submissions} />
