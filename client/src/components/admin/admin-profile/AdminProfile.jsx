@@ -7,6 +7,7 @@ import EventCount from "../cards/EventCount";
 import Contribution from "../cards/Contribution";
 import Events from "../event/Events";
 import BlogsSection from "../blog/BlogsSection";
+import { useParams } from "react-router-dom";
 
 const AdminProfile = () => {
   const dispatch = useDispatch();
@@ -18,12 +19,11 @@ const AdminProfile = () => {
 
   // const dispatch = useDispatch();
   const { event } = useSelector((state) => state.adminData);
-  // const { eventId } = useParams();
+  const { eventId } = useParams();
 
   useEffect(() => {
-    dispatch(fetchAdminEvent("6729da0646fde707de80f15f")); 
+    dispatch(fetchAdminEvent(eventId)); 
   }, [dispatch]);
-  console.log(event);
 
   if (status === "loading") {
     return <h2>Loading...</h2>;
