@@ -37,6 +37,7 @@ export const signupV1 = async (req, res, next) => {
             await newUser.save();
             
             const newprofile = new Profile({
+                name: username,
                 userid: newUser._id,
                 email: email,
                 isAdmin: (isAdmin==='true')?true:false
@@ -83,7 +84,8 @@ export const logout = async (req, res, next) => {
               return next(err);
             }
             await req.session.destroy(() => {
-              res.clearCookie("connect.sid"); // Clear session cookie (optional)
+              res.clearCookie("connect.sid");
+              res.clearCookie("socket_token");
               res.status(200).json({message: "logout successfully"});
             });
         });

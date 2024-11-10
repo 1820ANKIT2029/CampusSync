@@ -1,9 +1,17 @@
 import { News } from "../models/news.model.js"
-import { Event } from "../models/event.model.js"
+import { Event, EventParticipant } from "../models/event.model.js"
 import { Task } from "../models/task.models.js";
+import { Profile } from "../models/user.models.js";
 
 export const getevents = async (req, res, next) => {
     const { name, isActive, startTime, endTime, organizer } = req.query;
+
+    let id;
+    try{
+        id = req.user.id;
+    }catch(err){
+        console(err);
+    }
 
     let filter = {};
 
@@ -22,12 +30,22 @@ export const getevents = async (req, res, next) => {
 
     if (isActive === 'true') {
         const now = new Date();
-        filter.startTime = { ...filter.startTime, $lte: now };
-        filter.endTime = { ...filter.endTime, $gte: now };
+        filter.startTime = { $lte: now };
+        filter.endTime = { $gte: now };
     }
 
     try {
-        const events = await Event.find(filter);
+        let profile, userevent;
+        if(id){
+            profile = await Profile.findOne({userid: id}).select('_id');
+            userevent = await EventParticipant.find({participantId: profile._id}).select('eventId');
+            const participatedEventIds = userevent.map(event => event.eventId);
+            filter._id = { $nin: participatedEventIds };
+        }
+        const events = await Event.find(filter)
+        .sort({createdAt: -1})
+        .limit(30)
+        .populate("organizer", "name bio profilePic");
         if(!events){
             return res.status(404).json({error: "unable to fetch events"});
         }
@@ -54,7 +72,11 @@ export const getnews = async (req, res, next) => {
     }
 
     try{
-        const result = await News.find(filter).skip((Number(num)-1)*10).limit(10);
+        const result = await News.find(filter)
+        .sort({createdAt: -1})
+        .skip((Number(num)-1)*10)
+        .limit(10)
+        .populate('adminId', 'profilePic name bio');
 
         if(!result){
             return res.status(404).json({error: "unable to fetch news"});
@@ -98,7 +120,7 @@ export const eventinfo = async (req, res, next) => {
     }
 
     try{
-        const event = await Event.findById(eventId);
+        const event = await Event.findById(eventId).populate('organizer', "name profilePic bio");
 
         if(!event){
             return res.status(400).json({error: "No event exist with given eventId"});

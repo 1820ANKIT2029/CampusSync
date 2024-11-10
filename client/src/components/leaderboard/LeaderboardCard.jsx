@@ -1,4 +1,6 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+
 
 const LeaderboardCard = () => {
   const Participants = [
@@ -37,6 +39,7 @@ const LeaderboardCard = () => {
       aura: 30,
     },
   ];
+
 
   return (
     <div className="flex flex-col justify-center items-center sm:min-w-[240px] md:max-w-[450]">

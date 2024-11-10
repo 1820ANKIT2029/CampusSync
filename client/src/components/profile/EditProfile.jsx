@@ -1,21 +1,21 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchuserProfile } from '../../redux/features/user/userProfileSlice.js';
 
-const EditProfile = () => {
+const EditProfile = ({isModalOpen, setIsModalOpen}) => {
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
-    year: '',
+    year: 0,
     branch: '',
     email: '',
-    gender: '',
+    bio: '',
     profilePic: null,
   });
 
   const [preview, setPreview] = useState(null);
-  const [message, setMessage] = useState('');
-  const [isModalOpen, setIsModalOpen] = useState(false); // For modal visibility
-
-  // Handle change in input fields
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({
@@ -24,45 +24,82 @@ const EditProfile = () => {
     }));
   };
 
-  // Handle file input change (profile picture)
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    setFormData((prevData) => ({
-      ...prevData,
-      profilePic: file,
-    }));
-    setPreview(URL.createObjectURL(file));
+  const [error, setError] = useState("");
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const fileType = file.type.split('/')[0];
+      const fileSizeInMB = file.size / (1024 * 1024); 
+  
+      if (fileType !== "image") {
+        setError("Only image files are allowed.");
+      } else if (fileSizeInMB > 1) {
+        setError("File size exceeds 1MB.");
+      } else {
+        setError(""); 
+        setFormData((prevData) => ({
+          ...prevData,
+          profilePic: file,
+        }));
+        setPreview(URL.createObjectURL(file));
+      }
+    }
   };
+  
 
-  // Handle form submission
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if(error !== ''){
+      return ;
+    }
 
     const formSubmitData = new FormData();
     Object.keys(formData).forEach((key) => {
       formSubmitData.append(key, formData[key]);
     });
 
-    console.log(formData);
-    // try {
-    //   const response = await axios.post('http://localhost:3000/api/edit-profile', formSubmitData, {
-    //     headers: { 'Content-Type': 'multipart/form-data' },
-    //   });
-    //   setMessage('Profile updated successfully!');
-    // } catch (error) {
-    //   console.error("Error updating profile:", error);
-    //   setMessage('An error occurred while updating the profile.');
-    // }
+    let data = {};
+    if(formData.name !== ''){
+       data.name = formData.name;
+    }
+    if(formData.year !== 0){
+       data.year = formData.year;
+     }
+     if(formData.branch !== ''){
+       data.branch = formData.branch;
+     }
+     if(formData.email !== ''){
+       data.email = formData.email;
+     }
+     if(formData.bio !== ''){
+       data.bio = formData.bio;
+     }
+     if(formData.profilePic !== null){
+       data.profilePic = formData.profilePic;
+     }
+   try {
+     const result = await axios.post('http://localhost:3000/profile/edit', data , { withCredentials: true,headers: { 'Content-Type': 'multipart/form-data' } });
+     if(formData.profilePic != null) formData.profilePic = URL.createObjectURL(data.profilePic);
+     dispatch(fetchuserProfile());
+   } catch (err) {
+     console.log({ message: 'error in updating profile' });
+     console.log(err);
+   }
     setFormData({
       name: '',
       year: '',
       branch: '',
       email: '',
-      gender: '',
+      bio: '',
       profilePic: null,
     });
-    setIsModalOpen(false); // Close modal after submitting
+    setIsModalOpen(false); 
   };
+
+
 
   // Open the modal
   const openModal = () => {
@@ -132,6 +169,19 @@ const EditProfile = () => {
               </div>
 
               <div className="mb-4">
+                <label className="block text-gray-700 font-bold mb-2">Bio</label>
+                <textarea
+                  name="bio"
+                  value={formData.bio}
+                  onChange={handleChange}
+                  className="w-full p-2 border border-gray-300 rounded-md"
+                  placeholder="Write a short bio"
+                  rows="4" 
+                />
+              </div>
+
+
+              <div className="mb-4">
                 <label className="block text-gray-700 font-bold mb-2">Year of Study</label>
                 <input
                   type="text"
@@ -167,20 +217,12 @@ const EditProfile = () => {
                 />
               </div>
 
-              <div className="mb-4">
-                <label className="block text-gray-700 font-bold mb-2">Gender</label>
-                <select
-                  name="gender"
-                  value={formData.gender}
-                  onChange={handleChange}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                >
-                  <option value="" disabled>Select your gender</option>
-                  <option value="male">Male</option>
-                  <option value="female">Female</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
+              { error && (
+              <p className="text-red-700 bg-red-100 border border-red-500 rounded-md p-2 my-2">
+                {error}
+              </p>
+            ) }
+
 
               <div className="flex justify-between">
                 <button

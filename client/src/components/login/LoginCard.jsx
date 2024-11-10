@@ -45,7 +45,7 @@ function LoginCard() {
     
 
   const loginwithgoogle = ()=>{
-      window.open("http://localhost:3000/auth/login/OAuth/callback","_self")
+      window.open("http://localhost:3000/auth/login/OAuth/callback","_self");
   }
 
   return (

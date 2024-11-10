@@ -1,52 +1,56 @@
-import React from 'react';
-import Details from '../../eventsSection/Details.jsx';
+import React, { useEffect } from 'react';
+import { fetchAdminEvent } from '../../../redux/features/adminData/adminDataSlice.js';
+import Details from './Details.jsx';
 import Task from '../../eventsSection/Task.jsx';
 import SubmissionLayout from './SubmissionLayout.jsx';
-
-const tasks = [
-  { title: "Design Homepage", description: "Create a visually appealing homepage layout for the new website." },
-  { title: "API Development", description: "Develop and document the RESTful API for the application." },
-  { title: "User Testing", description: "Conduct user testing sessions to gather feedback on the user interface." },
-  { title: "Database Setup", description: "Set up the PostgreSQL database and configure necessary schemas." },
-  { title: "SEO Optimization", description: "Optimize website content for search engines to improve visibility." },
-  { title: "Marketing Strategy", description: "Develop a comprehensive marketing strategy for the product launch." },
-  { title: "Feature Implementation", description: "Implement the user authentication feature with OAuth." },
-  { title: "Performance Tuning", description: "Analyze and improve application performance for faster load times." },
-  { title: "Accessibility Audit", description: "Perform an accessibility audit to ensure compliance with WCAG standards." }
-];
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router-dom';
 
 function EventDetails() {
-  return (
-    <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto p-6">
-      <div className="md:flex items-stretch space-x-6 w-full bg-blue-100 h-auto">
-        <div className="flex-1 m-1 bg-white rounded-lg shadow-md bg-violet-400">
-          <Details />
-        </div>
-        <div className="flex-1 m-1 rounded-lg">
-          <SubmissionLayout/>
-        </div>
-      </div>
+  const dispatch = useDispatch();
+  const { eventData, eventDetailsStatus } = useSelector((state) => state.adminData);
+  let { eventId } = useParams();
 
-      {/* Lower Section */}
-      <div className="w-full p-4 flex flex-col space-y-2">
-        {/* Title for Tasks */}
-        <div className='text-center'>
-        <h2 className="text-4xl font-extrabold text-gray-800">Tasks under this Event</h2>
-        </div>
-        
-        <div className="grid grid-cols-2 gap-4">
-          {tasks.map((task, index) => (
-              <Task
-                  key={index}
-                  title={task.title}
-                  description={task.description}
-              />
-          ))}
-      </div>
+  useEffect(() => {
+    dispatch(fetchAdminEvent(eventId));
+  }, [dispatch, eventId]);
 
+  if (eventDetailsStatus === "pending") {
+    return <p>Loading...</p>;
+  }
+
+  if (eventDetailsStatus === "failed") {
+    return <p>Failed to load data</p>;
+  }
+
+  if (eventDetailsStatus === "succeeded" && eventData) {
+    return (
+      <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto p-6">
+        <div className="md:flex items-stretch space-x-6 w-full bg-blue-100 h-auto">
+          <div className="flex-1 m-1 bg-white rounded-lg shadow-md bg-violet-400">
+            <Details event={eventData} />
+          </div>
+          <div className="flex-1 m-1 rounded-lg">
+            <SubmissionLayout submissions={eventData.submissions} />
+          </div>
+        </div>
+
+        <div className="w-full p-4 flex flex-col space-y-2">
+          <div className="text-center">
+            <h2 className="text-4xl font-extrabold text-gray-800">Tasks under this Event</h2>
+          </div>
+          
+          <div className="grid grid-cols-2 gap-4">
+            {eventData.tasks?.map((task, index) => (
+              <Task key={index} title={task.name} description={task.description} />
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return null; // Render nothing until eventData is fully loaded
 }
 
 export default EventDetails;

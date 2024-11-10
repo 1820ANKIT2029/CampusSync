@@ -2,13 +2,22 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios';
 
 export const fetchBlogs = createAsyncThunk("user/fetchBlogs", async () => {
-    const res1 = await axios.get("http://localhost:3000/api/news", { withCredentials: true })
-    // console.log("news: "); console.log(res1);
+    const res1 = await axios.get("http://localhost:3000/api/news/1", { withCredentials: true })
+    console.log("news: "); console.log(res1.data);
     return res1.data;
 });
 
 const initialState = {
-    blogs: [],
+    blogs: [{
+        adminId:{
+            _id:null,
+            name:"",
+            bio:"",
+        },
+        createdAt:"",
+        description: "",
+        headline: "",
+    }],
     status: "idle",
     error: null,
 };

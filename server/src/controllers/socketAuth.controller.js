@@ -1,20 +1,37 @@
 import { Profile } from "../models/user.models.js"
 import jwt from 'jsonwebtoken';
 
-export const SocketTokenGenerater = async (userId) => {
+export const SocketTokenGenerater = async (value) => {
     try{
-        const profile = await Profile.findOne({userid: userId}).select('_id');
-
-        return jwt.sign(
-            { profileId: profile._id },
-            process.env.SESSION_SECRET,
-            { expiresIn: '1d' }
-        );
+        const token = jwt.sign(
+                { profileId: value},
+                process.env.SESSION_SECRET,
+                { expiresIn: '1d' }
+            );
+        return token;
     }catch(error){
         console.log(error);
-        return "false"
+        return false
     }
-    
+}
+
+export const setSocketAuthToken = async (req, res, next) => {
+    const id = req.user.id;
+    try{
+        const profile =  await Profile.findOne({userid: id}).select('_id');
+        const token = await SocketTokenGenerater(profile._id);
+        if(token){
+            res.cookie('socket_token', token, {
+                maxAge: 24*60*60*1000
+            });
+
+            return res.status(200).json({message: "cookies set"});
+        }
+
+    return res.status(400).json({error: "error in Set Socket Auth token"});
+    }catch(err){
+        return res.status(500).json({error: "error in Set Socket Auth token"})
+    }
 }
 
 export const SocketTokenVerify = async (token) => {
@@ -24,37 +41,43 @@ export const SocketTokenVerify = async (token) => {
         
         if (!profile) {
             console.log("Profile not found for token");
-            return "false";
+            return false;
         }
-
-        return decoded.profileId;
+        return decoded;
     } catch (error) {
         console.log(error);
-        return "false";
+        return false;
     }
-}
-
-export const setSocketAuthToken = async (req, res, next) => {
-    const token = await SocketTokenGenerater(req.user.id);
-    if(token){
-        req.socket_token = token;
-    }
-    next();
 }
 
 export const CheckTokenInSocket = async (socket, next) => {
-    const token = socket.handshake.auth.token;
-    if (!token) {
-        return socket.emit("authError", { message: "No token provided" }, () => {
-            socket.close();
-        });
-    }
+    try{
+        const token = socket.handshake.auth.token;
 
-    if(!SocketTokenVerify(token)){
-        return socket.emit("authError", { message: "Invalid token" }, () => {
-            socket.close();
-        });
-    }
+        if (!token) {
+            socket.emit("authError", "{ message: 'No token provided' }", () => {
+                socket.disconnect();
+            });
+            return;
+        }
+        
+        console.log(token);
 
-    next();
-}
+        const verifiedToken = await SocketTokenVerify(token);
+
+        if (!verifiedToken) {
+            socket.emit("authError", { message: "Invalid token" }, () => {
+                socket.disconnect();
+            });
+            return;
+        }
+
+        console.log("Auth passed for profileId:", verifiedToken);
+
+        socket.profileId = verifiedToken.profileId;
+        next();
+    }catch(error){
+        console.log(error);
+    }
+    
+};
