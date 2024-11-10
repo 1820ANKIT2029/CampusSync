@@ -213,7 +213,7 @@ const Navbar = () => {
               </li>
               {isAuthenticated && (
                 <>
-                  <li className={`${isAdmin ? "hidden" : ""}`}>
+                  <li className={`${isAdmin ? "" : ""}`}>
                   <NavLink to={'/notifications'} className="px-3 py-6 sm:pl-4 md:m-12 text-gray-500 hover:text-cyan-500 relative">
                     <svg
                       className="w-6 h-6"
