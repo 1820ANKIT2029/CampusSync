@@ -171,7 +171,7 @@ export const InvalidSubmission = async (req, res, next) => {
         const event = await EventParticipant.findOneAndUpdate(
             {eventId: submissionexist.taskId.eventId},
             { $inc: { points: -10 } },
-            { new: true }     
+            { new: true }
         );
         addNotification(participant.participantId, `Your submission for task ${task.name} is rejected by the event admin`);
         return res.status(200).json({message : "submission remove verify done"});
