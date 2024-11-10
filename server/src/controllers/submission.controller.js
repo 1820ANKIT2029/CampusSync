@@ -118,7 +118,7 @@ export const ValidSubmission = async (req, res, next) => {
         );
 
         // notification part
-        addNotification(participant.participantId, `Your submission for task ${task.name} is Verified by the event admin`);
+        addNotification(submission.participantId, `Your submission for task ${task.name} is Verified by the event admin`);
         
         return res.status(200).json({message : "submission verify done"});
     }
