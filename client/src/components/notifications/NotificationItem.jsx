@@ -2,8 +2,16 @@ import React from "react";
 
 
 const NotificationItem = ({ notification, onMarkRead, onDelete }) => {
-    console.log(notification.timestamp);
-    const formattedTime = new Date(notification.timestamp).toLocaleString();
+    let formatter = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+    let formattedTime = formatter.format(notification.createdAt);
+    const empty = notification.message === "No Notification till now!";
+    if(empty){
+      formattedTime = "";
+    }
   
     return (
       <div
@@ -16,20 +24,23 @@ const NotificationItem = ({ notification, onMarkRead, onDelete }) => {
           <p className="text-sm text-gray-500">{formattedTime}</p>
         </div>
         <div className="flex items-center space-x-2">
-          {!notification.read && (
+          {!notification.read && !empty && (
             <button
-              onClick={() => onMarkRead(notification.id)}
+              onClick={() => onMarkRead(notification._id)}
               className="text-sm text-blue-500 hover:underline"
             >
               Mark as Read
             </button>
           )}
-          <button
-            onClick={() => onDelete(notification.id)}
-            className="text-sm text-red-500 hover:underline"
-          >
-            Delete
+
+          {!empty && (
+            <button
+              onClick={() => onDelete(notification._id)}
+              className="text-sm text-red-500 hover:underline"
+            >
+              Delete
           </button>
+          )}
         </div>
       </div>
     );

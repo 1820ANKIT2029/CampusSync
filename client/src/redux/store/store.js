@@ -10,7 +10,8 @@ import eventsReducer from '../features/events/eventsSlice.js';
 import userStatsReducer from '../features/user/userStatsSlice.js';
 import userEventsReducer from '../features/user/userEventsSlice.js';
 import eventInfoReducer from '../features/events/eventInfoSlice.js';
-import taskSubReducer from '../features/events/taskSubSlice.js'
+import taskSubReducer from '../features/events/taskSubSlice.js';
+import notificationReducer from '../features/notification/notificationSlice.js';
 
 
 
@@ -26,6 +27,7 @@ const rootReducer = combineReducers({
   userEvents:userEventsReducer,
   eventInfo:eventInfoReducer,
   taskSub:taskSubReducer,
+  notification: notificationReducer,
 });
 
 export const store = configureStore({
