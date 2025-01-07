@@ -3,16 +3,19 @@ import NotificationItem from "./NotificationItem.jsx";
 import Cookies from 'js-cookie';
 import  {io } from 'socket.io-client';
 import axios from 'axios';
+import { useDispatch, useSelector } from "react-redux";
 
-const notificationsData = [
-  { id: 1, message: "No Notification till now!", read: false, timestamp: "" },
-];
+// const notificationsData = [
+//   { _id: 1, message: "No Notification till now!", read: false, timestamp: "" },
+// ];
 
 
 let socket;
 
 const NotificationSection = () => {
-  const [notifications, setNotifications] = useState(notificationsData);
+  const dispatch = useDispatch();
+  const notificationData = useSelector((state) => state.notifications);
+  const [notifications, setNotifications] = useState(notificationData);
 
   useEffect(() => {
     // Async function to handle socket setup
@@ -33,6 +36,8 @@ const NotificationSection = () => {
 
         // Listen for notifications and authentication errors
         socket.on("NotificationUpdate", (data) => {
+          data = {...data,...notifications};
+          dispatch(setNotifications(data));
           console.log("Received data:", data);
           setNotifications(data);
         });
@@ -63,14 +68,14 @@ const NotificationSection = () => {
   const markAsRead = (id) => {
     setNotifications((prevNotifications) =>
       prevNotifications.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
+        notification._id === id ? { ...notification, read: true } : notification
       )
     );
   };
 
   const deleteNotification = (id) => {
     setNotifications((prevNotifications) =>
-      prevNotifications.filter((notification) => notification.id !== id)
+      prevNotifications.filter((notification) => notification._id !== id)
     );
   };
 
@@ -78,10 +83,10 @@ const NotificationSection = () => {
     <div className="bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto my-8">
       <h2 className="text-2xl font-bold mb-4">Notifications</h2>
       <div>
-        {notifications.length > 0 ? (
+        {notifications?.length > 0 ? (
           notifications.map((notification) => (
             <NotificationItem
-              key={notification.id}
+              key={notification._id}
               notification={notification}
               onMarkRead={markAsRead}
               onDelete={deleteNotification}
