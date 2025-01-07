@@ -2,7 +2,7 @@ import React from 'react';
 import LoginCard from './LoginCard.jsx'
 import Image from '../Image.jsx';
 
-function Signup() {
+function Login() {
   return (
     <div className='flex flex-row-reverse mb-40'>
       <div className='w-full lg:w-1/2 lg:pr-32 lg:pt-20'>
@@ -15,4 +15,4 @@ function Signup() {
   );
 }
 
-export default Signup;
+export default Login;
