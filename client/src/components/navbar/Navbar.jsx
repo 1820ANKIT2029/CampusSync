@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import UserDropdown from './UserDropdown';
-import { setAuth } from '../../redux/features/authentication/authSlice';
 import { setAdmin } from '../../redux/features/isAdmin/adminSlice';
-import axios from 'axios';
 
 const Navbar = () => {
   const { isAdmin } = useSelector((state) => state.userProfile);
-  const isadmin = useSelector((state) => state.admin.isadmin);
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -17,35 +14,16 @@ const Navbar = () => {
     dispatch(setAdmin(true));
   }
 
-  const logOut = async (e) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.post('http://localhost:3000/auth/logout', {}, { withCredentials: true });
-      if (response.status === 200) {
-        dispatch(setAuth(false));
-        dispatch(setAdmin(false));
-        navigate('/')
-      }
-      else {
-        console.log(response);
-      }
-    } catch (error) {
-      console.error("Error during logout:", error);
-      alert("An error occurred while logging out.");
-    }
-  }
-
   const handleAdminLogin = (e) => {
     e.preventDefault();
     dispatch(setAdmin(true));
     navigate('/login')
   }
 
-  const handleStudentLogin = (e) => {
+  const handleAdminSignup = (e) => {
     e.preventDefault();
-    dispatch(setAdmin(false));
-    console.log(isAdmin);
+    dispatch(setAdmin(true));
+    navigate('/signup')
   }
 
   const toCreateBlog = () => {
@@ -56,14 +34,13 @@ const Navbar = () => {
     navigate('/admin/create-event');
   }
 
-
   return (
-    <section className='sticky top-0 z-999 m-4'>
+    <section className='sticky top-0 z-999 m-1'>
       <div className="containe w-full flex">
         <div className="flex flex-col p-5 md:flex-row md:items-center md:justify-between w-full">
           <div className="flex flex-row items-center justify-between md:justify-start w-full">
             <NavLink
-              to="#"
+              to="/"
               style={{ fontSize: '1.5rem' }} // Adjust the size as needed
               className="font-bold tracking-tighter text-cyan-600 transition duration-500 ease-in-out md:pr-8"
             >
@@ -72,27 +49,22 @@ const Navbar = () => {
 
             <div className="flex-grow"></div> {/* This empty div will push the button to the right */}
 
-            {!isAuthenticated && (!isadmin) && (
-              <ul className="sm:text-center list-none md:inline-flex md:items-center space-y-2 md:space-y-0">
+            {!isAuthenticated && (
+              <ul className="sm:text-center list-none inline-flex md:items-center space-x-1 md:space-x-3">
                 <li>
                   <button
                     onClick={handleAdminLogin}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
                   >
-                    Login as Admin
+                    Login
                   </button>
                 </li>
-              </ul>
-            )}
-
-            {!isAuthenticated && (isadmin) && (
-              <ul className="sm:text-center list-none md:inline-flex md:items-center space-y-2 md:space-y-0">
                 <li>
                   <button
-                    onClick={handleStudentLogin}
+                    onClick={handleAdminSignup}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
                   >
-                    Login as Student
+                    Signup
                   </button>
                 </li>
               </ul>
@@ -128,8 +100,7 @@ const Navbar = () => {
                   to={'/home'}
                   className={({ isActive }) => `md:border-b-2 
                   px-2 py-6 text-sm leading-[22px]
-                   text-gray-500 hover:border-cyan-600 hover:text-cyan-500
-                   md:px-3 md:px-6
+                   text-gray-500 hover:border-cyan-600 hover:text-cyan-500 md:px-3
                    ${isActive ? "border-cyan-600 text-cyan-600" : "border-transparent"}
                    `}
                 >
@@ -142,7 +113,7 @@ const Navbar = () => {
                   className={({ isActive }) => `md:border-b-2 
                    px-2 py-6 text-sm leading-[22px]
                     text-gray-500 hover:border-cyan-600 hover:text-cyan-500
-                    md:px-3 md:px-6
+                    md:px-3
                     ${isActive ? "border-cyan-600 text-cyan-600" : "border-transparent"}
                     `}
                 >
@@ -153,9 +124,9 @@ const Navbar = () => {
                 <NavLink
                   to={'/events'}
                   className={({ isActive }) => `md:border-b-2 
-                  px-2 py-6 text-sm leading-[22px]
-                   text-gray-500 hover:border-cyan-600 hover:text-cyan-500
-                   md:px-3 md:px-6
+                  px-2 py-6 text-sm leading-[22px] text-gray-500 
+                hover:border-cyan-600 hover:text-cyan-500
+                   md:px-3
                    ${isActive ? "border-cyan-600 text-cyan-600" : "border-transparent"}
                    `}
                 >
@@ -167,23 +138,22 @@ const Navbar = () => {
                   to={'/leaderboard'}
                   className={({ isActive }) => `md:border-b-2 
                   px-2 py-6 text-sm leading-[22px]
-                   text-gray-500 hover:border-cyan-600 hover:text-cyan-500
-                   md:px-3 md:px-6
+                   text-gray-500 hover:border-cyan-600 hover:text-cyan-500 md:px-3
                    ${isActive ? "border-cyan-600 text-cyan-600" : "border-transparent"}
                    `}
                 >
                   Leaderboard
                 </NavLink>
               </li>
+
               {/* admin view */}
               <li className={`${(isAdmin) ? "" : "hidden"}`}>
                 <button
                   onClick={toCreateEvent}
                   className={`hover:md:border-b-2
-                                px-2 py-6 text-sm leading-[22px]
-                                text-gray-500 hover:border-cyan-600 hover:text-cyan-500
-                                md:px-3 md:px-6
-                              `}
+                    px-2 py-6 text-sm leading-[22px] text-gray-500 
+                    hover:border-cyan-600 hover:text-cyan-500 md:px-3`
+                  }
                 >
                   Create Event
                 </button>
@@ -193,10 +163,9 @@ const Navbar = () => {
                 <button
                   onClick={toCreateBlog}
                   className={`hover:md:border-b-2
-                                px-2 py-6 text-sm leading-[22px]
-                                text-gray-500 hover:border-cyan-600 hover:text-cyan-500
-                                md:px-3 md:px-6
-                              `}
+                    px-2 py-6 text-sm leading-[22px] text-gray-500 
+                    hover:border-cyan-600 hover:text-cyan-500 md:px-3
+                  `}
                 >
                   Create Blog
                 </button>
@@ -206,10 +175,9 @@ const Navbar = () => {
                 <NavLink
                   to={'/leaderboard'}
                   className={`hover:md:border-b-2
-                                px-2 py-6 text-sm leading-[22px]
-                                text-gray-500 hover:border-cyan-600 hover:text-cyan-500
-                                md:px-3 md:px-6
-                              `}
+                    px-2 py-6 text-sm leading-[22px] text-gray-500 
+                    hover:border-cyan-600 hover:text-cyan-500 md:px-3
+                  `}
                 >
                   Leaderboard
                 </NavLink>
