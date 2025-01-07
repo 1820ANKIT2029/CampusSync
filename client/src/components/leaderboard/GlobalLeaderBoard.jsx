@@ -5,6 +5,7 @@ import { io } from 'socket.io-client';
 
 const GlobalLeaderBoard = () => {
   const [leaderboardData, setLeaderboardData] = useState([]);
+  const [pageNo, setPageNo] = useState(1)
   let socket;
 
   useEffect(() => {
@@ -21,7 +22,8 @@ const GlobalLeaderBoard = () => {
 
   return (
     <>
-      {leaderboardData.length>0 && (<LeaderBoardComp leaderboardData={leaderboardData}/>)}
+      {leaderboardData.length > 0 && (<LeaderBoardComp leaderboardData={leaderboardData.slice(0, 10)} />)}
+      {/* {leaderboardData.length > 0 && (<LeaderBoardComp leaderboardData={leaderboardData.slice(0, 10)} />)} */}
     </>
   );
 };
