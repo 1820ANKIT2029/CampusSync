@@ -19,8 +19,6 @@ function LoginCard() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  console.log(isadmin)
-
   const handleCheckboxChange = () => {
     if (checkboxRef.current.checked) {
       dispatch(setAdmin(true));
