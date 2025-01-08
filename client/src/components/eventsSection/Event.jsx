@@ -10,7 +10,8 @@ function Event() {
   const eventId = useParams();
   const dispatch = useDispatch();
   const {event, status} = useSelector((state) => state.eventInfo);
-  console.log("event in event.jsx"); console.log(event);
+  // console.log("event in event.jsx"); console.log(event);
+  console.log(event)
 
   useEffect(()=>{
     dispatch(fetchEventInfo(eventId));
