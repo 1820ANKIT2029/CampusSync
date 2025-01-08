@@ -89,6 +89,21 @@ export const profileEdit = async (req, res, next) => {
     }
 };
 
+export const task = async (req, res, next) => {
+    const id = req.user.id;
+    try{
+        const profile = await Profile.findOne({userid: id}).select('_id');
+        const result = await TaskParticipant.find({participantId: profile._id}).populate('taskId');
+        if(!result){
+            return res.status(404).json({error: "unable to fetch events"});
+        }
+        return res.status(200).json(result);
+
+    }catch(err){
+        return res.status(500).json({ error: "Internal server error at user events" });
+    }
+};
+
 export const event = async (req, res, next) => {
     const id = req.user.id;
     try{
