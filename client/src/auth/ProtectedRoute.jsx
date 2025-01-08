@@ -17,10 +17,7 @@ const ProtectedRoute = ({ children }) => {
   useEffect(() => {
     const myCookie = Cookies.get('connect.sid');
     if (myCookie) {
-      if(state === "idle"){
-        dispatch(fetchuserProfile());
-      }
-          
+      dispatch(fetchuserProfile()); 
       dispatch(setAuth(true));
     } else {
       dispatch(setAuth(false));
