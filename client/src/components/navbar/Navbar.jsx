@@ -14,15 +14,13 @@ const Navbar = () => {
     dispatch(setAdmin(true));
   }
 
-  const handleAdminLogin = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
-    dispatch(setAdmin(true));
     navigate('/login')
   }
 
-  const handleAdminSignup = (e) => {
+  const handleSignup = (e) => {
     e.preventDefault();
-    dispatch(setAdmin(true));
     navigate('/signup')
   }
 
@@ -53,7 +51,7 @@ const Navbar = () => {
               <ul className="sm:text-center list-none inline-flex md:items-center space-x-1 md:space-x-3">
                 <li>
                   <button
-                    onClick={handleAdminLogin}
+                    onClick={handleLogin}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
                   >
                     Login
@@ -61,7 +59,7 @@ const Navbar = () => {
                 </li>
                 <li>
                   <button
-                    onClick={handleAdminSignup}
+                    onClick={handleSignup}
                     className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition duration-200"
                   >
                     Signup
