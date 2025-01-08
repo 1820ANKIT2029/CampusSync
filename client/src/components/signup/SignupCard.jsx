@@ -127,6 +127,7 @@ function SignupCard() {
           <input type="checkbox"
             ref={checkboxRef}
             onChange={handleCheckboxChange}
+            defaultChecked={isadmin}
           />
           <label for="admin"> signup as Admin </label>
         </div>
