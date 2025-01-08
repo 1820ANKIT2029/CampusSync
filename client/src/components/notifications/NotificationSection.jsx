@@ -4,6 +4,7 @@ import Cookies from 'js-cookie';
 import  {io } from 'socket.io-client';
 import axios from 'axios';
 import { useDispatch, useSelector } from "react-redux";
+import { setNotifications } from "../../redux/features/notification/notificationSlice.js";
 
 // const notificationsData = [
 //   { _id: 1, message: "No Notification till now!", read: false, timestamp: "" },
@@ -14,8 +15,7 @@ let socket;
 
 const NotificationSection = () => {
   const dispatch = useDispatch();
-  const notificationData = useSelector((state) => state.notifications);
-  const [notifications, setNotifications] = useState(notificationData);
+  const notifications = useSelector((state) => state.notifications);
 
   useEffect(() => {
     // Async function to handle socket setup
@@ -39,7 +39,7 @@ const NotificationSection = () => {
           data = {...data,...notifications};
           dispatch(setNotifications(data));
           console.log("Received data:", data);
-          setNotifications(data);
+          // setNotification(data);
         });
 
         socket.on("authError", (data) => {
