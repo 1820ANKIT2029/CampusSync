@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchuserProfile } from '../../redux/features/user/userProfileSlice.js';
 
-const EditProfile = ({isModalOpen, setIsModalOpen}) => {
+const EditProfile = ({isModalOpen, setIsModalOpen, profiledata}) => {
   const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     name: '',
@@ -138,7 +138,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
                   />
                 ) : (
                   <img
-                    src="https://via.placeholder.com/150"
+                    src={profiledata?.profilePic || 'https://via.placeholder.com/150'}
                     alt="Profile Default"
                     className="w-24 h-24 rounded-full object-cover"
                   />
@@ -164,7 +164,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Enter your name"
+                  placeholder={profiledata?.name || "Enter your name"}
                 />
               </div>
 
@@ -175,7 +175,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
                   value={formData.bio}
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Write a short bio"
+                  placeholder={profiledata?.bio || "Write a short bio"}
                   rows="4" 
                 />
               </div>
@@ -189,7 +189,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
                   value={formData.year}
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Enter your year of study"
+                  placeholder={profiledata?.year || '0'}
                 />
               </div>
 
@@ -201,7 +201,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
                   value={formData.branch}
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Enter your branch"
+                  placeholder={ profiledata?.branch || "Enter your branch"}
                 />
               </div>
 
@@ -213,7 +213,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
                   value={formData.email}
                   onChange={handleChange}
                   className="w-full p-2 border border-gray-300 rounded-md"
-                  placeholder="Enter your email"
+                  placeholder={ profiledata?.email || "Enter your email"}
                 />
               </div>
 
@@ -224,7 +224,7 @@ const EditProfile = ({isModalOpen, setIsModalOpen}) => {
             ) }
 
 
-              <div className="flex justify-between">
+              <div className="flex justify-between space-x-1">
                 <button
                   type="button"
                   onClick={closeModal}
