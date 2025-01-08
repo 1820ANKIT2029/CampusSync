@@ -14,7 +14,7 @@ export const updateGlobalAura = async () => {
         for(const event of events){
             const eventparticipants = await EventParticipant.find({eventId: event._id});
             
-            for(const participant in eventparticipants){
+            for(const participant of eventparticipants){
                 const profile = await Profile.findByIdAndUpdate(
                     participant.participantId,
                     { $inc: { aura: participant.points } }
