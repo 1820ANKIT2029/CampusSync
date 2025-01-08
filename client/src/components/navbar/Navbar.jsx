@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import UserDropdown from './UserDropdown';
@@ -10,6 +10,14 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  console.log("isAdmin",isAdmin);
+    console.log("isAuth",isAuthenticated);
+
+  useEffect(()=>{
+    console.log("isAdmin",isAdmin);
+    console.log("isAuth",isAuthenticated);
+  },[])
+
   if (isAdmin) {
     dispatch(setAdmin(true));
   }
