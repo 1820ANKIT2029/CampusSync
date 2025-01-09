@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { taskReg, taskSub } from '../../redux/features/events/taskSubSlice';
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function TaskForm({ event, tasks, setTasks }) {
@@ -106,9 +106,8 @@ function TaskForm({ event, tasks, setTasks }) {
           type="submit"
           className="w-full bg-blue-600 text-white py-3 rounded-md hover:bg-blue-500 transition duration-300 font-medium text-lg"
         >
-          Submit Task
+          {statusSub === "pending"?"Submission in progress...":"Submit Task"}
         </button>
-        <ToastContainer />
       </form>
     </div>
   );

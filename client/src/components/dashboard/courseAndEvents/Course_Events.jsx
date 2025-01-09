@@ -59,9 +59,11 @@ function Course_Events() {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 w-full">
             {isEvent?events.map((event, index) => {
                     const colorClass = colors[Math.floor(index / 3) % colors.length];
-                    console.log(event);
+                    if(!event?.eventId?.name){
+                      return ;
+                    }
                     return (
-                            <EventCard key={index} eventName={event.eventId?.name || "no name"} eventId={event.eventId._id} color={colorClass} />
+                            <EventCard key={index} eventName={event?.eventId?.name || "no name"} eventId={event?.eventId?._id || '12'} color={colorClass} />
                     );
                 }):(
                   <p>There is no data for courses now</p>
