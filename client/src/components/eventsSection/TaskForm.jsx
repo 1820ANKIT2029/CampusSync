@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { taskReg, taskSub } from '../../redux/features/events/taskSubSlice';
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-function TaskForm({ event, tasks }) {
+function TaskForm({ event, tasks, setTasks }) {
   const [taskName, setTaskName] = useState('');
   const [file, setFile] = useState(null);
   const [fileName, setFileName] = useState('');
-  const [error, setError] = useState("");
   const dispatch = useDispatch();
   const { statusReg, statusSub } = useSelector((state) => state.taskSub);
 
@@ -19,9 +20,8 @@ function TaskForm({ event, tasks }) {
     if (selectedFile) {
       const fileSizeInMB = selectedFile.size / (1024 * 1024);
       if (fileSizeInMB >= 10) {
-        setError("File size exceeds 10MB");
+        toast.error("File size exceeds 10MB");
       } else {
-        setError("");
         setFile(selectedFile);
         setFileName(selectedFile.name);
       }
@@ -30,14 +30,17 @@ function TaskForm({ event, tasks }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (error) return;
 
     const task = tasks.find((task) => task.name === taskName);
     const taskId = task ? task._id : null;
 
     if (!taskId) {
-      setError("There is no such task");
+      toast.error("There is no such task");
       return;
+    }
+    if(task.isCompleted == 1 || task.isCompleted == 2){
+      toast.error("The task is already submitted");
+      return ;
     }
 
     try {
@@ -48,15 +51,22 @@ function TaskForm({ event, tasks }) {
 
         const subResult = await dispatch(taskSub({ taskId, formData }));
         if (subResult.type === taskSub.fulfilled.type) {
-          setError("Task submitted successfully");
+          const updatedTasks = tasks.map((t) =>
+            t._id === taskId ? { ...t, isCompleted: 2 } : t
+          );
+          setTasks(updatedTasks);
+          setTaskName('');
+          setFile(null);
+          setFileName('');
+          toast.success("Task submitted successfully");
         } else {
-          setError("Error in task submission");
+          toast.error("Error in task submission");
         }
       } else {
-        setError("Failed to register user for the task");
+        toast.error("Failed to register user for the task");
       }
     } catch (err) {
-      setError("Submission failed! Try again.");
+      toast.error("Submission failed! Try again.");
     }
   };
 
@@ -98,11 +108,7 @@ function TaskForm({ event, tasks }) {
         >
           Submit Task
         </button>
-        {error && (
-          <p className="text-red-700 bg-red-100 border border-red-500 rounded-md p-2 my-2">
-            {error}
-          </p>
-        )}
+        <ToastContainer />
       </form>
     </div>
   );
