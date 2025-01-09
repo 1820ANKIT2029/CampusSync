@@ -34,12 +34,10 @@ const NotificationSection = () => {
           auth: { token: socketToken }
         });
 
-        // Listen for notifications and authentication errors
         socket.on("NotificationUpdate", (data) => {
           data = {...data,...notifications};
           dispatch(setNotifications(data));
           console.log("Received data:", data);
-          // setNotification(data);
         });
 
         socket.on("authError", (data) => {

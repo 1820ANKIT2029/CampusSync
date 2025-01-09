@@ -6,12 +6,10 @@ export const fetchEventInfo = createAsyncThunk("user/fetchEventInfo", async (eve
         if (!eventId) {
             throw new Error("Event ID is required");
         }
-        
         const res1 = await axios.get(`http://localhost:3000/api/event/info`, {
-            params:  eventId ,
+            params:  {eventId },
             withCredentials: true,
         });
-        
         console.log("event: ", res1);
         return res1.data;
     } catch (error) {
