@@ -36,6 +36,10 @@ const Navbar = () => {
     navigate('/admin/create-blog');
   }
 
+  const toAdminDashboard = () => {
+    navigate('/admin');
+  }
+
   const toCreateEvent = () => {
     navigate('/admin/create-event');
   }
@@ -153,6 +157,18 @@ const Navbar = () => {
               </li>
 
               {/* admin view */}
+              <li className={`${(isAdmin) ? "" : "hidden"}`}>
+                <button
+                  onClick={toAdminDashboard}
+                  className={`hover:md:border-b-2
+                    px-2 py-6 text-sm leading-[22px] text-gray-500 
+                    hover:border-cyan-600 hover:text-cyan-500 md:px-3`
+                  }
+                >
+                  Dashboard
+                </button>
+              </li>
+
               <li className={`${(isAdmin) ? "" : "hidden"}`}>
                 <button
                   onClick={toCreateEvent}

@@ -66,7 +66,7 @@ const Profile = () => {
 
       {isModalOpen && (
         <div className="fixed inset-0 bg-gray-600 bg-opacity-50 flex justify-center items-center z-50 min-w-[120px]">
-          <EditProfile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen}/>
+          <EditProfile isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} profiledata={profileData}/>
         </div>
       )}
     </div>
