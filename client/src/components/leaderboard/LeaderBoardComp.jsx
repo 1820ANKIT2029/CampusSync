@@ -5,10 +5,7 @@ const LeaderBoardComp = ({leaderboardData, pageNo}) => {
   const [event, setEvent] = useState("global");
   const [searchTerm, setSearchTerm] = useState("");
   const [data, setData] = useState(leaderboardData);
-  const [page, setPage] = useState(pageNo)
-
-  console.log("component: ");
-  console.log(leaderboardData);
+  const [page, setPage] = useState(pageNo); 
   const handleEventChange = (e) => setEvent(e.target.value);
   const handleSearchChange = (e) => setSearchTerm(e.target.value.toLowerCase());
 

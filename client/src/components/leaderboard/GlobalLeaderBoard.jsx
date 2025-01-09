@@ -25,8 +25,6 @@ const GlobalLeaderBoard = () => {
     socket = io("http://localhost:5000/leaderBoard");
 
     socket.on("leaderboardUpdate", (value) => {
-      console.log("data here");
-      console.log(value);
       setLeaderboardData(value);
     });
 
