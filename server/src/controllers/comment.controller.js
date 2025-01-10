@@ -6,6 +6,7 @@ export const handleCommentConn = (socket) => {
 
     socket.on("newComment", async (comment) => {
         try {
+            console(comment);
             const message = await Comment.create({
                 userId: socket.profileId,
                 eventId: socket.eventId,
