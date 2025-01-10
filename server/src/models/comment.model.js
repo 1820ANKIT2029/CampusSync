@@ -2,8 +2,16 @@ import { Schema, model } from 'mongoose';
 
 const commentSchema = new Schema(
 	{
-		userId: { type: String, required: true }, // user ID
-		eventId: { type: String, required: true }, // event ID
+		userId: { 
+			type: Schema.Types.ObjectId, 
+			ref: 'Profile', 
+			required: true 
+		},
+		eventId: {
+			type: Schema.Types.ObjectId, 
+			ref: 'Event',
+			required: true
+		},
 		comment: { type: String, required: true },
 	},
 	{ timestamps: true }
