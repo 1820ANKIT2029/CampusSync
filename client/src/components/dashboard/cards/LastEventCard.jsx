@@ -4,7 +4,7 @@ import { fetchuserstats } from '../../../redux/features/user/userStatsSlice';
 
 const LastEventsCard = () => {
   const {events, status} = useSelector((state) => state.userStats);
-  console.log(events);
+  // console.log(events);
   const dispatch = useDispatch();
   useEffect(()=> {
     dispatch(fetchuserstats());

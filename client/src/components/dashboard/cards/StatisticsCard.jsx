@@ -14,7 +14,6 @@ const StatisticsCard = () => {
   
   
   const [stat, setStat] = useState("Events");
-  console.log(data[stat]);
 
   
   if(status === "pending"){

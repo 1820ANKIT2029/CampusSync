@@ -16,7 +16,7 @@ export const taskSub = createAsyncThunk("user/taskSub", async ({ taskId, formDat
             }
         });
 
-        console.log("taskSub response:", res1);
+        // console.log("taskSub response:", res1);
         return res1.data;
     } catch (error) {
         console.error("Error in task submission:", error);
@@ -59,11 +59,11 @@ const taskSubSlice = createSlice({
         builder
             .addCase(taskSub.pending, (state) => {
                 state.statusSub = "pending";
-                console.log("Submission in progress...");
+                // console.log("Submission in progress...");
             })
             .addCase(taskSub.fulfilled, (state, action) => {
                 state.statusSub = "succeeded";
-                console.log("Submission succeeded");
+                // console.log("Submission succeeded");
                 state.result = action.payload;
             })
             .addCase(taskSub.rejected, (state, action) => {
@@ -73,17 +73,17 @@ const taskSubSlice = createSlice({
             })
             .addCase(taskReg.pending, (state) => {
                 state.statusReg = "pending";
-                console.log("Registration in progress...");
+                // console.log("Registration in progress...");
             })
             .addCase(taskReg.fulfilled, (state, action) => {
                 state.statusReg = "succeeded";
-                console.log("Registration succeeded");
+                // console.log("Registration succeeded");
                 state.result = action.payload;
             })
             .addCase(taskReg.rejected, (state, action) => {
                 state.statusReg = "failed";
                 state.error = action.payload || "Failed to register the task";
-                console.log("Registration failed:", state.error);
+                // console.log("Registration failed:", state.error);
             });
     },
 });

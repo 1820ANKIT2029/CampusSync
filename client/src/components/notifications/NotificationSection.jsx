@@ -1,80 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import NotificationItem from "./NotificationItem.jsx";
-import Cookies from 'js-cookie';
-import  {io } from 'socket.io-client';
-import axios from 'axios';
+import Cookies from "js-cookie";
+import { io } from "socket.io-client";
+import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
-import { setNotifications } from "../../redux/features/notification/notificationSlice.js";
+import {
+  markAsRead,
+  deleteNotification,
+} from "../../redux/features/notification/notificationSlice.js";
 
-// const notificationsData = [
-//   { _id: 1, message: "No Notification till now!", read: false, timestamp: "" },
-// ];
 
-
-let socket;
 
 const NotificationSection = () => {
   const dispatch = useDispatch();
-  const notifications = useSelector((state) => state.notifications);
+  const notifications = useSelector((state) => state.notification);
+  console.log("notifications : ",notifications);
 
-  useEffect(() => {
-    // Async function to handle socket setup
-    const setupSocket = async () => {
-      try {
-        let socketToken = Cookies.get('socket_token');
-
-        // Request token if not available
-        if (!socketToken) {
-          await axios.post("http://localhost:3000/auth/SocketAuthToken", {}, { withCredentials: true });
-          socketToken = Cookies.get('socket_token');
-        }
-
-        // Initialize socket connection
-        socket = io("http://localhost:5000/notification", {
-          auth: { token: socketToken }
-        });
-
-        socket.on("NotificationUpdate", (data) => {
-          data = {...data,...notifications};
-          dispatch(setNotifications(data));
-          console.log("Received data:", data);
-        });
-
-        socket.on("authError", (data) => {
-          console.log("Auth error:", data);
-          socket.disconnect();
-        });
-      } catch (error) {
-        console.log("Socket setup error:", error);
-      }
-    };
-
-    // Call the async function
-    setupSocket();
-
-    // Cleanup socket on component unmount
-    return () => {
-      if (socket) {
-        socket.off("NotificationUpdate");
-        socket.off("authError");
-        socket.disconnect();
-      }
-    };
-  }, []);
-  
-
-  const markAsRead = (id) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.map((notification) =>
-        notification._id === id ? { ...notification, read: true } : notification
-      )
-    );
+  const markAsReadHandler = (id) => {
+    dispatch(markAsRead(id));
   };
 
-  const deleteNotification = (id) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.filter((notification) => notification._id !== id)
-    );
+  const deleteNotificationHandler = (id) => {
+    dispatch(deleteNotification(id));
   };
 
   return (
@@ -86,8 +33,8 @@ const NotificationSection = () => {
             <NotificationItem
               key={notification._id}
               notification={notification}
-              onMarkRead={markAsRead}
-              onDelete={deleteNotification}
+              onMarkRead={markAsReadHandler}
+              onDelete={deleteNotificationHandler}
             />
           ))
         ) : (

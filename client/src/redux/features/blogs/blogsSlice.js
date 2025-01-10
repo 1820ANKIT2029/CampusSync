@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export const fetchBlogs = createAsyncThunk("user/fetchBlogs", async () => {
     const res1 = await axios.get("http://localhost:3000/api/news/1", { withCredentials: true })
-    console.log("news: "); console.log(res1.data);
+    // console.log("news: "); console.log(res1.data);
     return res1.data;
 });
 
