@@ -8,7 +8,7 @@ ApiRouter.get('/events', getevents);
 // /api/news?date=<DATE>&AdminName=<NAME> 
 ApiRouter.get('/news/:num', getnews);
 
-UserRouter.get("/comments", comment);
+ApiRouter.get("/comments", comment);
 
 ApiRouter.get('/event/info', eventinfo);
 
