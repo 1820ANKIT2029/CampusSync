@@ -36,10 +36,10 @@ const StartServer = async () => {
         cron.schedule('* 1 * * *', updateGlobalAura);
         cron.schedule('59 23 * * *', deleteOldNotification);
 
-        const notification = io.of("notification");
-        const leaderBoard = io.of("leaderBoard");
-        const eventLeaderboard = io.of("eventLeaderboard");
-        const commentRoom = io.of("comment");
+        const notification = io.of("/notification");
+        const leaderBoard = io.of("/leaderBoard");
+        const eventLeaderboard = io.of("/eventLeaderboard");
+        const commentRoom = io.of("/comment");
 
         // auth of socket
         commentRoom.use(CheckTokenInSocket);
@@ -56,6 +56,13 @@ const StartServer = async () => {
 
         server.listen(PORT, () => {
             console.log(`Server is running on http://localhost:${PORT}`);
+        });
+
+        process.on('SIGINT', () => {
+            server.close(() => {
+                console.log('Server shut down gracefully.');
+                process.exit(0);
+            });
         });
 
     }catch(err){
