@@ -11,14 +11,23 @@ export const handleCommentConn = (socket) => {
     socket.on("newComment", async (comment) => {
         try {
             console.log(comment);
-            const message = await Comment.create({
-                userId: socket.profileId,
+            const newComment = {
+                userId: socket.profileId, // Assuming socket.profileId is set elsewhere
                 eventId: socket.eventId,
                 comment,
-            }).populate("userId", "_id name profilePic");
+            };
 
-            socket.to(socket.eventID).emit("getNewComment", message);
-            socket.emit("getNewComment", message);
+            const createdComment = await Comment.create(newComment);
+
+            // Fetch user details separately (assuming Comment.userId is ObjectId reference)
+            const populatedComment = await Comment.findById(createdComment._id)
+                .populate("userId", "_id name profilePic")
+                .exec();
+
+            // Emit the new comment to all clients in the event room
+            socket.to(socket.eventId).emit("getNewComment", populatedComment);
+            socket.emit("getNewComment", populatedComment);
+
         } catch (error) {
             console.error("Message error:", error);
             socket.emit("commenterror", error.message);
