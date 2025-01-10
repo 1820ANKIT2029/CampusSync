@@ -12,6 +12,7 @@ import { updateGlobalAura, deleteOldNotification } from './controllers/cron.cont
 import { GlobalLeaderBoard, LocalLeaderBoard } from './controllers/LeaderBoard.controller.js';
 import { CheckTokenInSocket } from './controllers/socketAuth.controller.js'
 import { NotificationSocket } from './controllers/notification.controller.js';
+import { handleCommentConn } from './controllers/comment.controller.js';
 
 dotenv.config();
 
@@ -38,15 +39,16 @@ const StartServer = async () => {
         const notification = io.of("notification");
         const leaderBoard = io.of("leaderBoard");
         const eventLeaderboard = io.of("eventLeaderboard");
-        //const chatRoom = io.of("chatRoom");
+        const commentRoom = io.of("comment");
 
         // auth of socket
-        //chatRoom.use(CheckTokenInSocket);
+        commentRoom.use(CheckTokenInSocket);
         notification.use(CheckTokenInSocket);
 
         leaderBoard.on('connection', GlobalLeaderBoard);
         eventLeaderboard.on('connection', LocalLeaderBoard);
         notification.on('connection', NotificationSocket);
+        commentRoom.on('connection', handleCommentConn);
 
         app.get('/', (req, res) => {
             res.send('Notification server is running.');
