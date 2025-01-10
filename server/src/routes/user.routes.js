@@ -10,7 +10,8 @@ import {
     registerInEvent,
     registerInTask,
     UserStat,
-    task
+    task,
+    comment
 } from '../controllers/user.controller.js';
 import { todolist, todo, todoadd, tododelete, tododone } from '../controllers/todo.controller.js';
 import { User } from '../models/user.models.js';
@@ -30,6 +31,7 @@ UserRouter.post('/event/register', registerInEvent);
 UserRouter.post('/event/task/register', registerInTask);
 
 UserRouter.get("/task", task);
+UserRouter.get("comments", comment);
 
 UserRouter.get('/todo', todolist);
 UserRouter.get('/todo/:todoId', todo);
