@@ -34,7 +34,6 @@ const GlobalLeaderBoard = () => {
     const startIndex = 10 * (pageNo - 1);
     const endIndex = 10 * pageNo;
     const newData = leaderboardData.slice(startIndex, endIndex);
-    console.log('Updated data:', newData); // Log the updated data
     setData(newData);
   }, [pageNo, leaderboardData])
 

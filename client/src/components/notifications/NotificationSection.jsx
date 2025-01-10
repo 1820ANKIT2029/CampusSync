@@ -15,7 +15,6 @@ import {
 const NotificationSection = () => {
   const dispatch = useDispatch();
   const notifications = useSelector((state) => state.notification);
-  console.log("notifications : ", notifications);
 
   const markAsReadHandler = (id) => {
     dispatch(markAsRead(id));
