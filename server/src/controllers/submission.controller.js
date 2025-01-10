@@ -71,6 +71,19 @@ export const upload = async (req, res, next) => {
     }
 }
 
+/*
+
+ isCompleted in TaskParticipant
+ isCheck in Submission
+
+ isCompleted | isCheck
+    true     |  true       --> accepted
+    true     |  false      --> not possible
+    false    |  true       --> rejected
+    false    |  false      --> not sumbitted yet
+
+ */
+
 export const ValidSubmission = async (req, res, next) => {
     const { submissionId } = req.params;
     const id  = req.user.id;
