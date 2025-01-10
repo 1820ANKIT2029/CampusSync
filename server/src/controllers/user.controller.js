@@ -112,9 +112,6 @@ export const comment = async (req, res, next) => {
     try{
         const profile = await Profile.findOne({userid: id}).select('_id');
         const result = await Comment.find({"eventId": eventId}).populate('userId', "_id name profilePic");
-        if(!result){
-            return res.status(404).json({error: "unable to fetch events"});
-        }
         return res.status(200).json(result);
 
     }catch(err){
