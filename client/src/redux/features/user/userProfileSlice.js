@@ -9,6 +9,7 @@ export const fetchuserProfile = createAsyncThunk("user/fetchUserProfile", async 
 
 const initialState = {
     userId: null,
+    profileId:null,
     name:"your name",
     bio: "your bio",
     year: 0,
@@ -39,6 +40,7 @@ const userProfileSlice = createSlice({
             .addCase(fetchuserProfile.fulfilled, (state,action) => {
                 state.status = "succeeded",
                 state.userId = action.payload.userid;
+                state.profileId = action.payload._id;
                 state.name = action.payload.name || "your name";
                 state.bio = action.payload.bio;
                 state.year = action.payload.year;
