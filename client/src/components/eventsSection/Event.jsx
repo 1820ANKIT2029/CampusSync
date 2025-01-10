@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
@@ -23,7 +23,6 @@ function relevantTasks(eventTasks, tasks) {
   for (let i = 0; i < eventTasks.length; i++) {
     const completedTask = tasks.find(task => eventTasks[i]._id === task.taskId._id)
     if (completedTask) {
-      console.log(completedTask);
       filteredTasks.push({ ...eventTasks[i], isCompleted: completedTask.isCompleted ? 1 : 2 });
     } else {
       filteredTasks.push({ ...eventTasks[i], isCompleted: 3 });
@@ -39,6 +38,8 @@ function Event() {
   const [tasks, setTasks] = useState([]);
   const [loadingTasks, setLoadingTasks] = useState(true); 
   const [showGroupChat, setShowGroupChat] = useState(false);
+
+  const chatRef = useRef(null); // Reference to scroll to chat section
 
   if (!eventId) {
     return <p>Invalid eventId...</p>;
@@ -77,10 +78,22 @@ function Event() {
     return <p>Error while fetching the data</p>;
   }
 
+  const scrollToChat = () => {
+    if (chatRef.current) {
+      chatRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
+  const toggleChat = () => {
+    if(!showGroupChat){
+      scrollToChat();
+    }
+    setShowGroupChat((prev) => !prev); // Toggle chat visibility
+  };
+
   return (
     <>
       <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto p-6">
-        {/* Header Section */}
         <div className="md:flex items-stretch space-x-6 w-full bg-blue-100 h-auto">
           <div className="flex-1 m-1 bg-white rounded-lg shadow-md bg-violet-400">
             <Details event={event} />
@@ -90,7 +103,6 @@ function Event() {
           </div>
         </div>
 
-        {/* Lower Section */}
         <div className="w-full p-4 flex flex-col space-y-2">
           <div className="text-center">
             <h2 className="text-4xl font-extrabold text-gray-800">
@@ -98,7 +110,6 @@ function Event() {
             </h2>
           </div>
 
-          {/* Loading tasks */}
           <div className="grid grid-cols-2 gap-4">
             {loadingTasks && <p>Loading tasks...</p>}
             {!loadingTasks && tasks.length > 0 &&
@@ -116,16 +127,20 @@ function Event() {
               </div>}
           </div>
         </div>
-
-        <button
-          onClick={() => setShowGroupChat(!showGroupChat)}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
-        >
-          {showGroupChat ? "Hide Group Chat" : "Show Group Chat"}
-        </button>
       </div>
 
-      {showGroupChat && <GroupChat />}
+      <div ref={chatRef}>
+        {showGroupChat && <GroupChat eventId={eventId} />}
+      </div>
+
+      <div className="fixed bottom-4 right-4">
+        <button
+          onClick={toggleChat}
+          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600"
+        >
+          {showGroupChat ? "Hide Chat" : "Show Chat"}
+        </button>
+      </div>
     </>
   );
 }
