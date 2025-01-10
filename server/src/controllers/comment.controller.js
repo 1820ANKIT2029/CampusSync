@@ -21,8 +21,7 @@ export const handleCommentConn = (socket) => {
 
             // Fetch user details separately (assuming Comment.userId is ObjectId reference)
             const populatedComment = await Comment.findById(createdComment._id)
-                .populate("userId", "_id name profilePic")
-                .exec();
+                .populate("userId", "_id name profilePic"); 
 
             // Emit the new comment to all clients in the event room
             socket.to(socket.eventId).emit("getNewComment", populatedComment);
