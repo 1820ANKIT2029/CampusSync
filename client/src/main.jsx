@@ -26,6 +26,8 @@ import EnsureAdmin from './auth/ensureAdmin.jsx';
 import LeaderBoard from './components/leaderboard/LeaderBoard.jsx';
 import NotificationSection from './components/notifications/NotificationSection.jsx';
 import TaskPage from './components/tasks/TaskPage.jsx';
+import { ToastContainer } from 'react-toastify';
+import NotificationSocket from './components/notifications/notificationSocket.jsx';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -63,6 +65,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ToastContainer />
     </Provider>
   </StrictMode>
 );
