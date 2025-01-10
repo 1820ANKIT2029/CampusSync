@@ -4,9 +4,13 @@ export const handleCommentConn = (socket) => {
     socket.eventId = socket.handshake.query.eventID;
     socket.join(socket.eventID);
 
+    console.log(socket.handshake.query.eventID)
+    console.log(socket.eventID);
+
+
     socket.on("newComment", async (comment) => {
         try {
-            console(comment);
+            console.log(comment);
             const message = await Comment.create({
                 userId: socket.profileId,
                 eventId: socket.eventId,
