@@ -2,6 +2,7 @@ import { News } from "../models/news.model.js"
 import { Event, EventParticipant } from "../models/event.model.js"
 import { Task } from "../models/task.models.js";
 import { Profile } from "../models/user.models.js";
+import { Comment } from "../models/comment.model.js";
 
 export const getevents = async (req, res, next) => {
     const { name, isActive, startTime, endTime, organizer } = req.query;
@@ -110,6 +111,19 @@ export const getnewss = async (req, res, next) => {
     }
 };
 
+export const comment = async (req, res, next) => {
+    const id = req.user.id;
+    const { eventId } = req.query;
+    if (!eventId) return res.status(404).json({error: "eventId not included in the query"});
+    try{
+        const profile = await Profile.findOne({userid: id}).select('_id');
+        const result = await Comment.find({"eventId": eventId}).populate('userId', "_id name profilePic");
+        return res.status(200).json(result);
+
+    }catch(err){
+        return res.status(500).json({ error: "Internal server error at Comment" });
+    }
+}
 
 
 export const eventinfo = async (req, res, next) => {
