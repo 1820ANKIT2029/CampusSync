@@ -10,8 +10,7 @@ import {
     registerInEvent,
     registerInTask,
     UserStat,
-    task,
-    comment
+    task
 } from '../controllers/user.controller.js';
 import { todolist, todo, todoadd, tododelete, tododone } from '../controllers/todo.controller.js';
 
