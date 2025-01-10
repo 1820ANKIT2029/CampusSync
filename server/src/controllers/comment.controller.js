@@ -1,11 +1,11 @@
 import { Comment } from "../models/comment.model.js";
 
 export const handleCommentConn = (socket) => {
-    socket.eventId = socket.handshake.query.eventID;
-    socket.join(socket.eventID);
+    socket.eventId = socket.handshake.query.eventId;
+    socket.join(socket.eventId);
 
-    console.log(socket.handshake.query.eventID)
-    console.log(socket.eventID);
+    console.log(socket.handshake.query.eventId)
+    console.log(socket.eventId);
 
 
     socket.on("newComment", async (comment) => {
