@@ -39,7 +39,7 @@ function Event() {
   const [loadingTasks, setLoadingTasks] = useState(true); 
   const [showGroupChat, setShowGroupChat] = useState(false);
 
-  const chatRef = useRef(null); // Reference to scroll to chat section
+  const chatRef = useRef(null);
 
   if (!eventId) {
     return <p>Invalid eventId...</p>;
@@ -91,6 +91,7 @@ function Event() {
     setShowGroupChat((prev) => !prev); // Toggle chat visibility
   };
 
+
   return (
     <>
       <div className="flex flex-col items-center space-y-4 max-w-6xl mx-auto p-6">
@@ -130,7 +131,7 @@ function Event() {
       </div>
 
       <div ref={chatRef}>
-        {showGroupChat && <GroupChat eventId={eventId} />}
+        {showGroupChat && <GroupChat eventId={eventId} adminId={event.event.organizer._id} />}
       </div>
 
       <div className="fixed bottom-4 right-4">

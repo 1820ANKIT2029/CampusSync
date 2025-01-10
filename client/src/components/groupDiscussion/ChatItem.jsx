@@ -1,12 +1,10 @@
 import React from "react";
 import { useSelector } from "react-redux";
 
-function ChatItem({ comment }) {
+function ChatItem({ comment, adminId }) {
     const {profileId} = useSelector((state) => state.userProfile);
     const id = comment.userId._id;
-    console.log(id);
-    console.log(profileId);
-    const name = comment.userId.name;
+    let name = comment.userId.name;
     const message = comment.comment;
     const profilePic = comment.userId.profilePic;
     const time = comment.createdAt;
@@ -19,7 +17,9 @@ function ChatItem({ comment }) {
     const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
     const formattedTime = `${formattedHours}:${formattedMinutes} ${ampm}`;
 
-console.log(formattedTime);
+    if(id == adminId){
+        name = "Admin";
+    }
 
     return (
         <div 

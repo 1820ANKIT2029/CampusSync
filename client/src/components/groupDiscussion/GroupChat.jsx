@@ -5,18 +5,17 @@ import ChatItem from "./ChatItem";
 import ChatInput from "./ChatInput";
 import { io } from "socket.io-client";
 
-function GroupChat({ eventId }) {
+function GroupChat({ eventId, adminId }) {
     const [comments, setComments] = useState([]);
-    const socketRef = useRef(null); // To persist socket instance across renders
+    const socketRef = useRef(null);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const res = await axios.get(
-                    `http://localhost:3000/user/comments?eventId=${eventId}`,
+                    `http://localhost:3000/api/comments?eventId=${eventId}`,
                     { withCredentials: true }
                 );
-                console.log("Messages from history: ", res.data);
                 setComments(res.data);
             } catch (err) {
                 console.error("Error fetching comments: ", err);
@@ -43,7 +42,6 @@ function GroupChat({ eventId }) {
 
                 // Event listeners
                 socket.on("getNewComment", (data) => {
-                    console.log("New comment received: ", data);
                     setComments((prev) => [...prev, data]);
                 });
 
@@ -51,8 +49,7 @@ function GroupChat({ eventId }) {
                     console.log("Socket error: ", data);
                 });
 
-                socketRef.current = socket; // Save socket instance
-                console.log(socket);
+                socketRef.current = socket;
             } catch (err) {
                 console.error("Error setting up socket: ", err);
             }
@@ -62,7 +59,6 @@ function GroupChat({ eventId }) {
         setupSocket();
 
         return () => {
-            // Cleanup socket connection
             if (socketRef.current) {
                 socketRef.current.disconnect();
             }
@@ -71,9 +67,7 @@ function GroupChat({ eventId }) {
 
     const NewComment = (comment) => {
         if (socketRef.current) {
-            console.log("Sending new comment: ", comment);
             socketRef.current.emit("newComment", comment);
-            console.log(comments);
         }
     };
 
@@ -81,7 +75,7 @@ function GroupChat({ eventId }) {
         <div className="grid place-items-center">
             <div className="w-2/3 md:min-h-96 md:max-h-screen bg-pink-200 bg-opacity-50 p-4 overflow-y-auto border border-pink-500 rounded-md mb-2">
                 {comments.map((comment, index) => (
-                    <ChatItem key={index} comment={comment} />
+                    <ChatItem key={index} comment={comment} adminId={adminId} />
                 ))}
             </div>
             <div className="w-2/3 h-12">
