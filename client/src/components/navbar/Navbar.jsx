@@ -3,7 +3,6 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import UserDropdown from './UserDropdown';
 import { setAdmin } from '../../redux/features/isAdmin/adminSlice';
-import NotificationSocket from '../notifications/notificationSocket';
 
 const Navbar = () => {
   const { isAdmin } = useSelector((state) => state.userProfile);
@@ -226,7 +225,6 @@ const Navbar = () => {
           </nav>)}
         </div>
       </div>
-      <NotificationSocket />
     </section>
   );
 };
