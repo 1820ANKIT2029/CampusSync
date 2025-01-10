@@ -10,7 +10,7 @@ export const fetchEventInfo = createAsyncThunk("user/fetchEventInfo", async (eve
             params:  {eventId },
             withCredentials: true,
         });
-        console.log("event: ", res1);
+        // console.log("event: ", res1);
         return res1.data;
     } catch (error) {
         console.error("Fetch event error:", error);
@@ -35,11 +35,11 @@ const eventInfoSlice = createSlice({
         builder
             .addCase(fetchEventInfo.pending, (state) => {
                 state.status = "pending";
-                console.log("Fetching events - status: pending");
+                // console.log("Fetching events - status: pending");
             })
             .addCase(fetchEventInfo.fulfilled, (state, action) => {
                 state.status = "succeeded";
-                console.log("Fetch events succeeded:", action.payload);
+                // console.log("Fetch events succeeded:", action.payload);
                 state.event = action.payload;
             })
             .addCase(fetchEventInfo.rejected, (state, action) => {

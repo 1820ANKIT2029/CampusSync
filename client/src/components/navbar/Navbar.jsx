@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import UserDropdown from './UserDropdown';
 import { setAdmin } from '../../redux/features/isAdmin/adminSlice';
+import NotificationSocket from '../notifications/notificationSocket';
 
 const Navbar = () => {
   const { isAdmin } = useSelector((state) => state.userProfile);
@@ -10,13 +11,6 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  console.log("isAdmin",isAdmin);
-    console.log("isAuth",isAuthenticated);
-
-  useEffect(()=>{
-    console.log("isAdmin",isAdmin);
-    console.log("isAuth",isAuthenticated);
-  },[])
 
   if (isAdmin) {
     dispatch(setAdmin(true));
@@ -232,6 +226,7 @@ const Navbar = () => {
           </nav>)}
         </div>
       </div>
+      <NotificationSocket />
     </section>
   );
 };
