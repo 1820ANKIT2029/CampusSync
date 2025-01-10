@@ -17,8 +17,8 @@ export const handleCommentConn = (socket) => {
                 comment,
             }).populate("userId", "_id name profilePic");
 
-            socket.to(socket.eventID).emit("newComment", message);
-            socket.emit("newComment", message);
+            socket.to(socket.eventID).emit("getNewComment", message);
+            socket.emit("getNewComment", message);
         } catch (error) {
             console.error("Message error:", error);
             socket.emit("commenterror", error.message);
