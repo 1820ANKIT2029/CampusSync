@@ -91,6 +91,9 @@ function Event() {
     setShowGroupChat((prev) => !prev); // Toggle chat visibility
   };
 
+  if(!loadingTasks){
+    console.log(tasks);
+  }
 
   return (
     <>
