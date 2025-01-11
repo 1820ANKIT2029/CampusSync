@@ -7,8 +7,7 @@ const HomeRouter = Router();
 
 
 HomeRouter.get('/', (req, res, next)=>{
-    console.log(req);
-    res.send(`AuraTracker CodeSangam 2024.`);
+    res.send(`CampusSync CodeSangam 2024.`);
 });
 
 HomeRouter.get('/profile', ensureLoggedIn, profile);

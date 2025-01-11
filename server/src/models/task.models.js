@@ -40,7 +40,7 @@ const taskParticipantSchema = new Schema({
     },
     isCompleted: { 
         type: Boolean, 
-        default: false 
+        default: true 
     }
 }, { timestamps: true });
 

@@ -3,12 +3,13 @@ import axios from 'axios';
 
 export const fetchuserProfile = createAsyncThunk("user/fetchUserProfile", async () => {
     const res1 = await axios.get("http://localhost:3000/profile", { withCredentials: true })
-    console.log("user profile"); console.log(res1);
+    // console.log("user profile"); console.log(res1);
     return res1.data;
 });
 
 const initialState = {
     userId: null,
+    profileId:null,
     name:"your name",
     bio: "your bio",
     year: 0,
@@ -39,7 +40,8 @@ const userProfileSlice = createSlice({
             .addCase(fetchuserProfile.fulfilled, (state,action) => {
                 state.status = "succeeded",
                 state.userId = action.payload.userid;
-                state.name = action.payload.name;
+                state.profileId = action.payload._id;
+                state.name = action.payload.name || "your name";
                 state.bio = action.payload.bio;
                 state.year = action.payload.year;
                 state.branch = action.payload.branch;

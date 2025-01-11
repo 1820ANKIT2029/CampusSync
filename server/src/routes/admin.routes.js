@@ -34,7 +34,7 @@ AdminRouter.get('/event/details/:eventId', adminEventById);
 AdminRouter.get('/event/active', adminActiveEvents);
 AdminRouter.get('/event/inactive', adminInactiveEvents);
 AdminRouter.get('/news', adminNews);
-AdminRouter.get('/news/:newsId', adminNewsById)
+AdminRouter.get('/news/:newsId', adminNewsById);
 
 AdminRouter.get('/profile', profile);
 AdminRouter.post('/profile/edit', handleImageUpload, profileEdit);

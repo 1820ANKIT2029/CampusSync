@@ -21,17 +21,19 @@ import CreateBlog from './components/admin/blog/CreateBlog.jsx';
 import EventDetails from './components/admin/event/EventDetails.jsx';
 
 import ProtectedRoute from './auth/ProtectedRoute.jsx';
+import IfLogin from './auth/iflogin.jsx';
 import EnsureAdmin from './auth/ensureAdmin.jsx';
 import LeaderBoard from './components/leaderboard/LeaderBoard.jsx';
 import NotificationSection from './components/notifications/NotificationSection.jsx';
 import TaskPage from './components/tasks/TaskPage.jsx';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path='/' element={<Layout />}>
-      <Route path="/" element={<Hero />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/signup" element={<Signup />} />
+      <Route path="/" element={<IfLogin><Hero /></IfLogin>} />
+      <Route path="/login" element={<IfLogin><Login /></IfLogin>} />
+      <Route path="/signup" element={<IfLogin><Signup /></IfLogin>} />
 
       {/* user Routes */}
       <Route path="/home" element={<ProtectedRoute> <Home /> </ProtectedRoute>} />
@@ -62,6 +64,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
       <RouterProvider router={router} />
+      <ToastContainer />
     </Provider>
   </StrictMode>
 );

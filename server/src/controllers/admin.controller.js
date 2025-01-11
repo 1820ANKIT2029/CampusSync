@@ -151,7 +151,7 @@ export const getStats = async (req, res, next) => {
         var totalEvents = 0;
         var totalBlogs = 0;
         const events = await Event.find({organizer:profile._id});
-        console.log(events);
+        // console.log(events);
         for(const event of events){
             totalParticipants += await EventParticipant.countDocuments({ eventId: event._id });
         }

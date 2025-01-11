@@ -10,7 +10,7 @@ const EventCard = ({ event , index}) => {
   const handleRegister = async () => {
     try {
       const res = await axios.post(`http://localhost:3000/user/event/register?eventId=${event._id}`,{}, { withCredentials: true });
-      console.log("user registered in the event");
+      // console.log("user registered in the event");
       navigate(`/event/${event._id}`)
     } catch (err) {
       console.log(err);
