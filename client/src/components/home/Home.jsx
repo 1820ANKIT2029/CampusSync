@@ -44,7 +44,12 @@ const Home = () => {
             }}
           >
             {(status === "succeeded") && blogs[index] && (<Blogs blogs={blogs[index]} />)}
-            {status !== "succeeded" && <p>Loading...</p>}
+            {status !== "succeeded" && (
+              <p className="max-w-2xl px-6 py-24 mx-auto space-y-1 text-lg text-center font-semibold text-black-700 animate-pulse">
+                Loading...
+              </p>
+            )}
+
           </div>
           
           
