@@ -71,6 +71,19 @@ export const upload = async (req, res, next) => {
     }
 }
 
+/*
+
+ isCompleted in TaskParticipant
+ isCheck in Submission
+
+ isCompleted | isCheck
+    true     |  true       --> accepted
+    true     |  false      --> not possible
+    false    |  true       --> rejected
+    false    |  false      --> not sumbitted yet
+
+ */
+
 export const ValidSubmission = async (req, res, next) => {
     const { submissionId } = req.params;
     const id  = req.user.id;
@@ -107,7 +120,9 @@ export const ValidSubmission = async (req, res, next) => {
             {participantId: submission.participantId},
             {isCompleted: true},
             {new: true }
-        );
+        ).populate("taskId");
+
+
         if(!(submission && task)){
             return res.status(400).json({error: "Submission or Task update error"});
         }
@@ -118,7 +133,7 @@ export const ValidSubmission = async (req, res, next) => {
         );
 
         // notification part
-        addNotification(submission.participantId, `Your submission for task ${task.name} is Verified by the event admin`);
+        addNotification(submission.participantId, `Your submission for task ${task.taskId.name} is Verified by the event admin`);
         
         return res.status(200).json({message : "submission verify done"});
     }
@@ -131,18 +146,16 @@ export const ValidSubmission = async (req, res, next) => {
 export const InvalidSubmission = async (req, res, next) => {
     const { submissionId } = req.params;
     const id = req.user.id;
-
     if(!submissionId){
         return res.status(400).json({error: "Submission ID not provided."});
     }
 
     try{
-        const profile = await Profile.findOne({userId: id}).select('_id');
+        const profile = await Profile.findOne({userid: id}).select('_id');
         const submissionexist = await Submission.findById(submissionId).populate('taskId');
         if(!submissionexist){
             return res.status(400).json({error: "Submission does not exist"});
         }
-
         const isadminevent = await Event.findOne({
             _id: submissionexist.taskId.eventId,
             organizer: profile._id
@@ -152,7 +165,7 @@ export const InvalidSubmission = async (req, res, next) => {
         }
 
         if(!submissionexist.isCheck){
-            return res.status(400).json({error: "Already done"});
+            return res.status(200).json({error: "Already done"});
         }
 
         const submission = await Submission.findByIdAndUpdate(
@@ -176,6 +189,7 @@ export const InvalidSubmission = async (req, res, next) => {
         addNotification(participant.participantId, `Your submission for task ${task.name} is rejected by the event admin`);
         return res.status(200).json({message : "submission remove verify done"});
     }catch(error){
+        console.log(error);
         return res.status(500).json({error: "Internal server error at removeVerifysubmission"});
     }
 }

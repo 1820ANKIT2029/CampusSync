@@ -1,6 +1,6 @@
 ## Hash3
 
-# AuraTracker (CodeSangam 2024)
+# CampusSync (CodeSangam 2024)
 
 
 This project is a Campus College Tracker Web App that gamifies academic life for college students, making studying, attending lectures, and participating in campus events more engaging and rewarding. It’s designed for students juggling multiple responsibilities who need help staying organized and motivated.
@@ -37,7 +37,7 @@ To run this project, you will need to add the following environment variables to
 Project Structure
 
 ```bash
-AuraTracker-CodeSangam
+CampusSync
 ├── server
 │   ├── server.js
 │   ├── SecondServer.js
@@ -59,13 +59,13 @@ AuraTracker-CodeSangam
 Clone the project
 
 ```bash
-  $ git clone https://github.com/1820ANKIT2029/AuraTracker-CodeSangam.git
+  $ git clone https://github.com/1820ANKIT2029/CampusSync.git
 ```
 
-Go to the AuraTracker-CodeSangam
+Go to the CampusSync
 
 ```bash
-  $ cd AuraTracker-CodeSangam
+  $ cd CampusSync
 ```
 
 # server
@@ -113,13 +113,26 @@ Stop client server
 ```
 
 
-## Demo
+## Project Demo
 
-Soon
+Here’s a quick preview of the app:
+
+![Home Page Demo](./demo/demo1.png)
+
+Home page after LoggedIn
+
+![Home Page Demo](./demo/demo2.png)
+
+Event Page
+
+![Home Page Demo](./demo/demo3.png)
+
+Profile Page
+
 
 
 ## Developers
 
-- [Alok Negi](https://github.com/aloknegi786) (Full Stack Developer, Leader)
-- [Ankit Kumar](https://github.com/1820ANKIT2029) (Backend Developer)
+- [Alok Negi](https://github.com/aloknegi786) (Developer, Leader)
+- [Ankit Kumar](https://github.com/1820ANKIT2029) (Developer)
 

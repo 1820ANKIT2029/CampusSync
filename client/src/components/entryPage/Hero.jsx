@@ -31,7 +31,7 @@ function Hero() {
     <section className="bg-blue-100 sm:py-40 md:py-52 md:mb-16 text-center">
       <div className="container mx-auto px-6">
         <h1 className="text-4xl font-bold text-blue-700 mb-6">
-          Welcome to AuraTracker
+          Welcome to CampusSync
         </h1>
         <p className="text-lg text-blue-600 mb-8">
           Make campus life engaging and exciting with our all-in-one platform designed just for students.

@@ -22,14 +22,14 @@ const userStatsSlice = createSlice({
         builder
             .addCase(fetchuserstats.pending, (state) => {
                 state.status = "pending";
-                console.log("fetching user stats...");
+                // console.log("fetching user stats...");
             })
             .addCase(fetchuserstats.fulfilled, (state,action) => {
                 state.status = "succeeded";
                 state.events = action.payload.events;
                 state.totalEvents= action.payload.totalEvents;
                 state.totalTasks= action.payload.totalTasks;
-                console.log("user stats fetched successfully");
+                // console.log("user stats fetched successfully");
             })
             .addCase(fetchuserstats.rejected, (state,action) => {
                 state.status = "failed";

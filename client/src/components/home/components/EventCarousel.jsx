@@ -3,12 +3,12 @@ import EventCard from './EventCard';
 import { useDispatch, useSelector } from 'react-redux';
 import { setEventAtHome } from '../../../redux/features/HomePageSlice/eventSlice.js'
 
-function EventCarousel({ blogs }) {
-  const it = useSelector((state) => state.event.event)
+function EventCarousel({ blogs, scrollToBlogfunc }) {
   const dispatch = useDispatch();
   
   const handleClick = (index) => {
       dispatch(setEventAtHome(index));
+      scrollToBlogfunc();
   };
 
   return (
@@ -18,7 +18,7 @@ function EventCarousel({ blogs }) {
           <div
             key={index}
             onClick={() => handleClick(index)}
-            className="h-48 aspect-video rounded-sm bg-cover bg-center "
+            className="h-48 aspect-video rounded-sm bg-cover bg-center hover:cursor-pointer"
           >
             <EventCard
              key={index}

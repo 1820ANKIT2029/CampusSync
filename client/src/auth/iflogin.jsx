@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { setAdmin } from '../redux/features/isAdmin/adminSlice';
 import { fetchuserProfile } from '../redux/features/user/userProfileSlice';
 
-const ProtectedRoute = ({ children }) => {
+const IfLogin = ({ children }) => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const { state } = useSelector((state) => state.userProfile);
   const dispatch = useDispatch();
@@ -19,14 +19,14 @@ const ProtectedRoute = ({ children }) => {
     if (myCookie) {
       dispatch(fetchuserProfile()); 
       dispatch(setAuth(true));
+      navigate('/home')
     } else {
       dispatch(setAuth(false));
       dispatch(setAdmin(false));
-      navigate('/');
     }
   }, [dispatch, navigate]);
 
-  return isAuthenticated ? children : null;
+  return children;
 };
 
-export default ProtectedRoute;
+export default IfLogin;

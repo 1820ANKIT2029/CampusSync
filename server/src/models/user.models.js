@@ -67,7 +67,7 @@ const profileScheme = new Schema({
     },
     profilePic: {
         type: String,
-        default: "https://res.cloudinary.com/dwlputtun/image/upload/v1730522067/ysuvwnriqlpqtdlyqysk.png",
+        default: "https://res.cloudinary.com/dwlputtun/image/upload/v1736586513/ei2hdv1f0oqhj3skwom8.webp",
     },
     aura: {
         type: Number,

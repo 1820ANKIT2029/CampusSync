@@ -1,90 +1,91 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import NotificationItem from "./NotificationItem.jsx";
-import Cookies from 'js-cookie';
-import  {io } from 'socket.io-client';
-import axios from 'axios';
+import Cookies from "js-cookie";
+import { io } from "socket.io-client";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  markAsRead,
+  deleteNotification,
+  addNotification
+} from "../../redux/features/notification/notificationSlice.js";
 
-const notificationsData = [
-  { id: 1, message: "No Notification till now!", read: false, timestamp: "" },
-];
 
-
-let socket;
 
 const NotificationSection = () => {
-  const [notifications, setNotifications] = useState(notificationsData);
+  const dispatch = useDispatch();
+  const notifications = useSelector((state) => state.notification);
+
+  const markAsReadHandler = (id) => {
+    dispatch(markAsRead(id));
+  };
+
+  const deleteNotificationHandler = (id) => {
+    dispatch(deleteNotification(id));
+  };
 
   useEffect(() => {
-    // Async function to handle socket setup
+    let socket;
+
     const setupSocket = async () => {
       try {
-        let socketToken = Cookies.get('socket_token');
+        let socketToken = Cookies.get("socket_token");
 
-        // Request token if not available
+        // Generate a new token if not present
         if (!socketToken) {
-          await axios.post("http://localhost:3000/auth/SocketAuthToken", {}, { withCredentials: true });
-          socketToken = Cookies.get('socket_token');
+          await axios.post(
+            "http://localhost:3000/auth/SocketAuthToken",
+            {},
+            { withCredentials: true }
+          );
+          socketToken = Cookies.get("socket_token");
         }
 
-        // Initialize socket connection
+        // Establish the socket connection
         socket = io("http://localhost:5000/notification", {
-          auth: { token: socketToken }
+          auth: { token: socketToken },
         });
 
-        // Listen for notifications and authentication errors
+        // Listen for notifications
         socket.on("NotificationUpdate", (data) => {
+          dispatch(addNotification(data));
           console.log("Received data:", data);
-          setNotifications(data);
         });
 
+        // Handle authentication errors
         socket.on("authError", (data) => {
-          console.log("Auth error:", data);
+          console.error("Auth error:", data);
           socket.disconnect();
         });
       } catch (error) {
-        console.log("Socket setup error:", error);
+        console.error("Socket setup error:", error);
       }
     };
 
-    // Call the async function
-    setupSocket();
+    const sid = Cookies.get("connect.sid");
+    if (sid) {
+      setupSocket();
+    }
 
-    // Cleanup socket on component unmount
+    // Cleanup on unmount
     return () => {
       if (socket) {
-        socket.off("NotificationUpdate");
-        socket.off("authError");
         socket.disconnect();
       }
     };
-  }, []);
-  
-
-  const markAsRead = (id) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.map((notification) =>
-        notification.id === id ? { ...notification, read: true } : notification
-      )
-    );
-  };
-
-  const deleteNotification = (id) => {
-    setNotifications((prevNotifications) =>
-      prevNotifications.filter((notification) => notification.id !== id)
-    );
-  };
+  }, [dispatch]); // Dispatch is a dependency
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-md max-w-3xl mx-auto my-8">
       <h2 className="text-2xl font-bold mb-4">Notifications</h2>
       <div>
-        {notifications.length > 0 ? (
+        {notifications?.length > 0 ? (
           notifications.map((notification) => (
             <NotificationItem
-              key={notification.id}
+              key={notification._id}
               notification={notification}
-              onMarkRead={markAsRead}
-              onDelete={deleteNotification}
+              onMarkRead={markAsReadHandler}
+              onDelete={deleteNotificationHandler}
             />
           ))
         ) : (

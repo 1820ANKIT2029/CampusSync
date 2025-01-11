@@ -14,6 +14,9 @@ export const fetchAdminData = createAsyncThunk("admin/fetchAdminData", async () 
 });
 
 export const fetchAdminEvent = createAsyncThunk("admin/fetchAdminEvent", async (eventId, { rejectWithValue }) => {
+    if(!eventId){
+        return ;
+    }
     try {
         const res = await axios.get(`http://localhost:3000/admin/event/details/${eventId}`, {
             withCredentials: true,
@@ -25,17 +28,21 @@ export const fetchAdminEvent = createAsyncThunk("admin/fetchAdminEvent", async (
     }
 });
 
-export const verifySub = createAsyncThunk('admin/verifySub', async (submissionId,{rejectWithValue}) => {
-    try{
-        const res = await axios.put(`http://localhost:3000/admin/submission/valid/${submissionId}`,{},{
-            withCredentials: true,
-        });
+export const verifySub = createAsyncThunk('admin/verifySub', async (submissionId, { rejectWithValue }) => {
+    try {
+        const res = await axios.put(
+            `http://localhost:3000/admin/submission/valid/${submissionId}`,
+            {},
+            { withCredentials: true }
+        );
+        console.log("response", res);
         return res.data;
-    }catch(error){
+    } catch (error) {
         console.error("Error verifying submission.", error);
-        return rejectWithValue(error.response?.data || "Failed to verify the submission");
+        return rejectWithValue(error.response?.data?.error || "Failed to verify the submission");
     }
-})
+});
+
 
 export const rejectSub = createAsyncThunk('admin/rejectSub', async (submissionId,{rejectWithValue}) => {
     try{
@@ -60,6 +67,7 @@ const initialState = {
     eventData: [],
     eventDetailsStatus: "idle",
     varifyStatus: "idle",
+    varifyMessage: "",
     rejectionStatus: "idle",
     status: "idle",
     error: null,
@@ -100,11 +108,12 @@ const adminDataSlice = createSlice({
             })
             .addCase(verifySub.fulfilled, (state, action) => {
                 state.varifyStatus = "succeeded";
+                state.varifyMessage = action.payload.message;
             })
             .addCase(verifySub.rejected, (state, action) => {
-                state.varifyStatus = "failed";
-                state.error = action.error.message;
-            })
+                state.varifyStatus = "rejected";
+                state.error = action.payload || "Failed to verify submission";
+            })            
             .addCase(rejectSub.pending, (state) => {
                 state.rejectionStatus = "pending";
             })
