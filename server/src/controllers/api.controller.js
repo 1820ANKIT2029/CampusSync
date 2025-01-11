@@ -12,7 +12,8 @@ export const getevents = async (req, res, next) => {
     try{
         id = req.user.id;
     }catch(err){
-        console(err);
+        console.log(err);
+        return ;
     }
 
     let filter = {};
