@@ -11,18 +11,20 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  if (isAdmin) {
-    dispatch(setAdmin(true));
-  }
+  useEffect(()=>{
+    if (isAdmin) {
+      dispatch(setAdmin(true));
+    }
+  },[])
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate('/login')
+    navigate('/login');
   }
 
   const handleSignup = (e) => {
     e.preventDefault();
-    navigate('/signup')
+    navigate('/signup');
   }
 
   const toCreateBlog = () => {

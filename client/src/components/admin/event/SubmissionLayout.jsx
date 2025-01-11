@@ -1,36 +1,47 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import { verifySub, rejectSub } from '../../../redux/features/adminData/adminDataSlice';
 import { FaEye, FaCheck, FaTimes } from 'react-icons/fa';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { toast } from "react-toastify";
 
 const SubmissionLayout = ({submissions}) => {
-    const {verifyStatus, rejectionStatus, eventDetailsStatus} = useSelector((state) => state.adminData);
+    const {varifyStatus,varifyMessage, rejectionStatus, eventDetailsStatus,error} = useSelector((state) => state.adminData);
     const [isOpen, setisOpen] = useState(false);
     const [currentDocument, setCurrentDocument] = useState('');
     const [tasksub,setTasksub] = useState(submissions);
     const dispatch = useDispatch();
 
+    useEffect(() => {
+      setTasksub((prev) => prev.filter((submission) => !submission.isCheck));
+    }, []);
+    
     const verifySubmission = async (submissionId) => {
-        await dispatch(verifySub(submissionId));
-        
-        if(verifyStatus === "succeeded"){
-          setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub.submissionId !== submissionId));
-        }
-        else{
-          console.log("failed to pass the submission");
-        }
+      toast.info("Verification started");
+      try {
+          const result = await dispatch(verifySub(submissionId)).unwrap();
+          toast.success(result.message);
+          console.log(tasksub);
+          setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub._id !== submissionId));
+      } catch (error) {
+          toast.error(error);
+          console.error("Failed to verify the submission:", error);
+      }
     };
+  
 
     const rejectSubmission = async (submissionId) => {
-        await dispatch(rejectSub(submissionId));
-        if(rejectionStatus === "succeeded"){
-          setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub.submissionId !== submissionId));
-        }
-        else{
-          console.log("failed to reject the submission")
+        toast.info("Rejection started");
+        try {
+            const result = await dispatch(rejectSub(submissionId)).unwrap();
+            toast.success("Submission rejected successfully");
+            setTasksub((prevTasksub) => prevTasksub.filter((sub) => sub._id !== submissionId));
+        } catch (error) {
+            toast.error(error);
+            console.error("Failed to reject the submission:", error);
         }
     };
+  
 
     if(eventDetailsStatus === "pending"){
       return (<p>loading...</p>);
@@ -38,24 +49,16 @@ const SubmissionLayout = ({submissions}) => {
     if(eventDetailsStatus === "failed"){
       return (<p>failed to load data</p>);
     }
-
-    if(submissions.length === 0){
-      return (
-        <>
-        <div>No submissions</div>
-        </>
-      )
-    }
     
 
   return (
-    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg max-h-80 overflow-y-auto hide-scrollbar">
+    <div className="max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg h-80 overflow-y-auto hide-scrollbar">
       <div className="text-center text-xl font-bold text-gray-800 p-4 border-b border-gray-200">
         Submissions
       </div>
 
 
-      {tasksub.map((submission,index) => (
+      {tasksub.length !== 0 && tasksub.map((submission,index) => (
         <div
           key={index}
           className="flex items-center bg-pink-100 px-4 py-2 mb-2 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 ease-in-out"
@@ -92,6 +95,13 @@ const SubmissionLayout = ({submissions}) => {
           </div>
         </div>
       ))}
+      {tasksub.length === 0 && (
+        <>
+          <div className='text-center mt-4'>No submissions</div>
+        </>
+      )
+
+      }
     </div>
   );
 };
