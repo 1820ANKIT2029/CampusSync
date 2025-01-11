@@ -7,7 +7,6 @@ const HomeRouter = Router();
 
 
 HomeRouter.get('/', (req, res, next)=>{
-    console.log(req);
     res.send(`AuraTracker CodeSangam 2024.`);
 });
 

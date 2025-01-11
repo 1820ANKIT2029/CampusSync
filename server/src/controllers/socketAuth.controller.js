@@ -60,8 +60,6 @@ export const CheckTokenInSocket = async (socket, next) => {
             });
             return;
         }
-        
-        console.log(token);
 
         const verifiedToken = await SocketTokenVerify(token);
 
