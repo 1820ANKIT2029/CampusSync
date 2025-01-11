@@ -1,8 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 function Blogs({ blogs}) {
-  const it = useSelector((state) => state.event.event);
   return (
     <>
       <article className="max-w-2xl px-6 py-24 mx-auto space-y-1 hide-scrollbar rounded-lg">

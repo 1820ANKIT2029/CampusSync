@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import LeaderboardCard from '../leaderboard/LeaderboardCard';
@@ -13,14 +13,23 @@ const Home = () => {
   const dispatch = useDispatch();
   const {blogs, status} = useSelector((state) => state.blogs);
   const index = useSelector((state) => state.event.event);
-  console.log("home")
-  console.log(blogs);
-  console.log(index);
-  console.log(status);
+  const targetBlogRef = useRef(null);
+
+  const scrollToBlog = () => {
+    if (targetBlogRef.current) {
+        targetBlogRef.current.scrollIntoView({ top: offsetTop, behavior: "smooth" });
+    } else {
+        console.error("Target blog ref is not available yet.");
+    }
+  };
+  // console.log("home")
+  // console.log(blogs);
+  // console.log(index);
+  // console.log(status);
 
   useEffect(()=>{
       dispatch(fetchBlogs());
-  },[]);
+  },[dispatch]);
 
   if(status === "failed"){
     return (
@@ -43,7 +52,11 @@ const Home = () => {
               overflowY: 'scroll', scrollbarWidth: 'none', msOverflowStyle: 'none'
             }}
           >
-            {(status === "succeeded") && blogs[index] && (<Blogs blogs={blogs[index]} />)}
+            {(status === "succeeded") && blogs[index] && (
+              <div ref={targetBlogRef}>
+                <Blogs blogs={blogs[index]} />
+              </div>
+            )}
             {status !== "succeeded" && <p>Loading...</p>}
           </div>
           
@@ -58,7 +71,11 @@ const Home = () => {
           <div
             className="bg-gradient-to-r from-teal-400 to-purple-600 text-white rounded p-4"
           >
-            {(status === "succeeded") && blogs[index] && (<Blogs blogs={blogs[index]} />)}
+            {(status === "succeeded") && blogs[index] && (
+              <div ref={targetBlogRef}>
+                <Blogs blogs={blogs[index]} />
+              </div>
+            )}
             {status !== "succeeded" && <p>Loading...</p>}
           </div>
           <div className="rounded">
@@ -68,7 +85,7 @@ const Home = () => {
       </div>
     </div>
     <div>
-    <EventCarousel blogs={blogs}/>
+    <EventCarousel scrollToBlogfunc={scrollToBlog} blogs={blogs}/>
   </div>
   </>
   );
