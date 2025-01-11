@@ -8,7 +8,7 @@ function Footer() {
       <div className="container mx-auto px-6 flex flex-col md:flex-row justify-between items-center">
         {/* Logo and Description */}
         <div className="mb-6 md:mb-0 text-center md:text-left">
-          <h2 className="text-2xl font-bold">AuraTracker</h2>
+          <h2 className="text-2xl font-bold">CampusSync</h2>
           <p className="text-gray-800 mt-2 max-w-sm">
             Enhancing campus life with easy access to events, study groups, and activities.
           </p>
@@ -33,7 +33,7 @@ function Footer() {
 
       {/* Copyright */}
       <div className="text-center text-blue-300 mt-6 text-sm">
-        &copy; {new Date().getFullYear()} AuraTracker. All rights reserved.
+        &copy; {new Date().getFullYear()} CampusSync. All rights reserved.
       </div>
     </footer>
   );
