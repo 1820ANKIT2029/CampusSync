@@ -3,6 +3,7 @@ import { Event, EventParticipant } from "../models/event.model.js"
 import { Task } from "../models/task.models.js";
 import { Profile } from "../models/user.models.js";
 import { Comment } from "../models/comment.model.js";
+import { Submission } from "../models/submission.model.js";
 
 export const getevents = async (req, res, next) => {
     const { name, isActive, startTime, endTime, organizer } = req.query;
@@ -129,11 +130,17 @@ export const comment = async (req, res, next) => {
 export const eventinfo = async (req, res, next) => {
     const { eventId } = req.query;
 
+    let id;
+    if(req.user.id){
+        id = req.user.id;
+    }
+
     if(!eventId){
         return res.status(400).json({error: "usage: /api/eventinfo?eventId={id}"});
     }
 
     try{
+        const profile = await Profile.findOne({userid: id}).select('_id');
         const event = await Event.findById(eventId).populate('organizer', "name profilePic bio");
 
         if(!event){
@@ -141,9 +148,32 @@ export const eventinfo = async (req, res, next) => {
         }
 
         const task = await Task.find({eventId: eventId});
+        let submission = [];
+        if(id){
+            for(let t of task){
+                s = Submission.findOne({participantId: profile._id, taskId: t._id}).select("isCheck");
+                t["isCheck"] = s.isCheck;
+            }
+        }
 
         return res.status(200).json({"event": event, "task": task});
     }catch(err){
         return res.status(500).json({error: "Interval server error at eventinfo"});
     }
 }
+
+export const NewsById = async (req, res, next) => {
+    const { newsId } = req.params;
+
+    try{
+        const news = await News.findById(newsId);
+
+        if(!news){
+            return res.status(400).json({error: "Admin news does not exist with given ID"});
+        }
+
+        return res.status(200).json(news);
+    }catch(err){
+        return res.status(500).json({error : "Internal server error at api get News by Id"});
+    }
+};
