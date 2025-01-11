@@ -31,7 +31,7 @@ const StatisticsCard = () => {
       <div className="w-4/5 h-px bg-gray-400 mb-4 mx-auto" />
       <div className='lg:flex lg:w-full lg:gap-2 lg:flex-row-reverse lg:space-x-2'>
         <ul className="flex flex-col justify-between text-center space-y-4 md:space-y-0 sm:flex-wrap lg:w-[100px] lg:h-full lg:gap-2">
-          {names.map((name, index) => {
+          {names?.map((name, index) => {
             return (
               <span onClick={() => { setStat(name); }} key={index} className={`rounded-sd-sm flex w-full flex-1 flex-col items-center justify-center text-xs font-medium text-sd-easy ${name === stat ? 'bg-green-300' : 'bg-gray-200'} rounded-lg cursor-pointer`}>
                 <Buttons name={name} />

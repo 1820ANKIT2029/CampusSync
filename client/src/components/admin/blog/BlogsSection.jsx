@@ -1,15 +1,25 @@
 import React, { useState, useRef, useEffect } from "react";
 import Blog from "./Blog";
+import { useNavigate } from "react-router-dom";
+import { setEventAtHome } from "../../../redux/features/HomePageSlice/eventSlice";
+import { useDispatch } from "react-redux";
 
 const BlogsSection = ({ blogs }) => {
   const [showMore, setShowMore] = useState(false);
   const gridRef = useRef(null);
-  
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   useEffect(() => {
     if (gridRef.current) {
       gridRef.current.style.maxHeight = `300px`;
     }
   }, []);
+
+  const gotoblog = (index)=>{
+    dispatch(setEventAtHome(index));
+    navigate("/home")
+  }
 
   const toggleShowMore = () => {
     setShowMore((prev) => !prev);
@@ -39,7 +49,8 @@ const BlogsSection = ({ blogs }) => {
         {blogs.map((blog, index) => (
           <div
             key={index}
-            className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center"
+            className="p-4 m-4 bg-blue-500 text-white rounded-lg shadow-md text-center hover:cursor-pointer"
+            onClick={()=> gotoblog(index)}
             style={{ height: "100px" }}
           >
             <Blog title={blog.headline} />

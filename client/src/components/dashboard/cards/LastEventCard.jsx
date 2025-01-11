@@ -22,7 +22,7 @@ const LastEventsCard = () => {
       <h2 className="text-2xl font-bold text-gray-800">Last   Events</h2>
       <div className="w-4/5 h-px bg-gray-400 my-4 mx-auto" /> 
       <ul className="mt-4 space-y-4">
-        {events.length && events.map((event, index) => (
+        {events?.length && events?.map((event, index) => (
           <li key={index} className="flex justify-between items-center bg-gray-100 p-4 rounded-lg cursor-pointer">
             <div>
               <h3 className="text-lg font-semibold text-gray-700">{event?.eventId?.name || "nil"}</h3>
