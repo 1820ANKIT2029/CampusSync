@@ -14,16 +14,20 @@ async function getTasks() {
   });
   return res.data;
 }
-
-function relevantTasks(eventTasks, tasks) {
+  
+function relevantTasks(eventTasks, tasksP,submission) {
   let filteredTasks = [];
-  if (!eventTasks || !tasks) {
+  if (!eventTasks || !tasksP) {
     return filteredTasks;
   }
   for (let i = 0; i < eventTasks.length; i++) {
-    const completedTask = tasks.find(task => eventTasks[i]._id === task.taskId._id)
-    if (completedTask) {
-      filteredTasks.push({ ...eventTasks[i], isCompleted: completedTask.isCompleted ? 1 : 2 });
+    const completedTask = tasksP.find(task => eventTasks[i]._id === task.taskId._id);
+    const varifiedtask = submission.find((task) => task.taskId=== eventTasks[i]._id);
+    if(varifiedtask?.isCheck){
+       filteredTasks.push({ ...eventTasks[i], isCompleted: (completedTask.isCompleted) ? 1 : 3 });
+    }
+    else if (completedTask?.isCompleted) {
+      filteredTasks.push({ ...eventTasks[i], isCompleted: 2});
     } else {
       filteredTasks.push({ ...eventTasks[i], isCompleted: 3 });
     }
@@ -56,7 +60,9 @@ function Event() {
     const fetchTasks = async () => {
       try {
         const taskData = await getTasks();
-        setTasks(relevantTasks(event.task, taskData));
+        console.log("iscompleted: ",taskData);
+        if(taskData.length !== 0) setTasks(relevantTasks(event.task, taskData,event.submission));
+        else setTasks(event.task);
       } catch (error) {
         console.error("Error fetching tasks:", error);
       } finally {
@@ -91,9 +97,6 @@ function Event() {
     setShowGroupChat((prev) => !prev); // Toggle chat visibility
   };
 
-  if(!loadingTasks){
-    console.log(tasks);
-  }
 
   return (
     <>
