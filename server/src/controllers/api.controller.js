@@ -135,30 +135,39 @@ export const eventinfo = async (req, res, next) => {
     if(req.user.id){
         id = req.user.id;
     }
+    console.log("user id", id)
 
     if(!eventId){
         return res.status(400).json({error: "usage: /api/eventinfo?eventId={id}"});
     }
 
     try{
-        const profile = await Profile.findOne({userid: id}).select('_id');
+        const profile = await Profile.findOne({userid: id._id}).select('_id');
         const event = await Event.findById(eventId).populate('organizer', "name profilePic bio");
 
         if(!event){
             return res.status(400).json({error: "No event exist with given eventId"});
         }
 
-        const task = await Task.find({eventId: eventId});
+        const task = await Task.find({ eventId: eventId });
         let submission = [];
-        if(id){
-            for(let t of task){
-                s = Submission.findOne({participantId: profile._id, taskId: t._id}).select("isCheck");
-                t["isCheck"] = s.isCheck;
+
+        if (id) {
+            for (let t of task) {
+                const s = await Submission.findOne({ participantId: profile._id, taskId: t._id });
+                if(s){
+                    submission.push(s);
+                }
             }
         }
 
-        return res.status(200).json({"event": event, "task": task});
+        let data = {"event": event, "task": task};
+        if(id){
+            data["submission"] = submission;
+        }
+        return res.status(200).json(data);
     }catch(err){
+        console.log(err)
         return res.status(500).json({error: "Interval server error at eventinfo"});
     }
 }

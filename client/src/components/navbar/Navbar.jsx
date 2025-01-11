@@ -46,10 +46,10 @@ const Navbar = () => {
           <div className="flex flex-row items-center justify-between md:justify-start w-full">
             <NavLink
               to="/"
-              style={{ fontSize: '1.5rem' }} // Adjust the size as needed
+              style={{ fontSize: '2rem', fontFamily: 'NanumGothic'}}
               className="font-bold tracking-tighter text-cyan-600 transition duration-500 ease-in-out md:pr-8"
             >
-              Aura Tracker
+              CampusSync
             </NavLink>
 
             <div className="flex-grow"></div> {/* This empty div will push the button to the right */}

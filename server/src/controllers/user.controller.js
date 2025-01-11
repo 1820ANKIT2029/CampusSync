@@ -94,6 +94,7 @@ export const task = async (req, res, next) => {
     try{
         const profile = await Profile.findOne({userid: id}).select('_id');
         const result = await TaskParticipant.find({participantId: profile._id}).populate('taskId');
+        console.log(result);
         if(!result){
             return res.status(404).json({error: "unable to fetch events"});
         }
