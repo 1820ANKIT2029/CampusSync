@@ -4,13 +4,11 @@ export const handleCommentConn = (socket) => {
     socket.eventId = socket.handshake.query.eventId;
     socket.join(socket.eventId);
 
-    console.log(socket.handshake.query.eventId)
-    console.log(socket.eventId);
+    // console.log(socket.handshake.query.eventId)
 
 
     socket.on("newComment", async (comment) => {
         try {
-            console.log(comment);
             const newComment = {
                 userId: socket.profileId, // Assuming socket.profileId is set elsewhere
                 eventId: socket.eventId,
